@@ -1,32 +1,57 @@
-% Beamer Font Theme: Tufte
-% Typography inspired by Edward Tufte's work
-% Uses ET Book/Palatino (serif) or Fira Sans (sans-serif)
+% Beamer Font Theme: Shibui
+% Clean typography for presentations
+% Multiple font options available
 %
-% Options: serif (default), sans
+% Options: sans (default), serif, garamond, charter, mono
 
 \mode<presentation>
 
-% Check for theme option (default: serif)
-\DeclareOptionBeamer{sans}{\def\tufte@font{sans}}
-\DeclareOptionBeamer{serif}{\def\tufte@font{serif}}
-\ExecuteOptionsBeamer{serif}  % Default to serif
+% Check for theme option (default: sans)
+\DeclareOptionBeamer{sans}{\def\shibui@font{sans}}
+\DeclareOptionBeamer{serif}{\def\shibui@font{serif}}
+\DeclareOptionBeamer{garamond}{\def\shibui@font{garamond}}
+\DeclareOptionBeamer{charter}{\def\shibui@font{charter}}
+\DeclareOptionBeamer{mono}{\def\shibui@font{mono}}
+\ExecuteOptionsBeamer{sans}  % Default to sans
 \ProcessOptionsBeamer
 
 % Define font loading based on option
-\ifx\tufte@font\undefined
-  \def\tufte@font{serif}
+\ifx\shibui@font\undefined
+  \def\shibui@font{sans}
 \fi
 
-\def\tufte@sans{sans}
-\ifx\tufte@font\tufte@sans
+% Helper macros for font comparison
+\def\shibui@sans{sans}
+\def\shibui@serif{serif}
+\def\shibui@garamond{garamond}
+\def\shibui@charter{charter}
+\def\shibui@mono{mono}
+
+\ifx\shibui@font\shibui@sans
   % Sans-serif theme: Use Fira Sans
-  \usefonttheme{default}  % Use sans-serif
+  \usefonttheme{default}
   \RequirePackage[sfdefault]{FiraSans}
   \RequirePackage[T1]{fontenc}
-\else
-  % Serif theme: Use ET Book or Palatino (Tufte style)
+\else\ifx\shibui@font\shibui@garamond
+  % EB Garamond: Elegant classic serif
   \usefonttheme{serif}
-
+  \RequirePackage{ebgaramond}
+  \RequirePackage[cmintegrals,cmbraces]{newtxmath}
+  \RequirePackage[T1]{fontenc}
+\else\ifx\shibui@font\shibui@charter
+  % Charter: Clean, readable serif
+  \usefonttheme{serif}
+  \RequirePackage[charter]{mathdesign}
+  \RequirePackage[T1]{fontenc}
+\else\ifx\shibui@font\shibui@mono
+  % Fira Mono: Monospace for code-heavy presentations
+  \usefonttheme{default}
+  \RequirePackage[scale=0.85]{FiraMono}
+  \renewcommand*\familydefault{\ttdefault}
+  \RequirePackage[T1]{fontenc}
+\else
+  % Serif theme (default): Use ET Book or Palatino
+  \usefonttheme{serif}
   % Attempt to use ET Book if available, fall back to Palatino
   \IfFileExists{ETbb.sty}{%
     \usepackage[lining]{ETbb}
@@ -35,7 +60,7 @@
     \usepackage{mathpazo}
     \usepackage[scaled=0.95]{helvet}
   }
-\fi
+\fi\fi\fi\fi
 
 % Font sizes for different elements
 \setbeamerfont{title}{size=\Huge,series=\bfseries}
@@ -78,8 +103,8 @@
 \setbeamerfont{block body example}{size=\normalsize,series=\normalfont}
 
 % Captions - smaller and less prominent
-\setbeamerfont{caption}{size=\small,series=\normalfont}
-\setbeamerfont{caption name}{size=\small,series=\normalfont}
+\setbeamerfont{caption}{size=\footnotesize,series=\normalfont}
+\setbeamerfont{caption name}{size=\footnotesize,series=\normalfont}
 
 % Bibliography
 \setbeamerfont{bibliography item}{size=\small}
@@ -103,7 +128,7 @@
 \AtBeginDocument{%
   \@ifpackageloaded{tikz}{%
     % Set TikZ to use document font (serif or sans based on theme option)
-    \ifx\tufte@font\tufte@sans
+    \ifx\shibui@font\shibui@sans
       % Sans-serif theme: use sans font
       \tikzset{
         every picture/.append style={font=\sffamily},

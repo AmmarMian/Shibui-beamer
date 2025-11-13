@@ -278,12 +278,12 @@ INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/beamer/beamericononline.20.pd
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/beamer/beamericononline.20.pdf
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/beamer/beamerouterthemedefault.sty
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/beamer/beamerouterthemedefault.sty
-INPUT ./beamerthemeTufte.sty
-INPUT beamerthemeTufte.sty
-INPUT ./beamercolorthemeTufte.sty
-INPUT ./beamerfontthemeTufte.sty
-INPUT ./beamerinnerthemeTufte.sty
-INPUT ./beamerouterthemeTufte.sty
+INPUT ./beamerthemeShibui.sty
+INPUT beamerthemeShibui.sty
+INPUT ./beamercolorthemeShibui.sty
+INPUT ./beamerfontthemeShibui.sty
+INPUT ./beamerouterthemeShibui.sty
+INPUT ./beamerinnerthemeShibui.sty
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty
@@ -319,8 +319,8 @@ INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/trimspaces/trimspaces.sty
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/trimspaces/trimspaces.sty
 INPUT /usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarycalc.code.tex
 INPUT /usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarycalc.code.tex
-INPUT beamercolorthemeTufte.sty
-INPUT beamerfontthemeTufte.sty
+INPUT beamercolorthemeShibui.sty
+INPUT beamerfontthemeShibui.sty
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/fira/FiraSans.sty
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/fira/FiraSans.sty
 INPUT /usr/local/texlive/2025/texmf-dist/tex/generic/iftex/ifxetex.sty
@@ -342,8 +342,8 @@ INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/fira/T1FiraSans-OsF.fd
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/fira/T1FiraSans-OsF.fd
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/fira/T1FiraSans-OsF.fd
 INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/public/fira/FiraSans-Regular-osf-t1.tfm
-INPUT beamerinnerthemeTufte.sty
-INPUT beamerouterthemeTufte.sty
+INPUT beamerinnerthemeShibui.sty
+INPUT beamerouterthemeShibui.sty
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/listings/listings.sty
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/listings/listings.sty
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/listings/lstpatch.sty
@@ -463,6 +463,9 @@ INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/translator/translator-numbers
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/translator/translator-theorem-dictionary-English.dict
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/translator/translator-theorem-dictionary-English.dict
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/translator/translator-theorem-dictionary-English.dict
+INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/tcolorbox/tcblistings.code.tex
+INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/tcolorbox/tcblistingscore.code.tex
+INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/tcolorbox/tcbprocessing.code.tex
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/tcolorbox/tcbskins.code.tex
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/tikzfill/tikzfill.image.sty
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/tikzfill/tikzfill.image.sty
@@ -562,6 +565,8 @@ INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/jknappen/ec/ecit0800.tfm
 INPUT ./example.toc
 INPUT ./example.toc
 INPUT example.toc
+INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/public/fira/FiraSans-Bold-osf-t1.tfm
+INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/jknappen/ec/ectt1000.tfm
 INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/jknappen/ec/ectt0900.tfm
 INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/jknappen/ec/ectc0800.tfm
 INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmss8.tfm
@@ -571,6 +576,8 @@ INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam5
 INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm5.tfm
 INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/public/fira/FiraSans-Regular-osf-t1.tfm
 INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/public/fira/FiraSans-Italic-osf-t1.tfm
+INPUT /usr/local/texlive/2025/texmf-dist/fonts/vf/public/fira/FiraSans-Bold-osf-t1.vf
+INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/public/fira/FiraSans-Bold-osf-t1--base.tfm
 INPUT ./example.toc
 INPUT ./example.toc
 INPUT example.toc
@@ -580,7 +587,6 @@ INPUT example.toc
 INPUT ./example.toc
 INPUT ./example.toc
 INPUT example.toc
-INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/jknappen/ec/ectt1000.tfm
 OUTPUT example.nav
 OUTPUT example.toc
 OUTPUT example.snm

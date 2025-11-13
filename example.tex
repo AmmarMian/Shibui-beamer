@@ -1,19 +1,22 @@
 \documentclass[aspectratio=169]{beamer}
 
-% Use the Tufte theme
+% Use the Shibui theme - Japanese aesthetic of simple, subtle beauty
 % Options:
-%   - Color: dark (default), light, solarizedlight, solarizeddark, solarizedosaka,
+%   - Color: light (default), dark, solarizedlight, solarizeddark, solarizedosaka,
 %            nord, gruvboxlight, gruvboxdark, autumn
-%   - Font: serif (default) or sans
-%   - Layout: nosectionheader (hide section from header), navontop (show navigation above title)
+%   - Font: sans (default), serif, garamond, charter, mono
+%   - Layout: nosectionheader (default, hide section from header), navontop (show navigation above title)
 %   - TOC: nosub (hide subsections in table of contents)
+%   - Progress bar: progressbar=basic (default), progressbar=segmented, progressbar=none
 %
 % Examples:
-%   \usetheme[solarizedosaka]{Tufte}                    % Just color scheme
-%   \usetheme[nord, sans]{Tufte}                        % Color + font
-%   \usetheme[dark, navontop]{Tufte}                    % Show navigation squares above title
-%   \usetheme[gruvboxdark, sans, nosectionheader]{Tufte} % Multiple options
-\usetheme[solarizeddark, sans, nosub, navontop, nosectionheader]{Tufte}
+%   \usetheme{Shibui}                                   % Use all defaults
+%   \usetheme[solarizedosaka]{Shibui}                   % Just color scheme
+%   \usetheme[nord, serif]{Shibui}                      % Color + font
+%   \usetheme[dark, navontop]{Shibui}                   % Show navigation squares above title
+%   \usetheme[gruvboxdark, garamond]{Shibui}            % Multiple options
+%   \usetheme[nord, progressbar=segmented]{Shibui}      % Section-based progress bar
+\usetheme[sans, light, nosub, progressbar=segmented, navontop]{Shibui}
 
 % Custom footer text (optional)
 \footertext{Conference Name 2024 -- City, Country}
@@ -29,7 +32,7 @@
 % You can still override settings here if needed.
 
 % Metadata
-\title{The Tufte Beamer Theme}
+\title{The Shibui Beamer Theme}
 \subtitle{A Minimalist Design for Clear Communication}
 \author{Your Name}
 \institute{Your Institution}
@@ -53,7 +56,7 @@
 % \sectionframe
 
 \begin{frame}{Design Philosophy}
-  The Tufte theme embodies Edward Tufte's design principles:
+  The Shibui theme embodies Japanese minimalist design principles:
 
   \begin{itemize}
     \item Clarity through simplicity
@@ -64,7 +67,7 @@
   \end{itemize}
 
   \vspace{1em}
-  This theme is inspired by the \textcolor{tufteaccent}{tufte-css} project and uses a clean, readable color palette.
+  Shibui represents simple, subtle, and unobtrusive beauty through refined restraint.
 \end{frame}
 
 \begin{frame}{Key Features}
@@ -73,7 +76,7 @@
     \item \textbf{Navigation Squares}: Shows current section slides only
     \item \textbf{Progress Bar}: Visual indicator with page numbers
     \item \textbf{Minimal Headline}: Section and title without visual clutter
-    \item \textbf{ET Book Font}: Beautiful serif typography (Palatino fallback)
+    \item \textbf{Multiple Fonts}: Choose from sans-serif, serif, or monospace options
   \end{enumerate}
 \end{frame}
 
@@ -88,12 +91,14 @@
 
   \vspace{1em}
 
-  \textbf{This theme uses serif fonts} in the tradition of Tufte's books:
+  \textbf{This theme offers 5 font options} for different presentation styles:
 
   \begin{itemize}
-    \item Primary: ET Book (if available)
-    \item Fallback: Palatino
-    \item Both provide excellent readability
+    \item \textbf{sans} (default): Fira Sans -- clean, modern sans-serif
+    \item \textbf{serif}: ET Book or Palatino fallback -- classic elegance
+    \item \textbf{garamond}: EB Garamond -- sophisticated serif typography
+    \item \textbf{charter}: Charter -- highly readable serif
+    \item \textbf{mono}: Fira Mono -- monospace for code-heavy presentations
   \end{itemize}
 
   \vspace{1em}
@@ -177,30 +182,30 @@
   Use blocks sparingly---content should speak for itself.
 \end{frame}
 
-\begin{frame}{Custom Tufte Boxes}
-  The theme provides a custom \texttt{tufteframe} environment with minimal styling:
+\begin{frame}{Custom Shibui Boxes}
+  The theme provides a custom \texttt{shibuiframe} environment with minimal styling:
 
   \vspace{0.5em}
 
-  \begin{tufteframe}{Key Concept}
-    This is a custom box with only bottom and right borders, following Tufte's minimal aesthetic. The title overlaps the top-left corner with a clean border.
+  \begin{shibuiframe}{Key Concept}
+    This is a custom box with only bottom and right borders, following Shibui's minimal aesthetic. The title overlaps the top-left corner with a clean border.
 
     \vspace{0.3em}
 
     Perfect for highlighting important concepts without visual clutter.
-  \end{tufteframe}
+  \end{shibuiframe}
 
   \vspace{0.5em}
 
-  \begin{tufteframe}{Mathematical Insight}
-    The box adapts to both light and dark themes automatically, maintaining readability and the clean Tufte style across all color schemes.
-  \end{tufteframe}
+  \begin{shibuiframe}{Mathematical Insight}
+    The box adapts to both light and dark themes automatically, maintaining readability and the clean Shibui style across all color schemes.
+  \end{shibuiframe}
 \end{frame}
 
 \subsection{Tables}
 
 \begin{frame}{Simple Tables}
-  Tables follow the minimal Tufte aesthetic:
+  Tables follow the minimal Shibui aesthetic:
 
   \vspace{1em}
 
@@ -278,26 +283,26 @@
 
 \begin{frame}{Quotations}
   \begin{quote}
-    ``The commonality between science and art is in trying to see profoundly---to develop strategies of seeing and showing.''
+    ``Less is more.''
   \end{quote}
 
   \vspace{0.5em}
-  \hfill --- Edward Tufte
+  \hfill --- Ludwig Mies van der Rohe
 
   \vspace{2em}
 
   \begin{quote}
-    ``Above all else show the data.''
+    ``Simplicity is the ultimate sophistication.''
   \end{quote}
 
   \vspace{0.5em}
-  \hfill --- Edward Tufte
+  \hfill --- Leonardo da Vinci
 \end{frame}
 
 \subsection{Mathematics}
 
 \begin{frame}{Mathematics}
-  The Tufte theme handles mathematical content elegantly:
+  The Shibui theme handles mathematical content elegantly:
 
   \vspace{1em}
 
@@ -376,13 +381,15 @@ for num in fibonacci(10):
 
   \vspace{1em}
 
-  The Tufte theme's generous whitespace helps create natural visual hierarchy without competing elements.
+  The Shibui theme's generous whitespace helps create natural visual hierarchy without competing elements.
 \end{frame}
 
 \subsection{Algorithms and Pseudocode}
 
 \begin{frame}{Algorithms}
+
   \begin{algorithm}[H]
+    \small
     \caption{Binary Search}
     \begin{algorithmic}[1]
       \Procedure{BinarySearch}{$A, n, T$}
@@ -410,22 +417,22 @@ for num in fibonacci(10):
   \centering
   \begin{tikzpicture}[scale=0.8]
     % Nodes
-    \node[circle,draw=tuftetext,fill=tuftegray!20,text=tuftetext,minimum size=1cm] (A) at (0,0) {A};
-    \node[circle,draw=tuftetext,fill=tuftegray!20,text=tuftetext,minimum size=1cm] (B) at (3,1) {B};
-    \node[circle,draw=tuftetext,fill=tuftegray!20,text=tuftetext,minimum size=1cm] (C) at (3,-1) {C};
-    \node[circle,draw=tufteaccent,fill=tufteaccent!15,text=tuftetext,minimum size=1cm] (D) at (6,0) {D};
+    \node[circle,draw=shibuitext,fill=shibuigray!20,text=shibuitext,minimum size=1cm] (A) at (0,0) {A};
+    \node[circle,draw=shibuitext,fill=shibuigray!20,text=shibuitext,minimum size=1cm] (B) at (3,1) {B};
+    \node[circle,draw=shibuitext,fill=shibuigray!20,text=shibuitext,minimum size=1cm] (C) at (3,-1) {C};
+    \node[circle,draw=shibuiaccent,fill=shibuiaccent!15,text=shibuitext,minimum size=1cm] (D) at (6,0) {D};
 
     % Edges
-    \draw[->,thick,color=tuftetext] (A) -- (B) node[midway,above,text=tuftetext] {5};
-    \draw[->,thick,color=tuftetext] (A) -- (C) node[midway,below,text=tuftetext] {3};
-    \draw[->,thick,color=tuftetext] (B) -- (D) node[midway,above,text=tuftetext] {2};
-    \draw[->,thick,color=tuftetext] (C) -- (D) node[midway,below,text=tuftetext] {4};
-    \draw[->,thick,color=tufteaccent] (B) -- (C) node[midway,right,text=tufteaccent] {1};
+    \draw[->,thick,color=shibuitext] (A) -- (B) node[midway,above,text=shibuitext] {5};
+    \draw[->,thick,color=shibuitext] (A) -- (C) node[midway,below,text=shibuitext] {3};
+    \draw[->,thick,color=shibuitext] (B) -- (D) node[midway,above,text=shibuitext] {2};
+    \draw[->,thick,color=shibuitext] (C) -- (D) node[midway,below,text=shibuitext] {4};
+    \draw[->,thick,color=shibuiaccent] (B) -- (C) node[midway,right,text=shibuiaccent] {1};
   \end{tikzpicture}
 
   \vspace{0.5em}
 
-  \small Weighted directed graph using themed colors (tuftetext, tufteaccent, tuftegray)
+  \small Weighted directed graph using themed colors (shibuitext, shibuiaccent, shibuigray)
 \end{frame}
 
 \begin{frame}{PGFPlots: Standard Style}
@@ -437,34 +444,34 @@ for num in fibonacci(10):
       xlabel={$x$},
       ylabel={$f(x)$},
       grid=major,
-      grid style={color=tuftegray!30},
+      grid style={color=shibuigray!30},
       legend pos=north west,
-      axis line style={color=tuftetext},
-      tick label style={color=tuftetext},
-      label style={color=tuftetext}
+      axis line style={color=shibuitext},
+      tick label style={color=shibuitext},
+      label style={color=shibuitext}
     ]
-      \addplot[color=tuftetext, thick, smooth, domain=-2:2] {x^2};
+      \addplot[color=shibuitext, thick, smooth, domain=-2:2] {x^2};
       \addlegendentry{$x^2$}
 
-      \addplot[color=tufteaccent, thick, smooth, domain=-2:2] {2^x};
+      \addplot[color=shibuiaccent, thick, smooth, domain=-2:2] {2^x};
       \addlegendentry{$2^x$}
 
-      \addplot[color=tuftedarkgray, thick, dashed, domain=-2:2] {0.5*x};
+      \addplot[color=shibuidarkgray, thick, dashed, domain=-2:2] {0.5*x};
       \addlegendentry{$0.5x$}
     \end{axis}
   \end{tikzpicture}
 \end{frame}
 
-\begin{frame}{PGFPlots: Tufte Style}
-  Simple activation with \texttt{tufte style} (no grid, legend outside):
+\begin{frame}{PGFPlots: Shibui Style}
+  Simple activation with \texttt{shibui style} (no grid, legend outside):
 
   \vspace{0.3em}
 
   \centering
   \begin{tikzpicture}
     \begin{axis}[
-      tufte style,
-      tufte colors,
+      shibui style,
+      shibui colors,
       width=0.75\textwidth,
       height=0.5\textheight,
       xlabel={$x$},
@@ -489,7 +496,7 @@ for num in fibonacci(10):
   \centering
   \begin{tikzpicture}
     \begin{axis}[
-      tufte style,
+      shibui style,
       width=0.75\textwidth,
       height=0.52\textheight,
       xlabel={Time ($t$)},
@@ -497,11 +504,11 @@ for num in fibonacci(10):
       ymin=-1.5, ymax=1.5
     ]
       % Simulated dynamic data
-      \addplot[color=tuftetext, thick, smooth, domain=0:10, samples=100]
+      \addplot[color=shibuitext, thick, smooth, domain=0:10, samples=100]
         {sin(deg(x))};
       \addlegendentry{Base signal}
 
-      \addplot[color=tufteaccent, thick, smooth, domain=0:10, samples=100]
+      \addplot[color=shibuiaccent, thick, smooth, domain=0:10, samples=100]
         {sin(deg(x)) + 0.2*sin(deg(5*x))};
       \addlegendentry{With noise}
     \end{axis}
@@ -514,11 +521,11 @@ for num in fibonacci(10):
 
 \subsection{Design Principles}
 
-\begin{frame}{Tufte's Principles}
+\begin{frame}{Shibui Principles}
   Apply these principles when using this theme:
 
   \begin{itemize}
-    \item \textbf{Show the data}: Let content take center stage
+    \item \textbf{Show the content}: Let content take center stage
     \item \textbf{Reduce noise}: Every element should serve a purpose
     \item \textbf{Integrate text and graphics}: Create a unified whole
     \item \textbf{Respect your audience}: Clear, honest presentation
@@ -546,14 +553,14 @@ for num in fibonacci(10):
 %--------------------------------------------------
 
 \begin{frame}{Summary}
-  The Tufte Beamer theme offers:
+  The Shibui Beamer theme offers:
 
   \begin{itemize}
-    \item \textbf{Elegant design} inspired by Tufte's work
+    \item \textbf{Elegant design} inspired by Japanese minimalism
     \item \textbf{Minimal interface} that stays out of your way
     \item \textbf{Clear navigation} through sections and slides
-    \item \textbf{Readable typography} with ET Book/Palatino
-    \item \textbf{Calm color palette} from tufte-css
+    \item \textbf{Multiple font options} including Fira Sans, Garamond, Charter, and more
+    \item \textbf{Calm color palettes} including Solarized variants
   \end{itemize}
 
   \vspace{1em}
@@ -569,9 +576,9 @@ for num in fibonacci(10):
 
   \vspace{2em}
 
-  \textcolor{tuftedarkgray}{%
+  \textcolor{shibuidarkgray}{%
     This theme is available at: \\
-    \texttt{github.com/yourname/tufte-beamer}
+    \texttt{github.com/yourname/shibui-beamer}
   }
 \end{frame}
 
@@ -583,38 +590,50 @@ for num in fibonacci(10):
 
 \section{Appendix}
 
-\begin{frame}{Theme Options Reference}
+\begin{frame}[allowframebreaks]{Theme Options Reference}
   Complete list of theme options:
 
   \vspace{0.3em}
 
-  \begin{tufteframe}{Color Themes}
-    \texttt{dark} -- Dark background (default) \\
-    \texttt{light} -- Light cream background \\
+  \begin{shibuiframe}{Color Themes}
+    \texttt{light} -- Light cream background (default) \\
+    \texttt{dark} -- Dark background \\
     \texttt{solarizedlight}, \texttt{solarizeddark}, \texttt{solarizedosaka} -- Solarized variants \\
     \texttt{nord} -- Arctic blue theme \\
     \texttt{gruvboxlight}, \texttt{gruvboxdark} -- Warm retro colors \\
     \texttt{autumn} -- Warm earthy tones
-  \end{tufteframe}
+  \end{shibuiframe}
 
   \vspace{0.3em}
 
-  \begin{tufteframe}{Font Themes}
-    \texttt{serif} -- ET Book/Palatino (default) \\
-    \texttt{sans} -- Fira Sans
-  \end{tufteframe}
+  \begin{shibuiframe}{Font Themes}
+    \texttt{sans} -- Fira Sans (default) \\
+    \texttt{serif} -- ET Book/Palatino \\
+    \texttt{garamond} -- EB Garamond \\
+    \texttt{charter} -- Charter \\
+    \texttt{mono} -- Fira Mono
+  \end{shibuiframe}
 
   \vspace{0.3em}
 
-  \begin{tufteframe}{Layout Options}
+  \begin{shibuiframe}{Layout Options}
     \texttt{nosectionheader} -- Hide section name from header \\
     \texttt{navontop} -- Show navigation squares above title \\
     \texttt{nosub} -- Hide subsections in table of contents
-  \end{tufteframe}
+  \end{shibuiframe}
 
   \vspace{0.3em}
 
-  \textbf{Usage:} \texttt{\textbackslash usetheme[nord,sans,navontop]\{Tufte\}}
+  \begin{shibuiframe}{Progress Bar Options}
+    \texttt{progressbar=basic} -- Single continuous bar (default) \\
+    \texttt{progressbar=segmented} -- Section-based segments \\
+    \texttt{progressbar=none} -- No progress bar, page numbers only
+  \end{shibuiframe}
+
+  \vspace{0.3em}
+
+  \textbf{Usage:} \texttt{\textbackslash usetheme[nord,sans,navontop]\{Shibui\}} \\
+  \textbf{Example:} \texttt{\textbackslash usetheme[progressbar=segmented]\{Shibui\}}
 \end{frame}
 
 \begin{frame}{Color Definitions}
@@ -627,18 +646,18 @@ for num in fibonacci(10):
     \hline
     \textbf{Color Name} & \textbf{Usage} \\
     \hline
-    \texttt{tuftebg} & Background color \\
-    \texttt{tuftetext} & Main text color \\
-    \texttt{tufteaccent} & Accent/highlight color \\
-    \texttt{tuftegray} & UI elements (light) \\
-    \texttt{tuftedarkgray} & Secondary text \\
-    \texttt{tuftecodebg} & Code/box background \\
+    \texttt{shibuibg} & Background color \\
+    \texttt{shibuitext} & Main text color \\
+    \texttt{shibuiaccent} & Accent/highlight color \\
+    \texttt{shibuigray} & UI elements (light) \\
+    \texttt{shibuidarkgray} & Secondary text \\
+    \texttt{shibuicodebg} & Code/box background \\
     \hline
   \end{tabular}
 
   \vspace{1em}
 
-  \small Use with: \texttt{\textbackslash color\{tufteaccent\}} or \texttt{\textbackslash textcolor\{tufteaccent\}\{text\}}
+  \small Use with: \texttt{\textbackslash color\{shibuiaccent\}} or \texttt{\textbackslash textcolor\{shibuiaccent\}\{text\}}
 \end{frame}
 
 \begin{frame}{Custom Environments}
@@ -646,15 +665,15 @@ for num in fibonacci(10):
 
   \vspace{0.5em}
 
-  \begin{tufteframe}{tufteframe}
+  \begin{shibuiframe}{shibuiframe}
     Minimal box with background color for highlighting concepts.
 
     \textbf{Usage:}
 
-    \texttt{\textbackslash begin\{tufteframe\}\{Title\}} \\
+    \texttt{\textbackslash begin\{shibuiframe\}\{Title\}} \\
     \texttt{~~Content...} \\
-    \texttt{\textbackslash end\{tufteframe\}}
-  \end{tufteframe}
+    \texttt{\textbackslash end\{shibuiframe\}}
+  \end{shibuiframe}
 
   \vspace{0.5em}
 
@@ -666,7 +685,7 @@ for num in fibonacci(10):
 
   \vspace{0.5em}
 
-  \begin{tufteframe}{footertext Command}
+  \begin{shibuiframe}{footertext Command}
     The \texttt{\textbackslash footertext\{\}} command lets you add custom text displayed above the progress bar in very small font.
 
     \vspace{0.3em}
@@ -678,7 +697,7 @@ for num in fibonacci(10):
     \vspace{0.3em}
 
     Perfect for adding: conference names, dates, institutional logos, or copyright notices.
-  \end{tufteframe}
+  \end{shibuiframe}
 
   \vspace{0.3em}
 
@@ -687,19 +706,20 @@ for num in fibonacci(10):
 
 \begin{frame}{Additional Resources}
   \begin{itemize}
-    \item \textbf{Edward Tufte's Books}
+    \item \textbf{Design References}
       \begin{itemize}
-        \item \emph{The Visual Display of Quantitative Information}
-        \item \emph{Envisioning Information}
-        \item \emph{Beautiful Evidence}
+        \item Japanese aesthetics: Wabi-sabi, Shibui, Ma
+        \item Minimalist design principles
+        \item Typography in presentation design
       \end{itemize}
 
     \vspace{0.5em}
 
-    \item \textbf{Related Projects}
+    \item \textbf{Color Schemes}
       \begin{itemize}
-        \item tufte-latex: Document classes for LaTeX
-        \item tufte-css: Web design framework
+        \item Solarized color palette
+        \item Nord theme
+        \item Gruvbox retro colors
       \end{itemize}
 
     \vspace{0.5em}
@@ -712,22 +732,30 @@ for num in fibonacci(10):
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Troubleshooting}
-  \begin{tufteframe}{Font Issues}
+\begin{frame}[allowframebreaks]{Troubleshooting}
+  \begin{shibuiframe}{Font Issues}
     If ET Book font is not available, Palatino is used as fallback. For Fira Sans, ensure the package is installed: \texttt{texlive-fonts-extra}
-  \end{tufteframe}
+  \end{shibuiframe}
 
   \vspace{0.5em}
 
-  \begin{tufteframe}{Color Problems}
+  \begin{shibuiframe}{Color Problems}
     Ensure you're using XeLaTeX or pdfLaTeX with appropriate color packages. Theme loads colors automatically.
-  \end{tufteframe}
+  \end{shibuiframe}
 
   \vspace{0.5em}
 
-  \begin{tufteframe}{Progress Bar}
-    Progress bar is automatically hidden on title page and plain frames. Use \texttt{noframenumbering} option to exclude specific frames.
-  \end{tufteframe}
+  \begin{shibuiframe}{Progress Bar}
+    Progress bar is automatically hidden on title page and plain frames. Three modes available:
+
+    \begin{itemize}
+      \item \textbf{basic} (default): Single continuous bar
+      \item \textbf{segmented}: Section-based segments with gaps. Past sections are dimmed, current section fills progressively
+      \item \textbf{none}: No bar, only page numbers
+    \end{itemize}
+
+    Use \texttt{noframenumbering} option to exclude specific frames from count.
+  \end{shibuiframe}
 \end{frame}
 
 \end{document}

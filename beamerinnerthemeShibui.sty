@@ -1,18 +1,18 @@
-% Beamer Inner Theme: Tufte
+% Beamer Inner Theme: Shibui
 % Defines title page, lists, blocks, and other internal elements
-% Minimalist design inspired by Tufte
+% Minimalist design inspired by Shibui
 
 \mode<presentation>
 
 % Check for theme option
-\DeclareOptionBeamer{nosub}{\def\tufte@nosub{true}}
+\DeclareOptionBeamer{nosub}{\def\shibui@nosub{true}}
 \ProcessOptionsBeamer
 
 %--------------------------------------------------
 % TITLE PAGE (rule of thirds, left-aligned, no header/footer)
 %--------------------------------------------------
 
-\defbeamertemplate*{title page}{Tufte theme}[1][]{%
+\defbeamertemplate*{title page}{Shibui theme}[1][]{%
   \vspace*{0.25\textheight}%
   \begingroup
     \raggedright
@@ -25,7 +25,7 @@
 
       % Decorative line
       \vskip0.5em
-      {\color{tuftetext}\rule{0.3\linewidth}{0.4pt}}
+      {\color{shibuitext}\rule{0.3\linewidth}{0.4pt}}
       \vskip0.5em
 
       % Subtitle
@@ -104,7 +104,7 @@
   \roman{enumiii}.%
 }
 
-% List spacing - generous (Tufte style)
+% List spacing - generous (Shibui style)
 \setlength{\leftmargini}{1.5em}
 \setlength{\leftmarginii}{1.5em}
 \setlength{\leftmarginiii}{1.5em}
@@ -171,7 +171,7 @@
 }
 
 % Subsection template - conditionally show based on nosub option
-\ifx\tufte@nosub\undefined
+\ifx\shibui@nosub\undefined
   % Show subsections (default)
   \setbeamertemplate{subsection in toc}{%
     \hspace{1.5em}\rule{0.4ex}{0.4ex}~\inserttocsubsection\par
@@ -223,7 +223,7 @@
 }
 
 %--------------------------------------------------
-% MARGINS (generous whitespace, Tufte style)
+% MARGINS (generous whitespace, Shibui style)
 %--------------------------------------------------
 
 \setbeamersize{text margin left=1cm,text margin right=1cm}

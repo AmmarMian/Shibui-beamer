@@ -1,0 +1,411 @@
+% Beamer Outer Theme: Shibui
+% Defines headline, footline, and navigation elements
+% Minimalist design with progress bar
+
+\mode<presentation>
+
+% Process theme options
+\DeclareOptionBeamer{nosectionheader}{\def\shibui@nosectionheader{true}}
+\DeclareOptionBeamer{navontop}{\def\shibui@navontop{true}}
+\DeclareOptionBeamer{progressbar}{\def\shibui@progressbar{#1}}
+\ExecuteOptionsBeamer{nosectionheader,progressbar=basic}  % Default: no section header, basic progress bar
+\ProcessOptionsBeamer
+
+% Remove default navigation symbols
+\setbeamertemplate{navigation symbols}{}
+
+% Helper commands to ignore arguments
+\newcommand{\@gobblefive}[5]{}
+\newcommand{\@gobblesix}[6]{}
+
+% Counter for tracking slides in current section
+\newcount\shibui@slidecount
+
+% Counters for segmented progress bar
+\newcount\shibui@totalsections
+\newcount\shibui@currentcountsection
+\newcount\shibui@tempcountsection
+
+% Helper to parse page range in format "first/last"
+\def\shibui@parserange#1/#2\relax{%
+  \def\shibui@rangefirst{#1}%
+  \def\shibui@rangelast{#2}%
+}
+
+% Section entry handler for counting sections and frames
+\def\shibui@countsectionentry#1#2#3#4#5{%
+  % #1=section number, #2=section name, #3=page, #4=text, #5=part
+  \ifnum#1>0\relax% Only count real sections (skip section 0 which is title/ToC)
+    \global\shibui@totalsections=#1\relax% Update total sections count
+    % Initialize frame count for this section to 0
+    \expandafter\gdef\csname shibui@sec@#1@frames\endcsname{0}%
+  \fi%
+}
+
+% Slide entry handler for counting frames per section
+\def\shibui@countslideentry#1#2#3#4#5#6{%
+  % #1=section, #2=subsection, #3=slide in subsection, #4=first/last page, #5=subsection name, #6=part
+  \ifnum#1>0\relax% Only count slides in real sections
+    \ifnum#3>0\relax% Skip backup slides (slide number 0)
+      % Increment frame count for this section
+      \expandafter\xdef\csname shibui@sec@#1@frames\endcsname{%
+        \the\numexpr\csname shibui@sec@#1@frames\endcsname+1\relax%
+      }%
+    \fi%
+  \fi%
+}
+
+% Helper to get frames count for a specific section
+\def\shibui@getframesinsection#1{%
+  \ifcsname shibui@sec@#1@frames\endcsname%
+    \csname shibui@sec@#1@frames\endcsname%
+  \else%
+    0%
+  \fi%
+}
+
+% Custom section navigation - sections on left
+\newcommand{\shibui@sectionentry}[5]{%
+  \ifnum#1>1\hspace{1em}\fi% Add space between sections
+  \ifnum\c@section=#1%
+    % Reset counter when entering current section
+    \global\shibui@slidecount=0\relax%
+    {\usebeamercolor[fg]{shibuiaccent}\textbf{#2}}%
+  \else%
+    {\usebeamercolor[fg]{section in head/foot shaded}#2}%
+  \fi%
+}
+
+% Mini frames (circles) only for current section - shown on right
+% #1=section, #2=subsection, #3=slide in subsection, #4=first/last page, #5=subsection name, #6=part
+\def\shibui@slideentry#1#2#3#4#5#6{%
+  % Only show circles for current section
+  \ifnum#1=\c@section\relax%
+    \ifnum#3>0\relax% Skip if slide number is 0 (backup slides)
+      % Increment slide count for current section
+      \global\advance\shibui@slidecount by 1\relax%
+      % Parse the page range "first/last"
+      \shibui@parserange#4\relax%
+      % Determine if this is the current slide
+      \def\shibui@circlestyle{0}% Default: outlined circle
+      \ifnum\shibui@rangefirst>0\relax%
+        % Check if current page is within this slide's page range
+        \ifnum\c@page<\shibui@rangefirst\relax%
+          % Before this slide - outlined
+        \else%
+          \ifnum\c@page>\shibui@rangelast\relax%
+            % After this slide - outlined
+          \else%
+            % Current slide - filled circle
+            \def\shibui@circlestyle{1}%
+          \fi%
+        \fi%
+      \fi%
+      % Draw circle
+      \raisebox{0.1ex}{\begin{pgfpicture}{0pt}{0pt}{0.12cm}{0.12cm}%
+        \ifnum\shibui@circlestyle=1\relax%
+          \color{shibuiaccent}%
+          \pgfpathcircle{\pgfpoint{0.06cm}{0.06cm}}{0.06cm}%
+          \pgfusepath{fill}%
+        \else%
+          \color{shibuigray}%
+          \pgfpathcircle{\pgfpoint{0.06cm}{0.06cm}}{0.06cm}%
+          \pgfusepath{stroke}%
+        \fi%
+      \end{pgfpicture}}%
+    \fi%
+  \fi%
+}
+
+% Disable sidebar
+\setbeamersize{sidebar width left=0cm, sidebar width right=0cm}
+
+%--------------------------------------------------
+% HEADLINE: Section name + Navigation squares + Frame title
+%--------------------------------------------------
+
+% Store the frame title - will be set by our frametitle template
+\newcommand{\shibuiframetitle}{}
+
+\defbeamertemplate*{headline}{Shibui theme}{%
+  \ifnum\c@framenumber=1
+    % No headline on title page
+  \else
+    % Navigation sections on top (if navontop option is set)
+    \ifx\shibui@navontop\undefined
+      % Default: no navigation on top
+    \else
+      % Show section names on left | circles on right (same line)
+      \vskip0.3ex%
+      \begin{beamercolorbox}[wd=\paperwidth,ht=2.5ex,dp=0.5ex,leftskip=1cm,rightskip=1cm]{navigation}
+        {\tiny%
+          % Section names
+          \let\sectionentry\shibui@sectionentry\let\slideentry\@gobblesix\def\lastpartialnumber{0}\dohead%
+          % Vertical separator
+          \hspace{1em}{\color{shibuigray}\rule{0.4pt}{1.2ex}}\hspace{1em}%
+          % Circles for current section
+          \beamer@slideinframe=0\relax%
+          \let\sectionentry\@gobblefive\let\slideentry\shibui@slideentry\def\lastpartialnumber{0}\dohead%
+        }%
+      \end{beamercolorbox}
+      % Thin separator line below navigation
+      \vskip0.3ex%
+      \hspace*{1cm}{\color{shibuigray}\rule{\dimexpr\paperwidth-2cm\relax}{0.3pt}}%
+      \vskip0.5ex%
+    \fi
+    % Main headline: section name + frame title
+    \begin{beamercolorbox}[wd=\paperwidth,ht=3ex,dp=1.5ex,leftskip=1cm,rightskip=.5em]{headline}
+      \usebeamerfont{headline}%
+      % Conditionally show section name and separator
+      \ifx\shibui@nosectionheader\undefined
+        % Section name (small and less prominent, aligned with separator line)
+        {\tiny\color{shibuigray}\insertsectionhead}%
+        \hspace{0.7em}%
+        % Vertical bar separator
+        {\color{shibuigray}\rule{0.4pt}{1.2ex}}%
+        \hspace{0.7em}%
+      \fi
+      % Frame title (always shown)
+      {\usebeamerfont{frametitle}\shibuiframetitle}%
+    \end{beamercolorbox}
+    % Separator line below headline (matching content width)
+    \vskip0.5ex%
+    \hspace*{1cm}{\color{shibuigray}\rule{\dimexpr\paperwidth-2cm\relax}{0.4pt}}%
+    \vskip1ex%
+  \fi
+}
+
+% Remove ALL spacing between navigation elements
+\setbeamertemplate{mini frame}{}%
+\setbeamertemplate{mini frame in current subsection}{}%
+\setbeamertemplate{mini frame in other subsection}{}%
+
+% CRITICAL: Remove separator spacing between section navigation items
+\defbeamertemplate{section in head/foot separator}{none}{}
+\setbeamertemplate{section in head/foot separator}[none]
+
+% Custom section navigation - render as squares with ABSOLUTELY NO SPACING
+\setbeamertemplate{section in head/foot}{%
+  \raisebox{0.1ex}{%
+    \begin{pgfpicture}{0pt}{0pt}{0.12cm}{0.12cm}%
+      % Current section - filled square
+      \color{shibuitext}%
+      \pgfpathrectangle{\pgfpointorigin}{\pgfpoint{0.12cm}{0.12cm}}%
+      \pgfusepath{fill}%
+    \end{pgfpicture}%
+  }%
+}
+
+\setbeamertemplate{section in head/foot shaded}{%
+  \raisebox{0.1ex}{%
+    \begin{pgfpicture}{0pt}{0pt}{0.12cm}{0.12cm}%
+      % Other sections - outlined square
+      \color{shibuigray}%
+      \pgfpathrectangle{\pgfpointorigin}{\pgfpoint{0.12cm}{0.12cm}}%
+      \pgfusepath{stroke}%
+    \end{pgfpicture}%
+  }%
+}
+
+%--------------------------------------------------
+% SEGMENTED PROGRESS BAR: Helper macro for drawing section-based progress
+%--------------------------------------------------
+
+\newcommand{\shibui@drawsegmentedprogress}{%
+  % First, count sections and frames per section by iterating through navigation
+  \global\shibui@totalsections=0\relax%
+  \let\sectionentry\shibui@countsectionentry%
+  \let\slideentry\shibui@countslideentry%
+  \def\lastpartialnumber{0}%
+  \dohead% Process navigation structure to count
+  %
+  % Check if we have sections - if not, fallback to basic mode
+  \ifnum\shibui@totalsections<1\relax%
+    % No sections detected - draw basic progress bar instead
+    \shibui@drawbasicprogress%
+  \else%
+    % Draw segmented progress bar
+    \pgfmathsetlength{\@tempdima}{\paperwidth-2cm}% Total width available
+    \pgfmathsetmacro{\gapwidthpt}{2}% Gap between segments in pt (dimensionless)
+    % Calculate available width after gaps in pt: total - (numsections-1)*gap
+    \pgfmathsetmacro{\availablewidthpt}{\@tempdima/1pt - (\shibui@totalsections-1)*\gapwidthpt}%
+    %
+    % Pre-calculate starting frame for current section
+    \pgfmathsetmacro{\currentsectionstartframe}{0}%
+    \shibui@tempcountsection=1\relax%
+    \loop\ifnum\shibui@tempcountsection<\c@section\relax%
+      \pgfmathsetmacro{\currentsectionstartframe}{\currentsectionstartframe + \shibui@getframesinsection{\the\shibui@tempcountsection}}%
+      \global\advance\shibui@tempcountsection by 1\relax%
+    \repeat%
+    %
+    \begin{tikzpicture}
+      \pgfmathsetmacro{\xpos}{0}% Current X position
+      % Store current section for comparison
+      \edef\currentsec{\the\c@section}%
+      % Iterate through each section using basic counter
+      \shibui@currentcountsection=1\relax%
+      \loop\ifnum\shibui@currentcountsection<\numexpr\shibui@totalsections+1\relax%
+        % Get frames in this section
+        \edef\framesinsec{\shibui@getframesinsection{\the\shibui@currentcountsection}}%
+        % Calculate segment width proportional to frames
+        \pgfmathsetmacro{\segwidth}{(\framesinsec/\inserttotalframenumber)*\availablewidthpt}%
+        %
+        % Draw background (light gray)
+        \fill[shibuigray] (\xpos pt,0) rectangle (\xpos pt + \segwidth pt,0.08cm);
+        %
+        % Determine fill based on section status
+        \edef\secsectnum{\the\shibui@currentcountsection}%
+        \ifnum\secsectnum>\currentsec\relax%
+          % Future section - no fill (already has background)
+        \else%
+          \ifnum\secsectnum<\currentsec\relax%
+            % Past section - fill with dimmed accent color
+            \fill[shibuiaccent!50!shibuigray] (\xpos pt,0) rectangle (\xpos pt + \segwidth pt,0.08cm);
+          \else%
+            % Current section - partial fill with full accent color
+            % Calculate frames into current section
+            \pgfmathsetmacro{\framesintoection}{\insertframenumber - \currentsectionstartframe - 1}%
+            \pgfmathsetmacro{\sectionprogress}{\framesintoection/\framesinsec}%
+            \pgfmathsetmacro{\fillwidth}{\sectionprogress*\segwidth}%
+            \fill[shibuiaccent] (\xpos pt,0) rectangle (\xpos pt + \fillwidth pt,0.08cm);
+          \fi%
+        \fi%
+        %
+        % Update position for next segment
+        \pgfmathsetmacro{\xpos}{\xpos + \segwidth + \gapwidthpt}%
+        \advance\shibui@currentcountsection by 1\relax%
+      \repeat%
+      %
+      % Page numbers to the right of the progress bar
+      \node[anchor=west,inner sep=0pt,outer sep=0pt,text=shibuidarkgray] at (\@tempdima+0.02cm,0.04cm)
+        {\usebeamerfont{page number in head/foot}\insertframenumber\,/\,\inserttotalframenumber};
+    \end{tikzpicture}
+  \fi%
+}
+
+% Helper macro for basic progress bar (extracted from footline)
+\newcommand{\shibui@drawbasicprogress}{%
+  \pgfmathsetlength{\@tempdima}{\paperwidth-2cm}%
+  \ifnum\inserttotalframenumber>1
+    \pgfmathsetmacro{\progress}{(\insertframenumber-1)/(\inserttotalframenumber-1)}
+    \pgfmathsetmacro{\progresswidth}{\progress*\@tempdima}
+  \else
+    \pgfmathsetmacro{\progress}{1}
+    \pgfmathsetmacro{\progresswidth}{\@tempdima}
+  \fi
+  \begin{tikzpicture}
+    % Background (light gray line)
+    \fill[shibuigray] (0,0) rectangle (\@tempdima,0.08cm);
+    % Progress (accent color line)
+    \fill[shibuiaccent] (0,0) rectangle (\progresswidth pt,0.08cm);
+    % Page numbers to the right of the progress bar
+    \node[anchor=west,inner sep=0pt,outer sep=0pt,text=shibuidarkgray] at (\@tempdima+0.02cm,0.04cm)
+      {\usebeamerfont{page number in head/foot}\insertframenumber\,/\,\inserttotalframenumber};
+  \end{tikzpicture}
+}
+
+%--------------------------------------------------
+% FOOTLINE: Progress bar + page numbers (flush bottom)
+%--------------------------------------------------
+
+\defbeamertemplate*{footline}{Shibui theme}{%
+  \ifnum\c@framenumber=1
+    % No footline on title page
+  \else
+    % Single colorbox containing footer text, progress bar, and page numbers
+    \begin{beamercolorbox}[wd=\paperwidth,ht=5ex,dp=1.5ex,leftskip=0em,rightskip=0em]{footline}
+      % Footer text (if set) - shown above progress bar in very small font
+      \ifx\shibuifootertext\@empty
+        % No footer text, maintain spacing
+        \vskip3ex
+      \else
+        \vskip1.5ex
+        \hspace*{1cm}{\tiny\color{shibuidarkgray}\shibuifootertext}%
+        \vskip0.5ex
+      \fi
+      % Draw progress bar based on mode
+      \hspace*{1cm}% Left margin offset
+      % Check progress bar mode
+      \def\shibui@pbnone{none}%
+      \def\shibui@pbbasic{basic}%
+      \def\shibui@pbsegmented{segmented}%
+      \ifx\shibui@progressbar\shibui@pbnone
+        % Mode: none - Show only page numbers without progress bar
+        \pgfmathsetlength{\@tempdima}{\paperwidth-2cm}%
+        \begin{tikzpicture}
+          \node[anchor=west,inner sep=0pt,outer sep=0pt,text=shibuidarkgray] at (0,0.04cm)
+            {\usebeamerfont{page number in head/foot}\insertframenumber\,/\,\inserttotalframenumber};
+        \end{tikzpicture}
+      \else\ifx\shibui@progressbar\shibui@pbsegmented
+        % Mode: segmented - Draw section-based progress bar
+        \shibui@drawsegmentedprogress%
+      \else
+        % Mode: basic (default) - Draw continuous progress bar
+        \shibui@drawbasicprogress%
+      \fi\fi
+    \end{beamercolorbox}
+  \fi
+}
+
+%--------------------------------------------------
+% FRAME TITLE (now in headline, not displayed in content area)
+%--------------------------------------------------
+
+\defbeamertemplate*{frametitle}{Shibui theme}{%
+  % Frame title appears in headline for regular frames
+  % Only show in content area for plain frames (no headline/footline)
+  \ifbeamer@plainframe
+    \vskip0.5em
+    \begin{beamercolorbox}[wd=\textwidth,leftskip=0em,rightskip=0em]{frametitle}
+      \usebeamerfont{frametitle}\insertframetitle
+      \ifx\insertframesubtitle\@empty
+      \else
+        \par\vskip-0.3em
+        {\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}\insertframesubtitle}
+      \fi
+    \end{beamercolorbox}
+    \vskip0.5em
+  \fi
+  % For regular frames, title is shown in headline only
+}
+
+% Section page template (centered, minimal)
+\defbeamertemplate*{section page}{Shibui theme}{
+  \centering
+  \vfill
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+  \vfill
+}
+
+% Add section page command
+\newcommand{\sectionframe}{%
+  {%
+    \setbeamertemplate{headline}{}%
+    \setbeamertemplate{footline}{}%
+    \begin{frame}[c,plain]
+      \sectionpage
+    \end{frame}
+  }%
+}
+
+%--------------------------------------------------
+% FRAMETITLE TEMPLATE
+%--------------------------------------------------
+% Override the frametitle template to capture title for headline
+% Uses setbeamertemplate to avoid "already defined" errors
+
+\setbeamertemplate{frametitle}{%
+  % Store title for use in headline
+  % Check if continuation count > 1 (first continuation is II, not I)
+  % Beamer's continuation count: 0 = first frame, 1 = frame I, 2 = frame II, etc.
+  \ifnum\insertcontinuationcount>1\relax
+    \protected@xdef\shibuiframetitle{\insertframetitle~\insertcontinuationtext}%
+  \else
+    \protected@xdef\shibuiframetitle{\insertframetitle}%
+  \fi
+  % The actual title display is handled by the headline, so we don't render anything here
+}
+
+\mode<all>

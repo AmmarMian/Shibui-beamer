@@ -1,0 +1,300 @@
+% Beamer Theme: Shibui (渋い)
+% A minimalist presentation theme embodying the Japanese aesthetic principle of Shibui:
+% simple, subtle, and unobtrusive beauty through refined restraint
+%
+% Author: Beamer presentation theme
+% License: MIT
+%
+% Features:
+% - 9 color schemes: light (default), dark, solarizedlight, solarizeddark, solarizedosaka,
+%   nord, gruvboxlight, gruvboxdark, autumn
+% - Multiple font options: sans (Fira Sans), serif (ET Book/Palatino), garamond (EB Garamond),
+%   charter (Charter), mono (Fira Mono)
+% - Minimal headline with optional navigation squares
+% - Three progress bar modes: basic (continuous), segmented (by section), or none
+% - Custom footer text support
+% - Clean title and section pages
+% - Generous whitespace and margins
+%
+% Usage:
+%   \usetheme{Shibui}                         % Default: light, sans-serif, no section header
+%   \usetheme[dark]{Shibui}                   % Use dark theme
+%   \usetheme[solarizedlight]{Shibui}         % Use Solarized Light
+%   \usetheme[nord]{Shibui}                   % Use Nord color scheme
+%   \usetheme[sans]{Shibui}                   % Use Fira Sans font
+%   \usetheme[serif]{Shibui}                  % Use ET Book/Palatino font
+%   \usetheme[garamond]{Shibui}               % Use EB Garamond font
+%   \usetheme[charter]{Shibui}                % Use Charter font
+%   \usetheme[mono]{Shibui}                   % Use Fira Mono font
+%   \usetheme[nosub]{Shibui}                  % Hide subsections in ToC
+%   \usetheme[nosectionheader]{Shibui}        % Hide section name from header
+%   \usetheme[navontop]{Shibui}               % Show navigation above title
+%   \usetheme[progressbar=segmented]{Shibui}  % Section-based progress bar
+%   \usetheme[progressbar=none]{Shibui}       % No progress bar
+%   \usetheme[nord,sans,navontop]{Shibui}     % Multiple options combined
+%
+% Custom footer text (in preamble):
+%   \footertext{Conference 2024 -- Paris}
+
+\mode<presentation>
+
+% Theme options
+\DeclareOptionBeamer{light}{\PassOptionsToPackage{light}{beamercolorthemeShibui}}
+\DeclareOptionBeamer{dark}{\PassOptionsToPackage{dark}{beamercolorthemeShibui}}
+\DeclareOptionBeamer{solarizedlight}{\PassOptionsToPackage{solarizedlight}{beamercolorthemeShibui}}
+\DeclareOptionBeamer{solarizeddark}{\PassOptionsToPackage{solarizeddark}{beamercolorthemeShibui}}
+\DeclareOptionBeamer{solarizedosaka}{\PassOptionsToPackage{solarizedosaka}{beamercolorthemeShibui}}
+\DeclareOptionBeamer{nord}{\PassOptionsToPackage{nord}{beamercolorthemeShibui}}
+\DeclareOptionBeamer{gruvboxlight}{\PassOptionsToPackage{gruvboxlight}{beamercolorthemeShibui}}
+\DeclareOptionBeamer{gruvboxdark}{\PassOptionsToPackage{gruvboxdark}{beamercolorthemeShibui}}
+\DeclareOptionBeamer{autumn}{\PassOptionsToPackage{autumn}{beamercolorthemeShibui}}
+\DeclareOptionBeamer{sans}{\PassOptionsToPackage{sans}{beamerfontthemeShibui}}
+\DeclareOptionBeamer{serif}{\PassOptionsToPackage{serif}{beamerfontthemeShibui}}
+\DeclareOptionBeamer{garamond}{\PassOptionsToPackage{garamond}{beamerfontthemeShibui}}
+\DeclareOptionBeamer{charter}{\PassOptionsToPackage{charter}{beamerfontthemeShibui}}
+\DeclareOptionBeamer{mono}{\PassOptionsToPackage{mono}{beamerfontthemeShibui}}
+\DeclareOptionBeamer{nosub}{\PassOptionsToPackage{nosub}{beamerinnerthemeShibui}}
+\DeclareOptionBeamer{nosectionheader}{\PassOptionsToPackage{nosectionheader}{beamerouterthemeShibui}}
+\DeclareOptionBeamer{navontop}{\PassOptionsToPackage{navontop}{beamerouterthemeShibui}}
+\DeclareOptionBeamer{progressbar}{\PassOptionsToPackage{progressbar=#1}{beamerouterthemeShibui}}
+\ExecuteOptionsBeamer{light,sans,nosectionheader,progressbar=basic}  % Default: light theme, sans-serif, no section header
+\ProcessOptionsBeamer
+
+% Required packages
+\RequirePackage{tikz}
+\RequirePackage{calc}
+\RequirePackage{etoolbox}
+\RequirePackage{tcolorbox}
+
+% TikZ libraries for progress bar
+\usetikzlibrary{calc}
+
+% Load theme components
+\usecolortheme{Shibui}
+\usefonttheme{Shibui}
+\useinnertheme{Shibui}
+\useoutertheme{Shibui}
+
+% General settings
+\setbeamersize{text margin left=1cm,text margin right=1cm}
+
+% Disable default Beamer navigation
+\beamertemplatenavigationsymbolsempty
+
+% Footer text command (can be set in preamble)
+\newcommand{\shibuifootertext}{}
+\newcommand{\footertext}[1]{\renewcommand{\shibuifootertext}{#1}}
+
+% Smooth transitions (optional)
+\setbeamercovered{transparent=0}
+
+% Hyperlink colors (subtle, matching Shibui-CSS)
+\hypersetup{
+  colorlinks=true,
+  linkcolor=shibuiaccent,
+  urlcolor=shibuiaccent,
+  citecolor=shibuitext
+}
+
+% Additional spacing adjustments for Shibui aesthetic
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+
+% Make footnotes smaller and less intrusive
+\setbeamerfont{footnote}{size=\tiny}
+
+% Note: Frame title spacing is handled in the outer theme's frametitle template
+
+%--------------------------------------------------
+% Custom Accent Color Commands
+%--------------------------------------------------
+% These commands apply the theme's accent color to text
+% All commands work in both text and math mode
+
+% \acccolor{text} - Apply accent color only
+\newcommand{\acccolor}[1]{\textcolor{shibuiaccent}{#1}}
+
+% \accentb{text} - Apply accent color + bold
+\newcommand{\accentb}[1]{\textcolor{shibuiaccent}{\textbf{#1}}}
+
+% \accentit{text} - Apply accent color + italic
+\newcommand{\accentit}[1]{\textcolor{shibuiaccent}{\textit{#1}}}
+
+% \accentemph{text} - Apply accent color + emphasis (italic)
+\newcommand{\accentemph}[1]{\textcolor{shibuiaccent}{\emph{#1}}}
+
+%--------------------------------------------------
+% PGFPlots Shibui Style (optional, requires pgfplots package)
+%--------------------------------------------------
+
+\AtBeginDocument{%
+  \@ifpackageloaded{pgfplots}{%
+    % Define Shibui-style axes for pgfplots
+    \makeatletter
+    \pgfplotsset{
+      % Main Shibui style - can be activated with "shibui style"
+      shibui style/.style = {
+        % Remove axis box, draw only bottom and left axes
+        after end axis/.code = {
+          \draw[color=shibuitext] ({rel axis cs:0,0} -| {axis cs:\pgfplots@data@xmin,0})
+            -- ({rel axis cs:0,0} -| {axis cs:\pgfplots@data@xmax,0});
+          \draw[color=shibuitext] ({rel axis cs:0,0} |- {axis cs:0,\pgfplots@data@ymin})
+            -- ({rel axis cs:0,0} |- {axis cs:0,\pgfplots@data@ymax});
+        },
+        axis line style = {draw = none},
+        tick align = outside,
+        tick pos = left,
+        % Use theme colors
+        every axis plot/.append style = {thick},
+        axis line style = {color=shibuitext},
+        tick label style = {color=shibuitext},
+        label style = {color=shibuitext},
+        % No grid in shibui style (use shibui grid style if needed)
+        grid = none,
+        % Legend style - positioned outside to avoid overlap
+        legend style = {
+          draw = none,
+          fill = none,
+          cells = {anchor = west},
+          at={(1.02,1)},
+          anchor=north west
+        }
+      },
+      % Shibui grid style - minimal grid lines
+      shibui grid/.style = {
+        grid = major,
+        grid style = {color=shibuigray!30, thin}
+      },
+      % Default cycle list using theme colors
+      shibui colors/.style = {
+        cycle list = {
+          {color=shibuitext, thick},
+          {color=shibuiaccent, thick},
+          {color=shibuidarkgray, thick, dashed},
+          {color=shibuigray, thick, dotted}
+        }
+      }
+    }
+    \makeatother
+  }{}%
+}
+
+%--------------------------------------------------
+% Custom tcolorbox: shibuiframe
+%--------------------------------------------------
+% Extremely minimal box with just background color and title on top
+%
+% Usage:
+%   \begin{shibuiframe}{Title}
+%     Content goes here
+%   \end{shibuiframe}
+
+\newtcolorbox{shibuiframe}[1]{
+  colback=shibuicodebg,
+  coltext=shibuitext,
+  boxrule=0pt,
+  arc=0pt,
+  sharp corners,
+  title={#1},
+  fonttitle=\bfseries,
+  coltitle=shibuiaccent,
+  colbacktitle=shibuicodebg,
+  top=3mm,
+  bottom=3mm,
+  left=3mm,
+  right=3mm,
+  toptitle=0mm,
+  bottomtitle=0mm,
+  after title={\vspace{-3mm}}
+}
+
+%--------------------------------------------------
+% Listings Configuration
+%--------------------------------------------------
+% Configure listings package if loaded
+
+\AtBeginDocument{%
+  \@ifpackageloaded{listings}{%
+    \lstset{
+      basicstyle=\ttfamily\scriptsize,
+      keywordstyle=\color{shibuiaccent},
+      commentstyle=\color{shibuidarkgray}\itshape,
+      stringstyle=\color{shibuidarkgray},
+      numbers=left,
+      numberstyle=\tiny\color{shibuigray},
+      frame=none,
+      backgroundcolor={},
+      breaklines=true,
+      showstringspaces=false,
+      xleftmargin=0pt,
+      xrightmargin=0pt,
+      framexleftmargin=0pt,
+      framexrightmargin=0pt
+    }
+    % Wrap lstlisting in a colored box to avoid background breaks
+    \tcbuselibrary{listings}
+    \BeforeBeginEnvironment{lstlisting}{%
+      \begin{tcolorbox}[
+        enhanced,
+        colback=shibuicodebg,
+        coltext=shibuitext,
+        colframe=shibuicodebg,
+        boxrule=0pt,
+        sharp corners,
+        top=2mm,
+        bottom=2mm,
+        left=2mm,
+        right=2mm,
+        arc=0pt
+      ]
+    }
+    \AfterEndEnvironment{lstlisting}{%
+      \end{tcolorbox}
+    }
+  }{}%
+}
+
+%--------------------------------------------------
+% Algorithm Configuration
+%--------------------------------------------------
+% Configure algorithm package if loaded
+
+\AtBeginDocument{%
+  \@ifpackageloaded{algpseudocode}{%
+    % Use monospace font at scriptsize for algorithm text
+    \makeatletter
+    \algrenewcommand\ALG@beginalgorithmic{\ttfamily\scriptsize\color{shibuitext}}
+    \makeatother
+  }{}%
+  %
+  \@ifpackageloaded{algorithm}{%
+    % Wrap algorithms in a styled box matching code blocks
+    \tcbuselibrary{skins}
+    \BeforeBeginEnvironment{algorithm}{%
+      \begin{tcolorbox}[
+        enhanced,
+        colback=shibuicodebg,
+        coltext=shibuitext,
+        colframe=shibuicodebg,
+        boxrule=0pt,
+        sharp corners,
+        top=0mm,
+        bottom=2mm,
+        left=2mm,
+        right=2mm
+      ]
+    }
+    \AfterEndEnvironment{algorithm}{%
+      \end{tcolorbox}
+    }
+    % Fix algorithm caption/label colors and size
+    \makeatletter
+    \renewcommand{\fnum@algorithm}{\footnotesize\textcolor{shibuitext}{\ALG@name~\thealgorithm}}
+    % Make the caption text smaller too
+    \let\old@caption\@caption
+    \long\def\@caption#1[#2]#3{\old@caption{#1}[{#2}]{\footnotesize#3}}
+    \makeatother
+  }{}%
+}
+
+\mode<all>
