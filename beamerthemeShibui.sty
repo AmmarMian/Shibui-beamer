@@ -28,9 +28,11 @@
 %   \usetheme[mono]{Shibui}                   % Use Fira Mono font
 %   \usetheme[nosub]{Shibui}                  % Hide subsections in ToC
 %   \usetheme[nosectionheader]{Shibui}        % Hide section name from header
-%   \usetheme[navontop]{Shibui}               % Show navigation above title
+%   \usetheme[navontop]{Shibui}               % Show navigation (section names) above title
+%   \usetheme[navontop,navcircles]{Shibui}    % Show navigation with circles
 %   \usetheme[progressbar=segmented]{Shibui}  % Section-based progress bar
 %   \usetheme[progressbar=none]{Shibui}       % No progress bar
+%   \usetheme[kanjilogo]{Shibui}              % Show "渋い" kanji before progress bar
 %   \usetheme[nord,sans,navontop]{Shibui}     % Multiple options combined
 %
 % Custom footer text (in preamble):
@@ -56,8 +58,10 @@
 \DeclareOptionBeamer{nosub}{\PassOptionsToPackage{nosub}{beamerinnerthemeShibui}}
 \DeclareOptionBeamer{nosectionheader}{\PassOptionsToPackage{nosectionheader}{beamerouterthemeShibui}}
 \DeclareOptionBeamer{navontop}{\PassOptionsToPackage{navontop}{beamerouterthemeShibui}}
+\DeclareOptionBeamer{navcircles}{\PassOptionsToPackage{navcircles}{beamerouterthemeShibui}}
 \DeclareOptionBeamer{progressbar}{\PassOptionsToPackage{progressbar=#1}{beamerouterthemeShibui}}
-\ExecuteOptionsBeamer{light,sans,nosectionheader,progressbar=basic}  % Default: light theme, sans-serif, no section header
+\DeclareOptionBeamer{kanjilogo}{\PassOptionsToPackage{kanjilogo}{beamerouterthemeShibui}}
+\ExecuteOptionsBeamer{light,sans,nosectionheader,navontop,progressbar=basic}  % Default: light theme, sans-serif, no section header, nav on top
 \ProcessOptionsBeamer
 
 % Required packages

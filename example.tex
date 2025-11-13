@@ -16,7 +16,7 @@
 %   \usetheme[dark, navontop]{Shibui}                   % Show navigation squares above title
 %   \usetheme[gruvboxdark, garamond]{Shibui}            % Multiple options
 %   \usetheme[nord, progressbar=segmented]{Shibui}      % Section-based progress bar
-\usetheme[sans, light, nosub, progressbar=segmented, navontop]{Shibui}
+\usetheme[sans, nosub, progressbar=segmented, kanjilogo]{Shibui}
 
 % Custom footer text (optional)
 \footertext{Conference Name 2024 -- City, Country}
@@ -440,12 +440,12 @@ for num in fibonacci(10):
   \begin{tikzpicture}
     \begin{axis}[
       width=0.75\textwidth,
-      height=0.55\textheight,
+      height=0.8\textheight,
       xlabel={$x$},
       ylabel={$f(x)$},
       grid=major,
       grid style={color=shibuigray!30},
-      legend pos=north west,
+      legend pos=north east,
       axis line style={color=shibuitext},
       tick label style={color=shibuitext},
       label style={color=shibuitext}
@@ -473,7 +473,7 @@ for num in fibonacci(10):
       shibui style,
       shibui colors,
       width=0.75\textwidth,
-      height=0.5\textheight,
+      height=0.8\textheight,
       xlabel={$x$},
       ylabel={$f(x)$}
     ]
@@ -498,7 +498,7 @@ for num in fibonacci(10):
     \begin{axis}[
       shibui style,
       width=0.75\textwidth,
-      height=0.52\textheight,
+      height=0.8\textheight,
       xlabel={Time ($t$)},
       ylabel={Signal Amplitude},
       ymin=-1.5, ymax=1.5

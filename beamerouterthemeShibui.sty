@@ -7,9 +7,17 @@
 % Process theme options
 \DeclareOptionBeamer{nosectionheader}{\def\shibui@nosectionheader{true}}
 \DeclareOptionBeamer{navontop}{\def\shibui@navontop{true}}
+\DeclareOptionBeamer{navcircles}{\def\shibui@navcircles{true}}
 \DeclareOptionBeamer{progressbar}{\def\shibui@progressbar{#1}}
-\ExecuteOptionsBeamer{nosectionheader,progressbar=basic}  % Default: no section header, basic progress bar
+\DeclareOptionBeamer{kanjilogo}{\def\shibui@kanjilogo{true}}
+\ExecuteOptionsBeamer{nosectionheader,navontop,progressbar=basic}  % Default: no section header, nav on top, basic progress bar, no circles
 \ProcessOptionsBeamer
+
+% Load CJK package if kanji logo is enabled
+\ifx\shibui@kanjilogo\undefined\else
+  \RequirePackage{CJKutf8}
+  \newcommand{\shibuikanji}{\begin{CJK}{UTF8}{min}渋い\end{CJK}}
+\fi
 
 % Remove default navigation symbols
 \setbeamertemplate{navigation symbols}{}
@@ -64,15 +72,17 @@
   \fi%
 }
 
-% Custom section navigation - sections on left
+% Custom section navigation - sections on left (clickable)
 \newcommand{\shibui@sectionentry}[5]{%
   \ifnum#1>1\hspace{1em}\fi% Add space between sections
   \ifnum\c@section=#1%
     % Reset counter when entering current section
     \global\shibui@slidecount=0\relax%
+    % Current section - not clickable, just highlighted
     {\usebeamercolor[fg]{shibuiaccent}\textbf{#2}}%
   \else%
-    {\usebeamercolor[fg]{section in head/foot shaded}#2}%
+    % Other sections - make them clickable hyperlinks using page number (#3)
+    {\usebeamercolor[fg]{section in head/foot shaded}\hyperlink{page.#3}{#2}}%
   \fi%
 }
 
@@ -101,7 +111,7 @@
           \fi%
         \fi%
       \fi%
-      % Draw circle
+      % Draw circle (not clickable)
       \raisebox{0.1ex}{\begin{pgfpicture}{0pt}{0pt}{0.12cm}{0.12cm}%
         \ifnum\shibui@circlestyle=1\relax%
           \color{shibuiaccent}%
@@ -135,23 +145,24 @@
     \ifx\shibui@navontop\undefined
       % Default: no navigation on top
     \else
-      % Show section names on left | circles on right (same line)
+      % Show section names on left | circles on right (if navcircles enabled)
       \vskip0.3ex%
       \begin{beamercolorbox}[wd=\paperwidth,ht=2.5ex,dp=0.5ex,leftskip=1cm,rightskip=1cm]{navigation}
         {\tiny%
           % Section names
           \let\sectionentry\shibui@sectionentry\let\slideentry\@gobblesix\def\lastpartialnumber{0}\dohead%
-          % Vertical separator
-          \hspace{1em}{\color{shibuigray}\rule{0.4pt}{1.2ex}}\hspace{1em}%
-          % Circles for current section
-          \beamer@slideinframe=0\relax%
-          \let\sectionentry\@gobblefive\let\slideentry\shibui@slideentry\def\lastpartialnumber{0}\dohead%
+          % Show circles only if navcircles option is enabled
+          \ifx\shibui@navcircles\undefined\else%
+            % Vertical separator
+            \hspace{1em}{\color{shibuigray}\rule{0.4pt}{1.2ex}}\hspace{1em}%
+            % Circles for current section
+            \beamer@slideinframe=0\relax%
+            \let\sectionentry\@gobblefive\let\slideentry\shibui@slideentry\def\lastpartialnumber{0}\dohead%
+          \fi%
         }%
       \end{beamercolorbox}
-      % Thin separator line below navigation
+      % Spacing below navigation (no separator line)
       \vskip0.3ex%
-      \hspace*{1cm}{\color{shibuigray}\rule{\dimexpr\paperwidth-2cm\relax}{0.3pt}}%
-      \vskip0.5ex%
     \fi
     % Main headline: section name + frame title
     \begin{beamercolorbox}[wd=\paperwidth,ht=3ex,dp=1.5ex,leftskip=1cm,rightskip=.5em]{headline}
@@ -323,8 +334,13 @@
         \hspace*{1cm}{\tiny\color{shibuidarkgray}\shibuifootertext}%
         \vskip0.5ex
       \fi
-      % Draw progress bar based on mode
-      \hspace*{1cm}% Left margin offset
+      % Show kanji logo if enabled (in the left margin, doesn't shift progress bar)
+      \ifx\shibui@kanjilogo\undefined
+        \hspace*{1cm}% Normal left margin offset
+      \else
+        % Place kanji in the left margin space, raised by 2pt
+        \hspace*{0.3cm}\raisebox{2pt}{\tiny\color{shibuidarkgray}\shibuikanji}\hspace*{0.2cm}%
+      \fi
       % Check progress bar mode
       \def\shibui@pbnone{none}%
       \def\shibui@pbbasic{basic}%
