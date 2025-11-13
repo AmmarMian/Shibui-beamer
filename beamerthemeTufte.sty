@@ -6,29 +6,45 @@
 % License: MIT
 %
 % Features:
-% - Tufte-CSS color palette (light or dark theme)
+% - 9 color schemes: dark, light, solarizedlight, solarizeddark, solarizedosaka,
+%   nord, gruvboxlight, gruvboxdark, autumn
 % - ET Book/Palatino (serif) or Fira Sans (sans-serif) typography
-% - Minimal headline with navigation squares (current section only)
+% - Minimal headline with optional navigation squares
 % - Progress bar with page numbers in footline
+% - Custom footer text support
 % - Clean title and section pages
 % - Generous whitespace and margins
 %
 % Usage:
-%   \usetheme{Tufte}                  % Default: dark theme, serif font
-%   \usetheme[dark]{Tufte}            % Explicitly use dark theme
-%   \usetheme[light]{Tufte}           % Use light theme
-%   \usetheme[sans]{Tufte}            % Use Fira Sans font
-%   \usetheme[nosub]{Tufte}           % Hide subsections in ToC
-%   \usetheme[light,sans,nosub]{Tufte}  % Multiple options combined
+%   \usetheme{Tufte}                         % Default: dark theme, serif font
+%   \usetheme[light]{Tufte}                  % Use light theme
+%   \usetheme[nord]{Tufte}                   % Use Nord color scheme
+%   \usetheme[sans]{Tufte}                   % Use Fira Sans font
+%   \usetheme[nosub]{Tufte}                  % Hide subsections in ToC
+%   \usetheme[nosectionheader]{Tufte}        % Hide section name from header
+%   \usetheme[navontop]{Tufte}               % Show navigation above title
+%   \usetheme[nord,sans,navontop]{Tufte}     % Multiple options combined
+%
+% Custom footer text (in preamble):
+%   \footertext{Conference 2024 -- Paris}
 
 \mode<presentation>
 
 % Theme options
 \DeclareOptionBeamer{light}{\PassOptionsToPackage{light}{beamercolorthemeTufte}}
 \DeclareOptionBeamer{dark}{\PassOptionsToPackage{dark}{beamercolorthemeTufte}}
+\DeclareOptionBeamer{solarizedlight}{\PassOptionsToPackage{solarizedlight}{beamercolorthemeTufte}}
+\DeclareOptionBeamer{solarizeddark}{\PassOptionsToPackage{solarizeddark}{beamercolorthemeTufte}}
+\DeclareOptionBeamer{solarizedosaka}{\PassOptionsToPackage{solarizedosaka}{beamercolorthemeTufte}}
+\DeclareOptionBeamer{nord}{\PassOptionsToPackage{nord}{beamercolorthemeTufte}}
+\DeclareOptionBeamer{gruvboxlight}{\PassOptionsToPackage{gruvboxlight}{beamercolorthemeTufte}}
+\DeclareOptionBeamer{gruvboxdark}{\PassOptionsToPackage{gruvboxdark}{beamercolorthemeTufte}}
+\DeclareOptionBeamer{autumn}{\PassOptionsToPackage{autumn}{beamercolorthemeTufte}}
 \DeclareOptionBeamer{sans}{\PassOptionsToPackage{sans}{beamerfontthemeTufte}}
 \DeclareOptionBeamer{serif}{\PassOptionsToPackage{serif}{beamerfontthemeTufte}}
 \DeclareOptionBeamer{nosub}{\PassOptionsToPackage{nosub}{beamerinnerthemeTufte}}
+\DeclareOptionBeamer{nosectionheader}{\PassOptionsToPackage{nosectionheader}{beamerouterthemeTufte}}
+\DeclareOptionBeamer{navontop}{\PassOptionsToPackage{navontop}{beamerouterthemeTufte}}
 \ExecuteOptionsBeamer{dark}  % Default to dark and serif
 \ProcessOptionsBeamer
 
@@ -52,6 +68,10 @@
 
 % Disable default Beamer navigation
 \beamertemplatenavigationsymbolsempty
+
+% Footer text command (can be set in preamble)
+\newcommand{\tuftefootertext}{}
+\newcommand{\footertext}[1]{\renewcommand{\tuftefootertext}{#1}}
 
 % Smooth transitions (optional)
 \setbeamercovered{transparent=0}
@@ -87,9 +107,9 @@
       tufte style/.style = {
         % Remove axis box, draw only bottom and left axes
         after end axis/.code = {
-          \draw ({rel axis cs:0,0} -| {axis cs:\pgfplots@data@xmin,0})
+          \draw[color=tuftetext] ({rel axis cs:0,0} -| {axis cs:\pgfplots@data@xmin,0})
             -- ({rel axis cs:0,0} -| {axis cs:\pgfplots@data@xmax,0});
-          \draw ({rel axis cs:0,0} |- {axis cs:0,\pgfplots@data@ymin})
+          \draw[color=tuftetext] ({rel axis cs:0,0} |- {axis cs:0,\pgfplots@data@ymin})
             -- ({rel axis cs:0,0} |- {axis cs:0,\pgfplots@data@ymax});
         },
         axis line style = {draw = none},
@@ -100,13 +120,15 @@
         axis line style = {color=tuftetext},
         tick label style = {color=tuftetext},
         label style = {color=tuftetext},
-        % Minimal grid
+        % No grid in tufte style (use tufte grid style if needed)
         grid = none,
-        % Legend style
+        % Legend style - positioned outside to avoid overlap
         legend style = {
           draw = none,
           fill = none,
-          cells = {anchor = west}
+          cells = {anchor = west},
+          at={(1.02,1)},
+          anchor=north west
         }
       },
       % Tufte grid style - minimal grid lines
@@ -151,7 +173,10 @@
   top=3mm,
   bottom=3mm,
   left=3mm,
-  right=3mm
+  right=3mm,
+  toptitle=0.5mm,
+  bottomtitle=0mm,
+  after title={\vspace{-1.5mm}}
 }
 
 %--------------------------------------------------

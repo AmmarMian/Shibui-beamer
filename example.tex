@@ -2,9 +2,21 @@
 
 % Use the Tufte theme
 % Options:
-%   - Color: dark (default) or light
+%   - Color: dark (default), light, solarizedlight, solarizeddark, solarizedosaka,
+%            nord, gruvboxlight, gruvboxdark, autumn
 %   - Font: serif (default) or sans
-\usetheme[light, sans, nosub]{Tufte}
+%   - Layout: nosectionheader (hide section from header), navontop (show navigation above title)
+%   - TOC: nosub (hide subsections in table of contents)
+%
+% Examples:
+%   \usetheme[solarizedosaka]{Tufte}                    % Just color scheme
+%   \usetheme[nord, sans]{Tufte}                        % Color + font
+%   \usetheme[dark, navontop]{Tufte}                    % Show navigation squares above title
+%   \usetheme[gruvboxdark, sans, nosectionheader]{Tufte} % Multiple options
+\usetheme[solarizeddark, sans, nosub, navontop, nosectionheader]{Tufte}
+
+% Custom footer text (optional)
+\footertext{Conference Name 2024 -- City, Country}
 
 % Additional packages for examples
 \usepackage{listings}
@@ -92,27 +104,27 @@
 \subsection{Color Schemes}
 
 \begin{frame}{Color Palette}
-  The theme supports both \textbf{light} and \textbf{dark} color schemes:
+  The theme now supports \textbf{9 color schemes} for different aesthetics:
 
   \vspace{0.5em}
 
-  \begin{block}{Dark Theme (Current)}
-    \textbf{Background}: Dark (\texttt{\#1A1A1A}) \\
-    \textbf{Text}: Light (\texttt{\#EEEEEE}) \\
-    \textbf{Accent}: Lighter red (\texttt{\#FF6B6B})
+  \begin{block}{Original Themes}
+    \textbf{dark} (default): Dark background with light text and red accent \\
+    \textbf{light}: Warm cream background with near-black text and dark red accent
   \end{block}
 
   \vspace{0.5em}
 
-  \begin{exampleblock}{Light Theme}
-    \textbf{Background}: Warm cream (\texttt{\#FFFFF8}) \\
-    \textbf{Text}: Near black (\texttt{\#111111}) \\
-    \textbf{Accent}: Dark red (\texttt{\#A00000})
+  \begin{exampleblock}{New Color Schemes}
+    \textbf{solarizedlight}, \textbf{solarizeddark}, \textbf{solarizedosaka}: Solarized variants \\
+    \textbf{nord}: Arctic, north-bluish color palette \\
+    \textbf{gruvboxlight}, \textbf{gruvboxdark}: Retro groove with warm tones \\
+    \textbf{autumn}: Warm autumn colors with browns and oranges
   \end{exampleblock}
 
-  \vspace{0.5em}
+  \vspace{0.3em}
 
-  Both palettes provide excellent contrast and reduce eye strain.
+  All palettes provide excellent contrast and reduce eye strain.
 \end{frame}
 
 %--------------------------------------------------
@@ -398,22 +410,22 @@ for num in fibonacci(10):
   \centering
   \begin{tikzpicture}[scale=0.8]
     % Nodes
-    \node[circle,draw,fill=tuftegray!20,minimum size=1cm] (A) at (0,0) {A};
-    \node[circle,draw,fill=tuftegray!20,minimum size=1cm] (B) at (3,1) {B};
-    \node[circle,draw,fill=tuftegray!20,minimum size=1cm] (C) at (3,-1) {C};
-    \node[circle,draw,fill=tuftegray!20,minimum size=1cm] (D) at (6,0) {D};
+    \node[circle,draw=tuftetext,fill=tuftegray!20,text=tuftetext,minimum size=1cm] (A) at (0,0) {A};
+    \node[circle,draw=tuftetext,fill=tuftegray!20,text=tuftetext,minimum size=1cm] (B) at (3,1) {B};
+    \node[circle,draw=tuftetext,fill=tuftegray!20,text=tuftetext,minimum size=1cm] (C) at (3,-1) {C};
+    \node[circle,draw=tufteaccent,fill=tufteaccent!15,text=tuftetext,minimum size=1cm] (D) at (6,0) {D};
 
     % Edges
-    \draw[->,thick,color=tuftetext] (A) -- (B) node[midway,above] {5};
-    \draw[->,thick,color=tuftetext] (A) -- (C) node[midway,below] {3};
-    \draw[->,thick,color=tuftetext] (B) -- (D) node[midway,above] {2};
-    \draw[->,thick,color=tuftetext] (C) -- (D) node[midway,below] {4};
-    \draw[->,thick,color=tufteaccent] (B) -- (C) node[midway,right] {1};
+    \draw[->,thick,color=tuftetext] (A) -- (B) node[midway,above,text=tuftetext] {5};
+    \draw[->,thick,color=tuftetext] (A) -- (C) node[midway,below,text=tuftetext] {3};
+    \draw[->,thick,color=tuftetext] (B) -- (D) node[midway,above,text=tuftetext] {2};
+    \draw[->,thick,color=tuftetext] (C) -- (D) node[midway,below,text=tuftetext] {4};
+    \draw[->,thick,color=tufteaccent] (B) -- (C) node[midway,right,text=tufteaccent] {1};
   \end{tikzpicture}
 
   \vspace{0.5em}
 
-  \small Weighted directed graph showing minimal Tufte-inspired styling
+  \small Weighted directed graph using themed colors (tuftetext, tufteaccent, tuftegray)
 \end{frame}
 
 \begin{frame}{PGFPlots: Standard Style}
@@ -444,7 +456,7 @@ for num in fibonacci(10):
 \end{frame}
 
 \begin{frame}{PGFPlots: Tufte Style}
-  Simple activation with \texttt{tufte style} keyword:
+  Simple activation with \texttt{tufte style} (no grid, legend outside):
 
   \vspace{0.3em}
 
@@ -456,8 +468,7 @@ for num in fibonacci(10):
       width=0.75\textwidth,
       height=0.5\textheight,
       xlabel={$x$},
-      ylabel={$f(x)$},
-      legend pos=north west
+      ylabel={$f(x)$}
     ]
       \addplot[smooth, domain=-2:2, samples=50] {x^2};
       \addlegendentry{$x^2$}
@@ -472,7 +483,6 @@ for num in fibonacci(10):
 \end{frame}
 
 \begin{frame}{Dynamic Data Visualization}
-  Tufte-style plot with dynamically sized data:
 
   \vspace{0.3em}
 
@@ -480,12 +490,10 @@ for num in fibonacci(10):
   \begin{tikzpicture}
     \begin{axis}[
       tufte style,
-      tufte grid,
       width=0.75\textwidth,
       height=0.52\textheight,
       xlabel={Time ($t$)},
       ylabel={Signal Amplitude},
-      legend pos=south east,
       ymin=-1.5, ymax=1.5
     ]
       % Simulated dynamic data
@@ -578,23 +586,35 @@ for num in fibonacci(10):
 \begin{frame}{Theme Options Reference}
   Complete list of theme options:
 
-  \vspace{0.5em}
+  \vspace{0.3em}
 
   \begin{tufteframe}{Color Themes}
     \texttt{dark} -- Dark background (default) \\
-    \texttt{light} -- Light cream background
+    \texttt{light} -- Light cream background \\
+    \texttt{solarizedlight}, \texttt{solarizeddark}, \texttt{solarizedosaka} -- Solarized variants \\
+    \texttt{nord} -- Arctic blue theme \\
+    \texttt{gruvboxlight}, \texttt{gruvboxdark} -- Warm retro colors \\
+    \texttt{autumn} -- Warm earthy tones
   \end{tufteframe}
 
-  \vspace{0.5em}
+  \vspace{0.3em}
 
   \begin{tufteframe}{Font Themes}
     \texttt{serif} -- ET Book/Palatino (default) \\
     \texttt{sans} -- Fira Sans
   \end{tufteframe}
 
-  \vspace{0.5em}
+  \vspace{0.3em}
 
-  \textbf{Usage:} \texttt{\textbackslash usetheme[light,sans]\{Tufte\}}
+  \begin{tufteframe}{Layout Options}
+    \texttt{nosectionheader} -- Hide section name from header \\
+    \texttt{navontop} -- Show navigation squares above title \\
+    \texttt{nosub} -- Hide subsections in table of contents
+  \end{tufteframe}
+
+  \vspace{0.3em}
+
+  \textbf{Usage:} \texttt{\textbackslash usetheme[nord,sans,navontop]\{Tufte\}}
 \end{frame}
 
 \begin{frame}{Color Definitions}
@@ -639,6 +659,30 @@ for num in fibonacci(10):
   \vspace{0.5em}
 
   All standard Beamer environments work as expected: blocks, columns, overlays, etc.
+\end{frame}
+
+\begin{frame}{Custom Footer Text}
+  Add custom text or logos above the progress bar:
+
+  \vspace{0.5em}
+
+  \begin{tufteframe}{footertext Command}
+    The \texttt{\textbackslash footertext\{\}} command lets you add custom text displayed above the progress bar in very small font.
+
+    \vspace{0.3em}
+
+    \textbf{Usage in preamble:}
+
+    \texttt{\textbackslash footertext\{Conference 2024 -- Paris\}}
+
+    \vspace{0.3em}
+
+    Perfect for adding: conference names, dates, institutional logos, or copyright notices.
+  \end{tufteframe}
+
+  \vspace{0.3em}
+
+  The footer text appears on all slides except the title page and uses the secondary text color for minimal visual impact.
 \end{frame}
 
 \begin{frame}{Additional Resources}

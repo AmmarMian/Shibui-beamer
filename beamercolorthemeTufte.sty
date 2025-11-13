@@ -2,15 +2,28 @@
 % Inspired by tufte-css color scheme
 % https://edwardtufte.github.io/tufte-css/
 %
-% Supports light and dark themes
-% Usage: \usetheme[dark]{Tufte} or \usetheme[light]{Tufte}
+% Supports multiple color schemes:
+% - dark (default), light (original Tufte-CSS)
+% - solarizedlight, solarizeddark, solarizedosaka (Solarized variants)
+% - nord (Arctic, north-bluish color palette)
+% - gruvboxlight, gruvboxdark (Retro groove with warm tones)
+% - autumn (Warm autumn colors with browns and oranges)
+%
+% Usage: \usetheme[dark]{Tufte} or \usetheme[solarizedosaka]{Tufte}
 % Default: dark
 
 \mode<presentation>
 
-% Check for theme option (default: dark)
+% Declare all color scheme options
 \DeclareOptionBeamer{light}{\def\tufte@theme{light}}
 \DeclareOptionBeamer{dark}{\def\tufte@theme{dark}}
+\DeclareOptionBeamer{solarizedlight}{\def\tufte@theme{solarizedlight}}
+\DeclareOptionBeamer{solarizeddark}{\def\tufte@theme{solarizeddark}}
+\DeclareOptionBeamer{solarizedosaka}{\def\tufte@theme{solarizedosaka}}
+\DeclareOptionBeamer{nord}{\def\tufte@theme{nord}}
+\DeclareOptionBeamer{gruvboxlight}{\def\tufte@theme{gruvboxlight}}
+\DeclareOptionBeamer{gruvboxdark}{\def\tufte@theme{gruvboxdark}}
+\DeclareOptionBeamer{autumn}{\def\tufte@theme{autumn}}
 \ExecuteOptionsBeamer{dark}  % Default to dark
 \ProcessOptionsBeamer
 
@@ -19,33 +32,100 @@
   \def\tufte@theme{dark}
 \fi
 
+% Helper macros for theme comparison
 \def\tufte@dark{dark}
+\def\tufte@light{light}
+\def\tufte@solarizedlight{solarizedlight}
+\def\tufte@solarizeddark{solarizeddark}
+\def\tufte@solarizedosaka{solarizedosaka}
+\def\tufte@nord{nord}
+\def\tufte@gruvboxlight{gruvboxlight}
+\def\tufte@gruvboxdark{gruvboxdark}
+\def\tufte@autumn{autumn}
+
+% Set colors based on selected theme
 \ifx\tufte@theme\tufte@dark
-  % Dark theme colors
+  % Dark theme colors (original)
   \definecolor{tuftebg}{HTML}{1A1A1A}        % Dark background
   \definecolor{tuftetext}{HTML}{EEEEEE}      % Light text
   \definecolor{tufteaccent}{HTML}{FF6B6B}    % Lighter red for accents
   \definecolor{tuftegray}{HTML}{444444}      % Dark gray for UI elements
   \definecolor{tuftedarkgray}{HTML}{AAAAAA}  % Light gray for secondary text
+  \definecolor{tuftecodebg}{HTML}{252525}    % Slightly lighter than main bg
   \definecolor{tuftelink}{HTML}{FF6B6B}      % Links (same as accent)
-\else
+\else\ifx\tufte@theme\tufte@light
   % Light theme colors (original tufte-css)
   \definecolor{tuftebg}{HTML}{FFFFF8}        % Cream background
   \definecolor{tuftetext}{HTML}{111111}      % Near black text
   \definecolor{tufteaccent}{HTML}{A00000}    % Dark red for accents
   \definecolor{tuftegray}{HTML}{CCCCCC}      % Light gray for UI elements
   \definecolor{tuftedarkgray}{HTML}{555555}  % Dark gray for secondary text
-  \definecolor{tuftelink}{HTML}{A00000}      % Links (same as accent)
-\fi
-
-% Code background colors (accentuated based on theme)
-\ifx\tufte@theme\tufte@dark
-  % Dark theme: lighter background for code
-  \definecolor{tuftecodebg}{HTML}{252525}    % Slightly lighter than main bg
-\else
-  % Light theme: darker background for code
   \definecolor{tuftecodebg}{HTML}{F5F5ED}    % Slightly darker than cream bg
-\fi
+  \definecolor{tuftelink}{HTML}{A00000}      % Links (same as accent)
+\else\ifx\tufte@theme\tufte@solarizedlight
+  % Solarized Light theme
+  \definecolor{tuftebg}{HTML}{FDF6E3}        % Base3 - light background
+  \definecolor{tuftetext}{HTML}{657B83}      % Base00 - primary text
+  \definecolor{tufteaccent}{HTML}{268BD2}    % Blue - accent color
+  \definecolor{tuftegray}{HTML}{EEE8D5}      % Base2 - light gray UI
+  \definecolor{tuftedarkgray}{HTML}{93A1A1}  % Base1 - secondary text
+  \definecolor{tuftecodebg}{HTML}{EEE8D5}    % Base2 - code background
+  \definecolor{tuftelink}{HTML}{268BD2}      % Blue - links
+\else\ifx\tufte@theme\tufte@solarizeddark
+  % Solarized Dark theme
+  \definecolor{tuftebg}{HTML}{002B36}        % Base03 - dark background
+  \definecolor{tuftetext}{HTML}{839496}      % Base0 - primary text
+  \definecolor{tufteaccent}{HTML}{268BD2}    % Blue - accent color
+  \definecolor{tuftegray}{HTML}{073642}      % Base02 - dark gray UI
+  \definecolor{tuftedarkgray}{HTML}{586E75}  % Base01 - secondary text
+  \definecolor{tuftecodebg}{HTML}{073642}    % Base02 - code background
+  \definecolor{tuftelink}{HTML}{268BD2}      % Blue - links
+\else\ifx\tufte@theme\tufte@solarizedosaka
+  % Solarized Osaka theme (deep blue variant)
+  \definecolor{tuftebg}{HTML}{001A26}        % Deep blue-cyan background
+  \definecolor{tuftetext}{HTML}{839496}      % Solarized base0 - primary text
+  \definecolor{tufteaccent}{HTML}{2AA198}    % Cyan - accent color
+  \definecolor{tuftegray}{HTML}{003844}      % Slightly lighter blue - UI elements
+  \definecolor{tuftedarkgray}{HTML}{586E75}  % Base01 - secondary text
+  \definecolor{tuftecodebg}{HTML}{002A36}    % Slightly lighter than bg
+  \definecolor{tuftelink}{HTML}{268BD2}      % Blue - links
+\else\ifx\tufte@theme\tufte@nord
+  % Nord theme (arctic, north-bluish)
+  \definecolor{tuftebg}{HTML}{2E3440}        % Nord0 - polar night background
+  \definecolor{tuftetext}{HTML}{ECEFF4}      % Nord6 - snow storm text
+  \definecolor{tufteaccent}{HTML}{88C0D0}    % Nord8 - frost blue accent
+  \definecolor{tuftegray}{HTML}{3B4252}      % Nord1 - darker UI elements
+  \definecolor{tuftedarkgray}{HTML}{D8DEE9}  % Nord4 - lighter secondary text
+  \definecolor{tuftecodebg}{HTML}{3B4252}    % Nord1 - code background
+  \definecolor{tuftelink}{HTML}{88C0D0}      % Nord8 - frost blue links
+\else\ifx\tufte@theme\tufte@gruvboxlight
+  % Gruvbox Light theme
+  \definecolor{tuftebg}{HTML}{FBF1C7}        % Light bg - warm cream
+  \definecolor{tuftetext}{HTML}{3C3836}      % Dark fg - primary text
+  \definecolor{tufteaccent}{HTML}{D65D0E}    % Bright orange - accent
+  \definecolor{tuftegray}{HTML}{EBDBB2}      % Light bg1 - UI elements
+  \definecolor{tuftedarkgray}{HTML}{665C54}  % Dark fg2 - secondary text
+  \definecolor{tuftecodebg}{HTML}{EBDBB2}    % Light bg1 - code background
+  \definecolor{tuftelink}{HTML}{D65D0E}      % Bright orange - links
+\else\ifx\tufte@theme\tufte@gruvboxdark
+  % Gruvbox Dark theme
+  \definecolor{tuftebg}{HTML}{282828}        % Dark bg - dark background
+  \definecolor{tuftetext}{HTML}{EBDBB2}      % Light fg - primary text
+  \definecolor{tufteaccent}{HTML}{FE8019}    % Bright orange - accent
+  \definecolor{tuftegray}{HTML}{3C3836}      % Dark bg1 - UI elements
+  \definecolor{tuftedarkgray}{HTML}{A89984}  % Light fg2 - secondary text
+  \definecolor{tuftecodebg}{HTML}{3C3836}    % Dark bg1 - code background
+  \definecolor{tuftelink}{HTML}{FE8019}      % Bright orange - links
+\else\ifx\tufte@theme\tufte@autumn
+  % Autumn theme (warm, earthy tones)
+  \definecolor{tuftebg}{HTML}{FAF4ED}        % Warm light beige background
+  \definecolor{tuftetext}{HTML}{5C4A42}      % Warm brown text
+  \definecolor{tufteaccent}{HTML}{D97742}    % Rust orange accent
+  \definecolor{tuftegray}{HTML}{EAD9CC}      % Warm light gray UI
+  \definecolor{tuftedarkgray}{HTML}{8B7366}  % Muted brown secondary text
+  \definecolor{tuftecodebg}{HTML}{F4E8D8}    % Warm cream code background
+  \definecolor{tuftelink}{HTML}{D97742}      % Rust orange links
+\fi\fi\fi\fi\fi\fi\fi\fi\fi
 
 % Set background colors
 \setbeamercolor{background canvas}{bg=tuftebg}
@@ -57,12 +137,12 @@
 \setbeamercolor{example text}{fg=tuftedarkgray}
 
 % Title and frame title
-\setbeamercolor{title}{fg=tuftetext}
+\setbeamercolor{title}{fg=tufteaccent}
 \setbeamercolor{subtitle}{fg=tuftedarkgray}
 \setbeamercolor{author}{fg=tuftetext}
 \setbeamercolor{date}{fg=tuftedarkgray}
 \setbeamercolor{institute}{fg=tuftedarkgray}
-\setbeamercolor{frametitle}{fg=tuftetext,bg=tuftebg}
+\setbeamercolor{frametitle}{fg=tufteaccent,bg=tuftebg}
 \setbeamercolor{framesubtitle}{fg=tuftedarkgray,bg=tuftebg}
 
 % Headline and footline
@@ -70,28 +150,28 @@
 \setbeamercolor{footline}{fg=tuftedarkgray,bg=tuftebg}
 
 % Section in headline
-\setbeamercolor{section in head/foot}{fg=tuftedarkgray,bg=tuftebg}
+\setbeamercolor{section in head/foot}{fg=tufteaccent,bg=tuftebg}
 \setbeamercolor{subsection in head/foot}{fg=tuftedarkgray,bg=tuftebg}
 
-% Navigation symbols (squares)
-\setbeamercolor{section in head/foot shaded}{fg=tuftegray,bg=tuftebg}
+% Navigation symbols and section names
+\setbeamercolor{section in head/foot shaded}{fg=tuftedarkgray,bg=tuftebg}
 \setbeamercolor{navigation symbols}{fg=tuftegray}
 \setbeamercolor{navigation symbols dimmed}{fg=tuftegray!50}
 
 % Progress bar
-\setbeamercolor{progress bar}{fg=tuftetext,bg=tuftegray}
-\setbeamercolor{progress bar progress}{fg=tuftetext,bg=tuftetext}
+\setbeamercolor{progress bar}{fg=tufteaccent,bg=tuftegray}
+\setbeamercolor{progress bar progress}{fg=tufteaccent,bg=tufteaccent}
 
 % Items (lists)
-\setbeamercolor{item}{fg=tuftetext}
+\setbeamercolor{item}{fg=tufteaccent}
 \setbeamercolor{subitem}{fg=tuftedarkgray}
 \setbeamercolor{subsubitem}{fg=tuftedarkgray}
 
-\setbeamercolor{itemize item}{fg=tuftetext}
+\setbeamercolor{itemize item}{fg=tufteaccent}
 \setbeamercolor{itemize subitem}{fg=tuftedarkgray}
 \setbeamercolor{itemize subsubitem}{fg=tuftedarkgray}
 
-\setbeamercolor{enumerate item}{fg=tuftetext}
+\setbeamercolor{enumerate item}{fg=tufteaccent}
 \setbeamercolor{enumerate subitem}{fg=tuftedarkgray}
 \setbeamercolor{enumerate subsubitem}{fg=tuftedarkgray}
 
@@ -112,7 +192,7 @@
 \setbeamercolor{bibliography entry note}{fg=tuftedarkgray}
 
 % Table of contents
-\setbeamercolor{section in toc}{fg=tuftetext}
+\setbeamercolor{section in toc}{fg=tufteaccent}
 \setbeamercolor{subsection in toc}{fg=tuftedarkgray}
 
 % Caption

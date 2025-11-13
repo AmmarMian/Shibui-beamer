@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1762448774.26865 "example.tex" "example.pdf" "example" 1762448776.28512 0
+["pdflatex"] 1763061788.40398 "example.tex" "example.pdf" "example" 1763061790.97121 0
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1136849721 2971 def0b6c1f0b107b3b936def894055589 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/fira/fir_iln36p.enc" 1570828436 3071 cfa92ee28d698dd9275559d9d1c3a233 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -300,17 +300,17 @@
   "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1760729133 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1760729079 3345738 85d57d252003b9b0ab39c80a15e67e7a ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "beamercolorthemeTufte.sty" 1762437112.52901 4437 d6dbfbf53f2bafdbb6b015dcf37078f9 ""
+  "beamercolorthemeTufte.sty" 1763055364.84476 9385 8663e3cea317860334d8dd64097112e3 ""
   "beamerfontthemeTufte.sty" 1762439336.44525 4167 7d11b67453ef1b4a7ba04bbb9e88b9cf ""
   "beamerinnerthemeTufte.sty" 1762440934.3254 6510 57803d5603a146e9683f8ae0a2786aea ""
-  "beamerouterthemeTufte.sty" 1762438174.46922 5352 0af9316466e17f7419f195844757c7dd ""
-  "beamerthemeTufte.sty" 1762440949.44768 6333 0859b6189dd9b97b8104e7c3540625ce ""
-  "example.aux" 1762448776.16194 11149 8fa685e0f0ae9ed768b39b49e8957550 "pdflatex"
-  "example.nav" 1762448776.16304 6970 566075a34f8d25acbdafe5324286c263 "pdflatex"
-  "example.out" 1762448776.16287 2766 5364991ffe5470e3c98c868a3a5fdc56 "pdflatex"
-  "example.tex" 1762448768.31429 17995 4f05d0b157b97146f7f901872d57a412 ""
-  "example.toc" 1762448776.16307 1123 d3854a1a9c7fa490ce3407d7d99e6745 "pdflatex"
-  "example.vrb" 1762448775.40931 391 516db94313ef59e12be515ebb497c408 "pdflatex"
+  "beamerouterthemeTufte.sty" 1763061661.63718 9198 50f3a269b93ae1ef44a72577d420b58d ""
+  "beamerthemeTufte.sty" 1763055240.67652 7910 09edc56b68fb19fdd63b58604b98db6c ""
+  "example.aux" 1763061790.85305 11277 b02817b860bf0bd7babf6a3713404fdc "pdflatex"
+  "example.nav" 1763061790.85415 7062 5d8c34f955053fad0675d9ea7dc333c8 "pdflatex"
+  "example.out" 1763061790.85399 2766 5364991ffe5470e3c98c868a3a5fdc56 "pdflatex"
+  "example.tex" 1763061786.23836 20158 f0e95e92c28a3cfb2942e4facf176261 ""
+  "example.toc" 1763061790.85418 1123 d3854a1a9c7fa490ce3407d7d99e6745 "pdflatex"
+  "example.vrb" 1763061789.79529 391 516db94313ef59e12be515ebb497c408 "pdflatex"
   (generated)
   "example.aux"
   "example.log"
