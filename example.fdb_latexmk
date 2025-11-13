@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1763066768.06177 "example.tex" "example.pdf" "example" 1763066771.35294 0
+["pdflatex"] 1763067016.68118 "example.tex" "example.pdf" "example" 1763067020.10041 0
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1136849721 2971 def0b6c1f0b107b3b936def894055589 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/fira/fir_iln36p.enc" 1570828436 3071 cfa92ee28d698dd9275559d9d1c3a233 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -307,13 +307,13 @@
   "beamerfontthemeShibui.sty" 1763066684.81484 5082 e2bfae09893473f56fdac9a042ffc52c ""
   "beamerinnerthemeShibui.sty" 1763063776.12814 6518 282eb3add5d0d648a9b8811042be9726 ""
   "beamerouterthemeShibui.sty" 1763066378.18255 15795 42068779a7237ce51c994af248bba483 ""
-  "beamerthemeShibui.sty" 1763066758.94777 10450 58445bc7d963f5edb23de506dc3d1d93 ""
-  "example.aux" 1763066771.24068 11661 35cc4236c949eeff92098e0a665976d2 "pdflatex"
-  "example.nav" 1763066771.24202 7338 818e55eb9992707d7c7d4f0181625d44 "pdflatex"
-  "example.out" 1763066771.24183 2766 5364991ffe5470e3c98c868a3a5fdc56 "pdflatex"
+  "beamerthemeShibui.sty" 1763067015.68159 10573 07d1a0dc6abf4dfb522d0f439a787692 ""
+  "example.aux" 1763067019.98552 11661 35cc4236c949eeff92098e0a665976d2 "pdflatex"
+  "example.nav" 1763067019.98685 7338 818e55eb9992707d7c7d4f0181625d44 "pdflatex"
+  "example.out" 1763067019.98669 2766 5364991ffe5470e3c98c868a3a5fdc56 "pdflatex"
   "example.tex" 1763066563.29563 21613 ddd6d5f4beea29a9675988c238cb1e86 ""
-  "example.toc" 1763066771.24205 1123 d3854a1a9c7fa490ce3407d7d99e6745 "pdflatex"
-  "example.vrb" 1763066769.62483 391 516db94313ef59e12be515ebb497c408 "pdflatex"
+  "example.toc" 1763067019.98689 1123 d3854a1a9c7fa490ce3407d7d99e6745 "pdflatex"
+  "example.vrb" 1763067018.31164 391 516db94313ef59e12be515ebb497c408 "pdflatex"
   (generated)
   "example.aux"
   "example.log"

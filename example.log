@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.10.17)  13 NOV 2025 21:46
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.10.17)  13 NOV 2025 21:50
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -1488,7 +1488,7 @@ put line 412.
 LaTeX Font Info:    Font shape `T1/FiraSans-OsF/regular/it' will be
 (Font)              scaled to size 5.0pt on input line 412.
 
-Overfull \vbox (18.19205pt too high) detected at line 412
+Overfull \vbox (8.19205pt too high) detected at line 412
  []
 
 
@@ -1608,7 +1608,7 @@ Package rerunfilecheck Info: File `example.out' has not changed.
 Here is how much of TeX's memory you used:
  43217 strings out of 473190
  1018659 string characters out of 5715799
- 1719946 words of memory out of 5000000
+ 1719950 words of memory out of 5000000
  65594 multiletter control sequences out of 15000+600000
  860415 words of font info for 97 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1629,7 +1629,7 @@ l/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sftt0800.pfb></usr/local/
 texlive/2025/texmf-dist/fonts/type1/public/cm-super/sftt0900.pfb></usr/local/te
 xlive/2025/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb></usr/local/texl
 ive/2025/texmf-dist/fonts/type1/public/cm-super/sftt1095.pfb>
-Output written on example.pdf (42 pages, 467389 bytes).
+Output written on example.pdf (42 pages, 467386 bytes).
 PDF statistics:
  471 PDF objects out of 1000 (max. 8388607)
  385 compressed objects within 4 object streams

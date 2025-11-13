@@ -241,7 +241,7 @@
         colframe=shibuicodebg,
         boxrule=0pt,
         sharp corners,
-        top=2mm,
+        top=0mm,
         bottom=2mm,
         left=2mm,
         right=2mm,
@@ -283,6 +283,7 @@
         left=2mm,
         right=2mm
       ]
+      \vspace{-10pt}%
     }
     \AfterEndEnvironment{algorithm}{%
       \end{tcolorbox}
@@ -293,6 +294,8 @@
     % Make the caption text smaller too
     \let\old@caption\@caption
     \long\def\@caption#1[#2]#3{\old@caption{#1}[{#2}]{\footnotesize#3}}
+    % Use negative space above caption to pull it to the top
+    \setlength{\abovecaptionskip}{-5pt}
     \makeatother
   }{}%
 }
