@@ -1,0 +1,122 @@
+% Beamer Color Theme: Tufte
+% Inspired by tufte-css color scheme
+% https://edwardtufte.github.io/tufte-css/
+%
+% Supports light and dark themes
+% Usage: \usetheme[dark]{Tufte} or \usetheme[light]{Tufte}
+% Default: dark
+
+\mode<presentation>
+
+% Check for theme option (default: dark)
+\DeclareOptionBeamer{light}{\def\tufte@theme{light}}
+\DeclareOptionBeamer{dark}{\def\tufte@theme{dark}}
+\ExecuteOptionsBeamer{dark}  % Default to dark
+\ProcessOptionsBeamer
+
+% Define color palette based on theme
+\ifx\tufte@theme\undefined
+  \def\tufte@theme{dark}
+\fi
+
+\def\tufte@dark{dark}
+\ifx\tufte@theme\tufte@dark
+  % Dark theme colors
+  \definecolor{tuftebg}{HTML}{1A1A1A}        % Dark background
+  \definecolor{tuftetext}{HTML}{EEEEEE}      % Light text
+  \definecolor{tufteaccent}{HTML}{FF6B6B}    % Lighter red for accents
+  \definecolor{tuftegray}{HTML}{444444}      % Dark gray for UI elements
+  \definecolor{tuftedarkgray}{HTML}{AAAAAA}  % Light gray for secondary text
+  \definecolor{tuftelink}{HTML}{FF6B6B}      % Links (same as accent)
+\else
+  % Light theme colors (original tufte-css)
+  \definecolor{tuftebg}{HTML}{FFFFF8}        % Cream background
+  \definecolor{tuftetext}{HTML}{111111}      % Near black text
+  \definecolor{tufteaccent}{HTML}{A00000}    % Dark red for accents
+  \definecolor{tuftegray}{HTML}{CCCCCC}      % Light gray for UI elements
+  \definecolor{tuftedarkgray}{HTML}{555555}  % Dark gray for secondary text
+  \definecolor{tuftelink}{HTML}{A00000}      % Links (same as accent)
+\fi
+
+% Code background colors (accentuated based on theme)
+\ifx\tufte@theme\tufte@dark
+  % Dark theme: lighter background for code
+  \definecolor{tuftecodebg}{HTML}{252525}    % Slightly lighter than main bg
+\else
+  % Light theme: darker background for code
+  \definecolor{tuftecodebg}{HTML}{F5F5ED}    % Slightly darker than cream bg
+\fi
+
+% Set background colors
+\setbeamercolor{background canvas}{bg=tuftebg}
+\setbeamercolor{normal text}{fg=tuftetext,bg=tuftebg}
+
+% Structure colors (minimal and clean)
+\setbeamercolor{structure}{fg=tuftetext}
+\setbeamercolor{alerted text}{fg=tufteaccent}
+\setbeamercolor{example text}{fg=tuftedarkgray}
+
+% Title and frame title
+\setbeamercolor{title}{fg=tuftetext}
+\setbeamercolor{subtitle}{fg=tuftedarkgray}
+\setbeamercolor{author}{fg=tuftetext}
+\setbeamercolor{date}{fg=tuftedarkgray}
+\setbeamercolor{institute}{fg=tuftedarkgray}
+\setbeamercolor{frametitle}{fg=tuftetext,bg=tuftebg}
+\setbeamercolor{framesubtitle}{fg=tuftedarkgray,bg=tuftebg}
+
+% Headline and footline
+\setbeamercolor{headline}{fg=tuftedarkgray,bg=tuftebg}
+\setbeamercolor{footline}{fg=tuftedarkgray,bg=tuftebg}
+
+% Section in headline
+\setbeamercolor{section in head/foot}{fg=tuftedarkgray,bg=tuftebg}
+\setbeamercolor{subsection in head/foot}{fg=tuftedarkgray,bg=tuftebg}
+
+% Navigation symbols (squares)
+\setbeamercolor{section in head/foot shaded}{fg=tuftegray,bg=tuftebg}
+\setbeamercolor{navigation symbols}{fg=tuftegray}
+\setbeamercolor{navigation symbols dimmed}{fg=tuftegray!50}
+
+% Progress bar
+\setbeamercolor{progress bar}{fg=tuftetext,bg=tuftegray}
+\setbeamercolor{progress bar progress}{fg=tuftetext,bg=tuftetext}
+
+% Items (lists)
+\setbeamercolor{item}{fg=tuftetext}
+\setbeamercolor{subitem}{fg=tuftedarkgray}
+\setbeamercolor{subsubitem}{fg=tuftedarkgray}
+
+\setbeamercolor{itemize item}{fg=tuftetext}
+\setbeamercolor{itemize subitem}{fg=tuftedarkgray}
+\setbeamercolor{itemize subsubitem}{fg=tuftedarkgray}
+
+\setbeamercolor{enumerate item}{fg=tuftetext}
+\setbeamercolor{enumerate subitem}{fg=tuftedarkgray}
+\setbeamercolor{enumerate subsubitem}{fg=tuftedarkgray}
+
+% Blocks (minimal)
+\setbeamercolor{block title}{fg=tuftetext,bg=tuftebg}
+\setbeamercolor{block body}{fg=tuftetext,bg=tuftebg}
+
+\setbeamercolor{block title alerted}{fg=tufteaccent,bg=tuftebg}
+\setbeamercolor{block body alerted}{fg=tuftetext,bg=tuftebg}
+
+\setbeamercolor{block title example}{fg=tuftedarkgray,bg=tuftebg}
+\setbeamercolor{block body example}{fg=tuftetext,bg=tuftebg}
+
+% Bibliography
+\setbeamercolor{bibliography entry author}{fg=tuftetext}
+\setbeamercolor{bibliography entry title}{fg=tuftetext}
+\setbeamercolor{bibliography entry location}{fg=tuftedarkgray}
+\setbeamercolor{bibliography entry note}{fg=tuftedarkgray}
+
+% Table of contents
+\setbeamercolor{section in toc}{fg=tuftetext}
+\setbeamercolor{subsection in toc}{fg=tuftedarkgray}
+
+% Caption
+\setbeamercolor{caption}{fg=tuftedarkgray}
+\setbeamercolor{caption name}{fg=tuftetext}
+
+\mode<all>

@@ -1,0 +1,246 @@
+% Beamer Inner Theme: Tufte
+% Defines title page, lists, blocks, and other internal elements
+% Minimalist design inspired by Tufte
+
+\mode<presentation>
+
+% Check for theme option
+\DeclareOptionBeamer{nosub}{\def\tufte@nosub{true}}
+\ProcessOptionsBeamer
+
+%--------------------------------------------------
+% TITLE PAGE (rule of thirds, left-aligned, no header/footer)
+%--------------------------------------------------
+
+\defbeamertemplate*{title page}{Tufte theme}[1][]{%
+  \vspace*{0.25\textheight}%
+  \begingroup
+    \raggedright
+    \hspace{0.1\textwidth}%
+    \begin{minipage}{0.8\textwidth}
+      % Title (large)
+      \begin{beamercolorbox}[wd=\linewidth,sep=0pt,left,#1]{title}
+        \usebeamerfont{title}\inserttitle\par%
+      \end{beamercolorbox}%
+
+      % Decorative line
+      \vskip0.5em
+      {\color{tuftetext}\rule{0.3\linewidth}{0.4pt}}
+      \vskip0.5em
+
+      % Subtitle
+      \ifx\insertsubtitle\@empty%
+      \else%
+        \begin{beamercolorbox}[wd=\linewidth,sep=0pt,left,#1]{subtitle}
+          {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
+        \end{beamercolorbox}%
+        \vskip1em
+      \fi
+
+      % Author
+      \begin{beamercolorbox}[wd=\linewidth,sep=0pt,left,#1]{author}
+        \usebeamerfont{author}\insertauthor
+      \end{beamercolorbox}
+
+      % Institute
+      \ifx\insertinstitute\@empty
+      \else
+        \vskip0.3em
+        \begin{beamercolorbox}[wd=\linewidth,sep=0pt,left,#1]{institute}
+          \usebeamerfont{institute}\insertinstitute
+        \end{beamercolorbox}
+      \fi
+
+      % Date
+      \vskip0.3em
+      \begin{beamercolorbox}[wd=\linewidth,sep=0pt,left,#1]{date}
+        \usebeamerfont{date}\insertdate
+      \end{beamercolorbox}
+    \end{minipage}
+  \endgroup
+  \vfill
+}
+
+% Override title page to remove header/footer
+\renewcommand{\maketitle}{%
+  \ifbeamer@inframe
+    \titlepage
+  \else
+    {%
+      \setbeamertemplate{headline}{}%
+      \setbeamertemplate{footline}{}%
+      \frame[plain,noframenumbering]{\titlepage}%
+    }%
+  \fi
+}
+
+%--------------------------------------------------
+% LISTS (minimal, clean)
+%--------------------------------------------------
+
+% Itemize items - simple filled squares
+\setbeamertemplate{itemize item}{%
+  \raisebox{0.12ex}{\rule{0.6ex}{0.6ex}}%
+}
+
+\setbeamertemplate{itemize subitem}{%
+  \raisebox{0.12ex}{\rule{0.5ex}{0.5ex}}%
+}
+
+\setbeamertemplate{itemize subsubitem}{%
+  \raisebox{0.12ex}{\rule{0.4ex}{0.4ex}}%
+}
+
+% Enumerate items - simple numbers
+\setbeamertemplate{enumerate item}{%
+  \arabic{enumi}.%
+}
+
+\setbeamertemplate{enumerate subitem}{%
+  \alph{enumii}.%
+}
+
+\setbeamertemplate{enumerate subsubitem}{%
+  \roman{enumiii}.%
+}
+
+% List spacing - generous (Tufte style)
+\setlength{\leftmargini}{1.5em}
+\setlength{\leftmarginii}{1.5em}
+\setlength{\leftmarginiii}{1.5em}
+\setlength{\labelsep}{0.5em}
+
+%--------------------------------------------------
+% BLOCKS (minimal, no background boxes)
+%--------------------------------------------------
+
+\setbeamertemplate{block begin}{%
+  \vskip0.5em
+  \begin{beamercolorbox}[leftskip=0em,rightskip=0em]{block title}%
+    \usebeamerfont{block title}\insertblocktitle
+  \end{beamercolorbox}%
+  {\parskip0pt\par}%
+  \usebeamerfont{block body}%
+  \begin{beamercolorbox}[leftskip=0em,rightskip=0em,vmode]{block body}%
+}
+
+\setbeamertemplate{block end}{%
+  \end{beamercolorbox}
+  \vskip0.5em
+}
+
+% Alert block
+\setbeamertemplate{block alerted begin}{%
+  \vskip0.5em
+  \begin{beamercolorbox}[leftskip=0em,rightskip=0em]{block title alerted}%
+    \usebeamerfont{block title alerted}\insertblocktitle
+  \end{beamercolorbox}%
+  {\parskip0pt\par}%
+  \usebeamerfont{block body alerted}%
+  \begin{beamercolorbox}[leftskip=0em,rightskip=0em,vmode]{block body alerted}%
+}
+
+\setbeamertemplate{block alerted end}{%
+  \end{beamercolorbox}
+  \vskip0.5em
+}
+
+% Example block
+\setbeamertemplate{block example begin}{%
+  \vskip0.5em
+  \begin{beamercolorbox}[leftskip=0em,rightskip=0em]{block title example}%
+    \usebeamerfont{block title example}\insertblocktitle
+  \end{beamercolorbox}%
+  {\parskip0pt\par}%
+  \usebeamerfont{block body example}%
+  \begin{beamercolorbox}[leftskip=0em,rightskip=0em,vmode]{block body example}%
+}
+
+\setbeamertemplate{block example end}{%
+  \end{beamercolorbox}
+  \vskip0.5em
+}
+
+%--------------------------------------------------
+% TABLE OF CONTENTS (clean and simple)
+%--------------------------------------------------
+
+% Reduce spacing in ToC
+\setbeamertemplate{section in toc}{%
+  \inserttocsectionnumber.~\inserttocsection\par\vspace{0.2em}
+}
+
+% Subsection template - conditionally show based on nosub option
+\ifx\tufte@nosub\undefined
+  % Show subsections (default)
+  \setbeamertemplate{subsection in toc}{%
+    \hspace{1.5em}\rule{0.4ex}{0.4ex}~\inserttocsubsection\par
+  }
+\else
+  % Hide subsections when nosub option is used
+  \setbeamertemplate{subsection in toc}{}
+\fi
+
+% Reduce spacing between ToC entries
+\makeatletter
+\patchcmd{\beamer@sectionintoc}{\vskip1.5em}{\vskip0.5em}{}{}
+\makeatother
+
+%--------------------------------------------------
+% CAPTION (minimal)
+%--------------------------------------------------
+
+\setbeamertemplate{caption}{%
+  \raggedright
+  \usebeamerfont{caption}\insertcaption\par
+}
+
+\setbeamertemplate{caption label separator}{: }
+
+%--------------------------------------------------
+% BIBLIOGRAPHY (clean)
+%--------------------------------------------------
+
+\setbeamertemplate{bibliography item}{%
+  \insertbiblabel
+}
+
+%--------------------------------------------------
+% THEOREM ENVIRONMENTS (minimal)
+%--------------------------------------------------
+
+\setbeamertemplate{theorem begin}{%
+  \vskip0.5em
+  \begin{\inserttheoremblockenv}{%
+    \inserttheoremname
+    \ifx\inserttheoremaddition\@empty\else\ (\inserttheoremaddition)\fi%
+  }%
+}
+
+\setbeamertemplate{theorem end}{%
+  \end{\inserttheoremblockenv}
+  \vskip0.5em
+}
+
+%--------------------------------------------------
+% MARGINS (generous whitespace, Tufte style)
+%--------------------------------------------------
+
+\setbeamersize{text margin left=1cm,text margin right=1cm}
+
+%--------------------------------------------------
+% AUTOMATIC SECTION TOC
+%--------------------------------------------------
+% Display table of contents at the start of each section
+% with the current section highlighted
+
+\AtBeginSection[]{
+  \begin{frame}{Overview}
+    % Tighter spacing for section ToC
+    \setlength{\parskip}{0pt}%
+    \setlength{\itemsep}{0pt}%
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\mode<all>

@@ -1,0 +1,161 @@
+% Beamer Outer Theme: Tufte
+% Defines headline, footline, and navigation elements
+% Minimalist design with progress bar
+
+\mode<presentation>
+
+% Remove default navigation symbols
+\setbeamertemplate{navigation symbols}{}
+
+% Disable sidebar
+\setbeamersize{sidebar width left=0cm, sidebar width right=0cm}
+
+%--------------------------------------------------
+% HEADLINE: Section name + Navigation squares + Frame title
+%--------------------------------------------------
+
+% Store the frame title in a custom command
+\newcommand{\tufteframetitle}{}
+
+% Patch \frametitle to store the title
+\let\oldframetitle\frametitle
+\renewcommand{\frametitle}[1]{%
+  \gdef\tufteframetitle{#1}%
+  \oldframetitle{#1}%
+}
+
+\defbeamertemplate*{headline}{Tufte theme}{%
+  \ifnum\c@framenumber=1
+    % No headline on title page
+  \else
+    \begin{beamercolorbox}[wd=\paperwidth,ht=3ex,dp=1.5ex,leftskip=1cm,rightskip=.5em]{headline}
+      \usebeamerfont{headline}%
+      % Section name (small and less prominent, aligned with separator line)
+      {\tiny\color{tuftegray}\insertsectionhead}%
+      \hspace{0.7em}%
+      % Vertical bar separator
+      {\color{tuftegray}\rule{0.4pt}{1.2ex}}%
+      \hspace{0.7em}%
+      % Frame title
+      {\usebeamerfont{frametitle}\tufteframetitle}%
+    \end{beamercolorbox}
+    % Separator line below headline (matching content width)
+    \vskip0.5ex%
+    \hspace*{1cm}{\color{tuftegray}\rule{\dimexpr\paperwidth-2cm\relax}{0.4pt}}%
+    \vskip1ex%
+  \fi
+}
+
+% Remove ALL spacing between navigation elements
+\setbeamertemplate{mini frame}{}%
+\setbeamertemplate{mini frame in current subsection}{}%
+\setbeamertemplate{mini frame in other subsection}{}%
+
+% CRITICAL: Remove separator spacing between section navigation items
+\defbeamertemplate{section in head/foot separator}{none}{}
+\setbeamertemplate{section in head/foot separator}[none]
+
+% Custom section navigation - render as squares with ABSOLUTELY NO SPACING
+\setbeamertemplate{section in head/foot}{%
+  \raisebox{0.1ex}{%
+    \begin{pgfpicture}{0pt}{0pt}{0.12cm}{0.12cm}%
+      % Current section - filled square
+      \color{tuftetext}%
+      \pgfpathrectangle{\pgfpointorigin}{\pgfpoint{0.12cm}{0.12cm}}%
+      \pgfusepath{fill}%
+    \end{pgfpicture}%
+  }%
+}
+
+\setbeamertemplate{section in head/foot shaded}{%
+  \raisebox{0.1ex}{%
+    \begin{pgfpicture}{0pt}{0pt}{0.12cm}{0.12cm}%
+      % Other sections - outlined square
+      \color{tuftegray}%
+      \pgfpathrectangle{\pgfpointorigin}{\pgfpoint{0.12cm}{0.12cm}}%
+      \pgfusepath{stroke}%
+    \end{pgfpicture}%
+  }%
+}
+
+%--------------------------------------------------
+% FOOTLINE: Progress bar + page numbers (flush bottom)
+%--------------------------------------------------
+
+\defbeamertemplate*{footline}{Tufte theme}{%
+  \ifnum\c@framenumber=1
+    % No footline on title page
+  \else
+    % Calculate progress (handle case when there's only 1 frame)
+    % Progress bar width matches headline line width (paperwidth - 2cm for margins)
+    \pgfmathsetlength{\@tempdima}{\paperwidth-2cm}
+    \ifnum\inserttotalframenumber>1
+      \pgfmathsetmacro{\progress}{(\insertframenumber-1)/(\inserttotalframenumber-1)}
+      \pgfmathsetmacro{\progresswidth}{\progress*\@tempdima}
+    \else
+      \pgfmathsetmacro{\progress}{1}
+      \pgfmathsetmacro{\progresswidth}{\@tempdima}
+    \fi
+
+    % Single colorbox containing both progress bar and page numbers
+    \begin{beamercolorbox}[wd=\paperwidth,ht=5ex,dp=1.5ex,leftskip=0em,rightskip=0.5em]{footline}
+      % Draw progress bar raised from bottom
+      \vskip3ex
+      \hspace*{1cm}% Left margin offset
+      \begin{tikzpicture}
+        % Background (light gray line)
+        \fill[tuftegray] (0,0) rectangle (\@tempdima,0.08cm);
+        % Progress (dark line)
+        \fill[tuftetext] (0,0) rectangle (\progresswidth pt,0.08cm);
+        % Page numbers overlaid on the right
+        \node[anchor=south east,inner sep=0pt,text=tuftedarkgray] at (\@tempdima,0.15cm)
+          {\usebeamerfont{page number in head/foot}\insertframenumber\,/\,\inserttotalframenumber};
+      \end{tikzpicture}
+    \end{beamercolorbox}
+  \fi
+}
+
+%--------------------------------------------------
+% FRAME TITLE (now in headline, not displayed in content area)
+%--------------------------------------------------
+
+\defbeamertemplate*{frametitle}{Tufte theme}{%
+  % Frame title appears in headline for regular frames
+  % Only show in content area for plain frames (no headline/footline)
+  \ifbeamer@plainframe
+    \vskip0.5em
+    \begin{beamercolorbox}[wd=\textwidth,leftskip=0em,rightskip=0em]{frametitle}
+      \usebeamerfont{frametitle}\insertframetitle
+      \ifx\insertframesubtitle\@empty
+      \else
+        \par\vskip-0.3em
+        {\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}\insertframesubtitle}
+      \fi
+    \end{beamercolorbox}
+    \vskip0.5em
+  \fi
+  % For regular frames, title is shown in headline only
+}
+
+% Section page template (centered, minimal)
+\defbeamertemplate*{section page}{Tufte theme}{
+  \centering
+  \vfill
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+  \vfill
+}
+
+% Add section page command
+\newcommand{\sectionframe}{%
+  {%
+    \setbeamertemplate{headline}{}%
+    \setbeamertemplate{footline}{}%
+    \begin{frame}[c,plain]
+      \sectionpage
+    \end{frame}
+  }%
+}
+
+\mode<all>

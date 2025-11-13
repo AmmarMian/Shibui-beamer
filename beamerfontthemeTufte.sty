@@ -1,0 +1,122 @@
+% Beamer Font Theme: Tufte
+% Typography inspired by Edward Tufte's work
+% Uses ET Book/Palatino (serif) or Fira Sans (sans-serif)
+%
+% Options: serif (default), sans
+
+\mode<presentation>
+
+% Check for theme option (default: serif)
+\DeclareOptionBeamer{sans}{\def\tufte@font{sans}}
+\DeclareOptionBeamer{serif}{\def\tufte@font{serif}}
+\ExecuteOptionsBeamer{serif}  % Default to serif
+\ProcessOptionsBeamer
+
+% Define font loading based on option
+\ifx\tufte@font\undefined
+  \def\tufte@font{serif}
+\fi
+
+\def\tufte@sans{sans}
+\ifx\tufte@font\tufte@sans
+  % Sans-serif theme: Use Fira Sans
+  \usefonttheme{default}  % Use sans-serif
+  \RequirePackage[sfdefault]{FiraSans}
+  \RequirePackage[T1]{fontenc}
+\else
+  % Serif theme: Use ET Book or Palatino (Tufte style)
+  \usefonttheme{serif}
+
+  % Attempt to use ET Book if available, fall back to Palatino
+  \IfFileExists{ETbb.sty}{%
+    \usepackage[lining]{ETbb}
+  }{%
+    % Palatino as fallback (similar to ET Book)
+    \usepackage{mathpazo}
+    \usepackage[scaled=0.95]{helvet}
+  }
+\fi
+
+% Font sizes for different elements
+\setbeamerfont{title}{size=\Huge,series=\bfseries}
+\setbeamerfont{subtitle}{size=\Large,series=\normalfont}
+\setbeamerfont{author}{size=\large,series=\normalfont}
+\setbeamerfont{date}{size=\normalsize,series=\normalfont}
+\setbeamerfont{institute}{size=\normalsize,series=\normalfont}
+
+% Frame title - will appear in headline, so keep compact
+\setbeamerfont{frametitle}{size=\normalsize,series=\bfseries}
+\setbeamerfont{framesubtitle}{size=\small,series=\normalfont}
+
+% Headline and footline - small and subtle
+\setbeamerfont{headline}{size=\small,series=\normalfont}
+\setbeamerfont{footline}{size=\tiny,series=\normalfont}
+\setbeamerfont{section in head/foot}{size=\small,series=\normalfont}
+\setbeamerfont{subsection in head/foot}{size=\small,series=\normalfont}
+\setbeamerfont{page number in head/foot}{size=\tiny,series=\normalfont}
+
+% Section page
+\setbeamerfont{section title}{size=\LARGE,series=\bfseries}
+\setbeamerfont{section subtitle}{size=\large,series=\normalfont}
+
+% Normal text
+\setbeamerfont{normal text}{size=\normalsize,series=\normalfont}
+
+% Lists
+\setbeamerfont{itemize/enumerate body}{size=\normalsize}
+\setbeamerfont{itemize/enumerate subbody}{size=\normalsize}
+\setbeamerfont{itemize/enumerate subsubbody}{size=\small}
+
+% Blocks
+\setbeamerfont{block title}{size=\normalsize,series=\bfseries}
+\setbeamerfont{block body}{size=\normalsize,series=\normalfont}
+
+\setbeamerfont{block title alerted}{size=\normalsize,series=\bfseries}
+\setbeamerfont{block body alerted}{size=\normalsize,series=\normalfont}
+
+\setbeamerfont{block title example}{size=\normalsize,series=\bfseries}
+\setbeamerfont{block body example}{size=\normalsize,series=\normalfont}
+
+% Captions - smaller and less prominent
+\setbeamerfont{caption}{size=\small,series=\normalfont}
+\setbeamerfont{caption name}{size=\small,series=\normalfont}
+
+% Bibliography
+\setbeamerfont{bibliography item}{size=\small}
+\setbeamerfont{bibliography entry author}{size=\small,series=\normalfont}
+\setbeamerfont{bibliography entry title}{size=\small,series=\normalfont}
+\setbeamerfont{bibliography entry location}{size=\small,series=\normalfont}
+\setbeamerfont{bibliography entry note}{size=\small,series=\normalfont}
+
+% TOC
+\setbeamerfont{section in toc}{size=\normalsize,series=\normalfont}
+\setbeamerfont{subsection in toc}{size=\small,series=\normalfont}
+
+% Emphasis and alerts
+\renewcommand{\emph}[1]{{\itshape #1}}
+
+% Monospace fonts for code and algorithms
+\setbeamerfont{code}{family=\ttfamily,size=\scriptsize}
+\setbeamerfont{algorithm}{family=\ttfamily,size=\scriptsize}
+
+% Configure TikZ to use theme font
+\AtBeginDocument{%
+  \@ifpackageloaded{tikz}{%
+    % Set TikZ to use document font (serif or sans based on theme option)
+    \ifx\tufte@font\tufte@sans
+      % Sans-serif theme: use sans font
+      \tikzset{
+        every picture/.append style={font=\sffamily},
+        every node/.append style={font=\sffamily}
+      }
+    \else
+      % Serif theme: use serif font
+      \tikzset{
+        every picture/.append style={font=\rmfamily},
+        every node/.append style={font=\rmfamily}
+      }
+    \fi
+  }{}%
+}
+
+\mode<all>
