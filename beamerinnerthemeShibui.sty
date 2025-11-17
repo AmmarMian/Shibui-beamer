@@ -223,6 +223,158 @@
 }
 
 %--------------------------------------------------
+% ENHANCED THEOREM ENVIRONMENTS WITH TCOLORBOX
+%--------------------------------------------------
+% These provide styled theorem-like environments matching Shibui aesthetic
+% Requires tcolorbox package
+
+\RequirePackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+% Base theorem box style using theme colors - minimal Shibui aesthetic
+\tcbset{
+  shibuitheoremstyle/.style={
+    colback=shibuicodebg,
+    coltext=shibuitext,
+    coltitle=shibuiaccent,
+    fonttitle=\bfseries,
+    frame hidden,
+    boxrule=0pt,
+    sharp corners,
+    left=5pt,
+    right=5pt,
+    top=3pt,
+    bottom=3pt,
+    toptitle=2pt,
+    bottomtitle=1pt,
+    breakable,
+    enhanced jigsaw,
+  }
+}
+
+% Theorem environment
+\newenvironment{shibuitheorem}[1][]{%
+  \begin{tcolorbox}[shibuitheoremstyle,title=Theorem #1]
+}{%
+  \end{tcolorbox}
+}
+
+% Lemma environment
+\newenvironment{shibuilemma}[1][]{%
+  \begin{tcolorbox}[shibuitheoremstyle,title=Lemma #1]
+}{%
+  \end{tcolorbox}
+}
+
+% Corollary environment
+\newenvironment{shibuicorollary}[1][]{%
+  \begin{tcolorbox}[shibuitheoremstyle,title=Corollary #1]
+}{%
+  \end{tcolorbox}
+}
+
+% Definition environment (uses darkgray for title color)
+\newenvironment{shibuidefinition}[1][]{%
+  \begin{tcolorbox}[shibuitheoremstyle,
+    coltitle=shibuidarkgray,
+    title=Definition #1]
+}{%
+  \end{tcolorbox}
+}
+
+% Proposition environment
+\newenvironment{shibuiproposition}[1][]{%
+  \begin{tcolorbox}[shibuitheoremstyle,title=Proposition #1]
+}{%
+  \end{tcolorbox}
+}
+
+% Proof environment with QED symbol
+\newenvironment{shibuiproof}{%
+  \par\vspace{0.3em}%
+  \noindent\textbf{Proof.}\quad
+}{%
+  \hfill$\square$\par\vspace{0.3em}%
+}
+
+%--------------------------------------------------
+% CALLOUT BOXES
+%--------------------------------------------------
+% Note, Warning, and Tip boxes using theme colors - minimal Shibui aesthetic
+
+% Note box (uses accent color for title)
+\newenvironment{shibiunote}[1][Note]{%
+  \begin{tcolorbox}[
+    colback=shibuicodebg,
+    coltext=shibuitext,
+    coltitle=shibuiaccent,
+    fonttitle=\bfseries,
+    title=#1,
+    frame hidden,
+    boxrule=0pt,
+    sharp corners,
+    left=5pt,
+    right=5pt,
+    top=3pt,
+    bottom=3pt,
+    toptitle=2pt,
+    bottomtitle=1pt,
+    breakable,
+    enhanced jigsaw,
+  ]
+}{%
+  \end{tcolorbox}
+}
+
+% Warning box (uses code background color)
+\newenvironment{shibuiwarning}[1][Warning]{%
+  \begin{tcolorbox}[
+    colback=shibuicodebg,
+    coltext=shibuitext,
+    coltitle=shibuiaccent,
+    fonttitle=\bfseries,
+    title=#1,
+    frame hidden,
+    boxrule=0pt,
+    sharp corners,
+    left=5pt,
+    right=5pt,
+    top=3pt,
+    bottom=3pt,
+    toptitle=2pt,
+    bottomtitle=1pt,
+    breakable,
+    enhanced jigsaw,
+  ]
+}{%
+  \end{tcolorbox}
+}
+
+% Tip box (uses darkgray for title)
+\newenvironment{shibuitip}[1][Tip]{%
+  \begin{tcolorbox}[
+    colback=shibuicodebg,
+    coltext=shibuitext,
+    coltitle=shibuidarkgray,
+    fonttitle=\bfseries,
+    title=#1,
+    frame hidden,
+    boxrule=0pt,
+    sharp corners,
+    left=5pt,
+    right=5pt,
+    top=3pt,
+    bottom=3pt,
+    toptitle=2pt,
+    bottomtitle=1pt,
+    breakable,
+    enhanced jigsaw,
+  ]
+}{%
+  \end{tcolorbox}
+}
+
+%--------------------------------------------------
 % MARGINS (generous whitespace, Shibui style)
 %--------------------------------------------------
 

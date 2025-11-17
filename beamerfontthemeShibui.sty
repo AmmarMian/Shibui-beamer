@@ -3,6 +3,7 @@
 % Multiple font options available
 %
 % Options: sans (default), serif, garamond, charter, mono
+% Math font options: mathsans, mathserif, mathdefault (auto-matches text font)
 
 \mode<presentation>
 
@@ -12,7 +13,14 @@
 \DeclareOptionBeamer{garamond}{\def\shibui@font{garamond}}
 \DeclareOptionBeamer{charter}{\def\shibui@font{charter}}
 \DeclareOptionBeamer{mono}{\def\shibui@font{mono}}
+
+% Math font options
+\DeclareOptionBeamer{mathsans}{\def\shibui@mathfont{mathsans}}
+\DeclareOptionBeamer{mathserif}{\def\shibui@mathfont{mathserif}}
+\DeclareOptionBeamer{mathdefault}{\def\shibui@mathfont{mathdefault}}
+
 \ExecuteOptionsBeamer{sans}  % Default to sans
+\ExecuteOptionsBeamer{mathdefault}  % Default math matches text
 \ProcessOptionsBeamer
 
 % Define font loading based on option
@@ -27,40 +35,67 @@
 \def\shibui@charter{charter}
 \def\shibui@mono{mono}
 
+% Helper macros for mathfont comparison
+\def\shibui@mathsans{mathsans}
+\def\shibui@mathserif{mathserif}
+\def\shibui@mathdefault{mathdefault}
+
+% Set up text fonts
 \ifx\shibui@font\shibui@sans
   % Sans-serif theme: Use Fira Sans
   \usefonttheme{default}
   \RequirePackage[sfdefault]{FiraSans}
   \RequirePackage[T1]{fontenc}
+  % Set up math font
+  \ifx\shibui@mathfont\shibui@mathdefault
+    % Use sans math for sans text
+    \RequirePackage{sfmath}
+  \fi
 \else\ifx\shibui@font\shibui@garamond
   % EB Garamond: Elegant classic serif
   \usefonttheme{serif}
   \RequirePackage{ebgaramond}
-  \RequirePackage[cmintegrals,cmbraces]{newtxmath}
   \RequirePackage[T1]{fontenc}
+  % Set up math font
+  \ifx\shibui@mathfont\shibui@mathdefault
+    \RequirePackage[cmintegrals,cmbraces]{newtxmath}
+    \RequirePackage[libertine]{newtxmath}
+  \fi
 \else\ifx\shibui@font\shibui@charter
   % Charter: Clean, readable serif
   \usefonttheme{serif}
-  \RequirePackage[charter]{mathdesign}
   \RequirePackage[T1]{fontenc}
+  % Set up math font
+  \ifx\shibui@mathfont\shibui@mathdefault
+    \RequirePackage[charter]{mathdesign}
+  \fi
 \else\ifx\shibui@font\shibui@mono
   % Fira Mono: Monospace for code-heavy presentations
   \usefonttheme{default}
   \RequirePackage[scale=0.85]{FiraMono}
   \renewcommand*\familydefault{\ttdefault}
   \RequirePackage[T1]{fontenc}
+  % Mono typically uses default math
 \else
   % Serif theme (default): Use ET Book or Palatino
   \usefonttheme{serif}
+  \RequirePackage[T1]{fontenc}
   % Attempt to use ET Book if available, fall back to Palatino
   \IfFileExists{ETbb.sty}{%
-    \usepackage[lining]{ETbb}
+    \RequirePackage[lining]{ETbb}
   }{%
     % Palatino as fallback (similar to ET Book)
-    \usepackage{mathpazo}
-    \usepackage[scaled=0.95]{helvet}
+    \RequirePackage{mathpazo}
+    \RequirePackage[scaled=0.95]{helvet}
   }
 \fi\fi\fi\fi
+
+% Override math font if explicitly requested
+\ifx\shibui@mathfont\shibui@mathsans
+  \RequirePackage{sfmath}
+\else\ifx\shibui@mathfont\shibui@mathserif
+  \RequirePackage{newtxmath}
+\fi\fi
 
 % Font sizes for different elements
 \setbeamerfont{title}{size=\Huge,series=\bfseries}

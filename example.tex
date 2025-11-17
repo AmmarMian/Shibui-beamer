@@ -16,23 +16,31 @@
 %   \usetheme[dark, navontop]{Shibui}                   % Show navigation squares above title
 %   \usetheme[gruvboxdark, garamond]{Shibui}            % Multiple options
 %   \usetheme[nord, progressbar=segmented]{Shibui}      % Section-based progress bar
-\usetheme[sans, nosub, progressbar=segmented, kanjilogo]{Shibui}
+\usetheme[nord, charter, nosub, progressbar=segmented, kanjilogo]{Shibui}
 
 % Custom footer text (optional)
 \footertext{Conference Name 2024 -- City, Country}
 
 % Additional packages for examples
+\usepackage{CJKutf8}  % For Japanese kanji in title
 \usepackage{listings}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
 
+% Helper command for color preview boxes
+\newcommand{\colorpreview}[2]{%
+  \tikz\node[rectangle, fill=#1, minimum width=1.2cm, minimum height=0.5cm,
+             draw=shibuitext, line width=0.3pt, inner sep=0pt]{};%
+  \,\texttt{\footnotesize #2}%
+}
+
 % NOTE: Listings and algorithm styling are now handled automatically by the theme!
 % You can still override settings here if needed.
 
 % Metadata
-\title{The Shibui Beamer Theme}
+\title{The Shibui \begin{CJK}{UTF8}{min}(渋い)\end{CJK} Beamer Theme}
 \subtitle{A Minimalist Design for Clear Communication}
 \author{Your Name}
 \institute{Your Institution}
@@ -72,71 +80,385 @@
 
 \begin{frame}{Key Features}
   \begin{enumerate}
-    \item \textbf{Dark Theme Colors}: Dark background with light, readable text
-    \item \textbf{Navigation Squares}: Shows current section slides only
-    \item \textbf{Progress Bar}: Visual indicator with page numbers
-    \item \textbf{Minimal Headline}: Section and title without visual clutter
-    \item \textbf{Multiple Fonts}: Choose from sans-serif, serif, or monospace options
+    \item \textbf{Multiple Color Schemes}: 9 themes from light to dark, including Solarized, Nord, Gruvbox
+    \item \textbf{Typography Options}: 5 font families with matching math fonts
+    \item \textbf{Progress Indicators}: Basic, segmented, or none
+    \item \textbf{Minimal Navigation}: Clean headlines with optional section squares
+    \item \textbf{Academic Features}: Theorem environments, proofs, citations
   \end{enumerate}
 \end{frame}
 
+\begin{frame}[fragile]{Quick Start}
+  \textbf{Basic usage:}
+
+  \vspace{0.5em}
+
+  \begin{shibuiframe}{Minimal Example}
+    \texttt{\textbackslash documentclass\{beamer\}} \\
+    \texttt{\textbackslash usetheme\{Shibui\}} \\
+    \texttt{\textbackslash begin\{document\}} \\
+    \texttt{...your content...} \\
+    \texttt{\textbackslash end\{document\}}
+  \end{shibuiframe}
+
+  \vspace{1em}
+
+  \textbf{With options:}
+
+  \vspace{0.5em}
+
+  \begin{shibuiframe}{Customized Theme}
+    \texttt{\textbackslash usetheme[nord, charter]\{Shibui\}} \\
+    \texttt{\textbackslash usetheme[dark, progressbar=segmented]\{Shibui\}} \\
+    \texttt{\textbackslash usetheme[solarizedosaka, garamond, kanjilogo]\{Shibui\}}
+  \end{shibuiframe}
+
+  \vspace{0.5em}
+
+  \small See following sections for detailed customization options.
+\end{frame}
+
 %--------------------------------------------------
-\section{Typography \& Color}
+\section{Theme Options}
 %--------------------------------------------------
 
 \subsection{Typography}
 
-\begin{frame}{Typography Matters}
+\begin{frame}{Typography Overview}
   Good typography is essential for effective presentations.
 
-  \vspace{1em}
+  \vspace{0.5em}
 
-  \textbf{This theme offers 5 font options} for different presentation styles:
+  \textbf{This theme offers 5 font options with matching math fonts:}
 
   \begin{itemize}
-    \item \textbf{sans} (default): Fira Sans -- clean, modern sans-serif
-    \item \textbf{serif}: ET Book or Palatino fallback -- classic elegance
-    \item \textbf{garamond}: EB Garamond -- sophisticated serif typography
-    \item \textbf{charter}: Charter -- highly readable serif
-    \item \textbf{mono}: Fira Mono -- monospace for code-heavy presentations
+    \item \textbf{sans}: Fira Sans + sfmath (sans-serif math)
+    \item \textbf{serif}: ET Book/Palatino + mathpazo (Palatino math)
+    \item \textbf{garamond}: EB Garamond + newtxmath (Times-like math)
+    \item \textbf{charter}: Charter + mathdesign charter (matching math)
+    \item \textbf{mono}: Fira Mono + Computer Modern math
   \end{itemize}
+
+  \vspace{0.5em}
+
+  \textbf{Math font override options:} \texttt{mathdefault} (auto-match text), \texttt{mathsans}, \texttt{mathserif}
+
+  \vspace{0.5em}
+
+  \small \emph{Example:} \texttt{\textbackslash usetheme[garamond, mathsans]\{Shibui\}} uses Garamond text with sans-serif math.
+\end{frame}
+
+\begin{frame}{Font: sans (Fira Sans + sfmath)}
+  \textbf{Text:} Fira Sans \quad \textbf{Math:} sfmath (sans-serif)
+
+  \vspace{0.5em}
+
+  \textbf{Usage:} \texttt{\textbackslash usetheme[sans]\{Shibui\}} or \texttt{\textbackslash usetheme\{Shibui\}} (default)
 
   \vspace{1em}
 
-  \emph{Emphasis through italics} rather than bold helps maintain visual calm.
+  {\fontfamily{FiraSans-TLF}\selectfont
+  The Fibonacci sequence is defined by $F_n = F_{n-1} + F_{n-2}$ with $F_0 = 0$ and $F_1 = 1$.
+
+  For continuous functions, the integral $\int_a^b f(x)\,dx$ represents the area under the curve.
+
+  Einstein's mass-energy equivalence: $E = mc^2$}
+\end{frame}
+
+\begin{frame}{Font: serif (ET Book/Palatino + mathpazo)}
+  \textbf{Text:} ET Book/Palatino \quad \textbf{Math:} mathpazo (Palatino math)
+
+  \vspace{0.5em}
+
+  \textbf{Usage:} \texttt{\textbackslash usetheme[serif]\{Shibui\}}
+
+  \vspace{1em}
+
+  {\fontfamily{ETbb-TLF}\selectfont
+  The Fibonacci sequence is defined by $F_n = F_{n-1} + F_{n-2}$ with $F_0 = 0$ and $F_1 = 1$.
+
+  For continuous functions, the integral $\int_a^b f(x)\,dx$ represents the area under the curve.
+
+  Einstein's mass-energy equivalence: $E = mc^2$}
+\end{frame}
+
+\begin{frame}{Font: garamond (EB Garamond + newtxmath)}
+  \textbf{Text:} EB Garamond \quad \textbf{Math:} newtxmath (Times-like)
+
+  \vspace{0.5em}
+
+  \textbf{Usage:} \texttt{\textbackslash usetheme[garamond]\{Shibui\}}
+
+  \vspace{1em}
+
+  {\fontfamily{EBGaramond-TLF}\selectfont
+  The Fibonacci sequence is defined by $F_n = F_{n-1} + F_{n-2}$ with $F_0 = 0$ and $F_1 = 1$.
+
+  For continuous functions, the integral $\int_a^b f(x)\,dx$ represents the area under the curve.
+
+  Einstein's mass-energy equivalence: $E = mc^2$}
+\end{frame}
+
+\begin{frame}{Font: charter (Charter + mathdesign)}
+  \textbf{Text:} Charter \quad \textbf{Math:} mathdesign charter (matching)
+
+  \vspace{0.5em}
+
+  \textbf{Usage:} \texttt{\textbackslash usetheme[charter]\{Shibui\}}
+
+  \vspace{1em}
+
+  {\fontfamily{bch}\selectfont
+  The Fibonacci sequence is defined by $F_n = F_{n-1} + F_{n-2}$ with $F_0 = 0$ and $F_1 = 1$.
+
+  For continuous functions, the integral $\int_a^b f(x)\,dx$ represents the area under the curve.
+
+  Einstein's mass-energy equivalence: $E = mc^2$}
+\end{frame}
+
+\begin{frame}{Font: mono (Fira Mono + CM math)}
+  \textbf{Text:} Fira Mono \quad \textbf{Math:} Computer Modern (default)
+
+  \vspace{0.5em}
+
+  \textbf{Usage:} \texttt{\textbackslash usetheme[mono]\{Shibui\}}
+
+  \vspace{1em}
+
+  {\fontfamily{FiraMono-TLF}\selectfont
+  The Fibonacci sequence is defined by $F_n = F_{n-1} + F_{n-2}$ with $F_0 = 0$ and $F_1 = 1$.
+
+  For continuous functions, the integral $\int_a^b f(x)\,dx$ represents the area under the curve.
+
+  Einstein's mass-energy equivalence: $E = mc^2$}
+\end{frame}
+
+\begin{frame}[fragile]{Math Font Options}
+  The theme provides flexible math font configuration:
+
+  \vspace{0.5em}
+
+  \begin{shibuiframe}{Default Behavior (mathdefault)}
+    \texttt{\textbackslash usetheme[sans]\{Shibui\}} → sfmath (sans-serif) \\
+    \texttt{\textbackslash usetheme[serif]\{Shibui\}} → mathpazo (Palatino) \\
+    \texttt{\textbackslash usetheme[garamond]\{Shibui\}} → newtxmath (Times-like) \\
+    \texttt{\textbackslash usetheme[charter]\{Shibui\}} → mathdesign (Charter) \\
+    \texttt{\textbackslash usetheme[mono]\{Shibui\}} → Computer Modern
+  \end{shibuiframe}
+
+  \vspace{0.5em}
+
+  \begin{shibuiframe}{Override Math Font}
+    \textbf{Force sans-serif math:} \\
+    \texttt{\textbackslash usetheme[garamond, mathsans]\{Shibui\}} \\
+    \vspace{0.3em}
+    \textbf{Force serif math:} \\
+    \texttt{\textbackslash usetheme[sans, mathserif]\{Shibui\}}
+  \end{shibuiframe}
+
+  \vspace{0.5em}
+
+  \small Mix and match text and math fonts for maximum flexibility.
 \end{frame}
 
 \subsection{Color Schemes}
 
-\begin{frame}{Color Palette}
-  The theme now supports \textbf{9 color schemes} for different aesthetics:
+\begin{frame}{Color Palette Overview}
+  The theme now supports \textbf{9 color schemes} for different aesthetics.
 
   \vspace{0.5em}
 
-  \begin{block}{Original Themes}
-    \textbf{dark} (default): Dark background with light text and red accent \\
-    \textbf{light}: Warm cream background with near-black text and dark red accent
-  \end{block}
+  Each scheme uses these color roles:
+  \begin{itemize}
+    \item \texttt{bg} -- background
+    \item \texttt{text} -- main text
+    \item \texttt{accent} -- highlights
+    \item \texttt{gray} -- UI elements
+    \item \texttt{darkgray} -- secondary text
+    \item \texttt{codebg} -- code background
+  \end{itemize}
 
   \vspace{0.5em}
 
-  \begin{exampleblock}{New Color Schemes}
-    \textbf{solarizedlight}, \textbf{solarizeddark}, \textbf{solarizedosaka}: Solarized variants \\
-    \textbf{nord}: Arctic, north-bluish color palette \\
-    \textbf{gruvboxlight}, \textbf{gruvboxdark}: Retro groove with warm tones \\
-    \textbf{autumn}: Warm autumn colors with browns and oranges
-  \end{exampleblock}
+  The following slides show each color scheme with preview boxes.
+\end{frame}
 
-  \vspace{0.3em}
+\begin{frame}{Color Scheme: light}
+  \begin{shibuiframe}{light -- Warm cream with dark red accent}
+    \colorpreview{shibuibg@light}{bg}
+    \colorpreview{shibuitext@light}{text}
+    \colorpreview{shibuiaccent@light}{accent}
+    \colorpreview{shibuigray@light}{gray}
+    \colorpreview{shibuidarkgray@light}{darkgray}
+    \colorpreview{shibuicodebg@light}{codebg}
+  \end{shibuiframe}
 
-  All palettes provide excellent contrast and reduce eye strain.
+  \vspace{1em}
+
+  Classic Shibui aesthetic with warm cream background and sophisticated dark red accents. Perfect for traditional presentations.
+
+  \vspace{0.5em}
+
+  \textbf{Usage:} \texttt{\textbackslash usetheme[light]\{Shibui\}} or \texttt{\textbackslash usetheme\{Shibui\}} (default)
+\end{frame}
+
+\begin{frame}{Color Scheme: dark}
+  \begin{shibuiframe}{dark -- Dark background with red accent}
+    \colorpreview{shibuibg@dark}{bg}
+    \colorpreview{shibuitext@dark}{text}
+    \colorpreview{shibuiaccent@dark}{accent}
+    \colorpreview{shibuigray@dark}{gray}
+    \colorpreview{shibuidarkgray@dark}{darkgray}
+    \colorpreview{shibuicodebg@dark}{codebg}
+  \end{shibuiframe}
+
+  \vspace{1em}
+
+  Modern dark theme ideal for low-light presentations. Reduces eye strain during long sessions.
+
+  \vspace{0.5em}
+
+  \textbf{Usage:} \texttt{\textbackslash usetheme[dark]\{Shibui\}}
+\end{frame}
+
+\begin{frame}{Color Scheme: solarizedlight}
+  \begin{shibuiframe}{solarizedlight -- Ethan Schoonover's light palette}
+    \colorpreview{shibuibg@solarizedlight}{bg}
+    \colorpreview{shibuitext@solarizedlight}{text}
+    \colorpreview{shibuiaccent@solarizedlight}{accent}
+    \colorpreview{shibuigray@solarizedlight}{gray}
+    \colorpreview{shibuidarkgray@solarizedlight}{darkgray}
+    \colorpreview{shibuicodebg@solarizedlight}{codebg}
+  \end{shibuiframe}
+
+  \vspace{1em}
+
+  Carefully designed by Ethan Schoonover for optimal readability. Selective contrast reduces eye fatigue.
+
+  \vspace{0.5em}
+
+  \textbf{Usage:} \texttt{\textbackslash usetheme[solarizedlight]\{Shibui\}}
+\end{frame}
+
+\begin{frame}{Color Scheme: solarizeddark}
+  \begin{shibuiframe}{solarizeddark -- Ethan Schoonover's dark palette}
+    \colorpreview{shibuibg@solarizeddark}{bg}
+    \colorpreview{shibuitext@solarizeddark}{text}
+    \colorpreview{shibuiaccent@solarizeddark}{accent}
+    \colorpreview{shibuigray@solarizeddark}{gray}
+    \colorpreview{shibuidarkgray@solarizeddark}{darkgray}
+    \colorpreview{shibuicodebg@solarizeddark}{codebg}
+  \end{shibuiframe}
+
+  \vspace{1em}
+
+  Dark variant of Solarized with blue accents. Scientifically designed color relationships.
+
+  \vspace{0.5em}
+
+  \textbf{Usage:} \texttt{\textbackslash usetheme[solarizeddark]\{Shibui\}}
+\end{frame}
+
+\begin{frame}{Color Scheme: solarizedosaka}
+  \begin{shibuiframe}{solarizedosaka -- Deep blue with muted red}
+    \colorpreview{shibuibg@solarizedosaka}{bg}
+    \colorpreview{shibuitext@solarizedosaka}{text}
+    \colorpreview{shibuiaccent@solarizedosaka}{accent}
+    \colorpreview{shibuigray@solarizedosaka}{gray}
+    \colorpreview{shibuidarkgray@solarizedosaka}{darkgray}
+    \colorpreview{shibuicodebg@solarizedosaka}{codebg}
+  \end{shibuiframe}
+
+  \vspace{1em}
+
+  Custom Solarized variant with deep blue-cyan background and muted red accents. Combines elegance with readability.
+
+  \vspace{0.5em}
+
+  \textbf{Usage:} \texttt{\textbackslash usetheme[solarizedosaka]\{Shibui\}}
+\end{frame}
+
+\begin{frame}{Color Scheme: nord}
+  \begin{shibuiframe}{nord -- Arctic, north-bluish palette}
+    \colorpreview{shibuibg@nord}{bg}
+    \colorpreview{shibuitext@nord}{text}
+    \colorpreview{shibuiaccent@nord}{accent}
+    \colorpreview{shibuigray@nord}{gray}
+    \colorpreview{shibuidarkgray@nord}{darkgray}
+    \colorpreview{shibuicodebg@nord}{codebg}
+  \end{shibuiframe}
+
+  \vspace{1em}
+
+  Inspired by Arctic beauty with cool blue tones. Clean and calm aesthetic for modern presentations.
+
+  \vspace{0.5em}
+
+  \textbf{Usage:} \texttt{\textbackslash usetheme[nord]\{Shibui\}}
+\end{frame}
+
+\begin{frame}{Color Scheme: gruvboxlight}
+  \begin{shibuiframe}{gruvboxlight -- Retro groove with warm tones}
+    \colorpreview{shibuibg@gruvboxlight}{bg}
+    \colorpreview{shibuitext@gruvboxlight}{text}
+    \colorpreview{shibuiaccent@gruvboxlight}{accent}
+    \colorpreview{shibuigray@gruvboxlight}{gray}
+    \colorpreview{shibuidarkgray@gruvboxlight}{darkgray}
+    \colorpreview{shibuicodebg@gruvboxlight}{codebg}
+  \end{shibuiframe}
+
+  \vspace{1em}
+
+  Retro-inspired warm color palette. Bright orange accents with earthy tones create an inviting atmosphere.
+
+  \vspace{0.5em}
+
+  \textbf{Usage:} \texttt{\textbackslash usetheme[gruvboxlight]\{Shibui\}}
+\end{frame}
+
+\begin{frame}{Color Scheme: gruvboxdark}
+  \begin{shibuiframe}{gruvboxdark -- Dark retro with bright orange}
+    \colorpreview{shibuibg@gruvboxdark}{bg}
+    \colorpreview{shibuitext@gruvboxdark}{text}
+    \colorpreview{shibuiaccent@gruvboxdark}{accent}
+    \colorpreview{shibuigray@gruvboxdark}{gray}
+    \colorpreview{shibuidarkgray@gruvboxdark}{darkgray}
+    \colorpreview{shibuicodebg@gruvboxdark}{codebg}
+  \end{shibuiframe}
+
+  \vspace{1em}
+
+  Dark variant with vibrant orange accents. Combines nostalgia with modern design sensibilities.
+
+  \vspace{0.5em}
+
+  \textbf{Usage:} \texttt{\textbackslash usetheme[gruvboxdark]\{Shibui\}}
+\end{frame}
+
+\begin{frame}{Color Scheme: autumn}
+  \begin{shibuiframe}{autumn -- Warm earthy tones}
+    \colorpreview{shibuibg@autumn}{bg}
+    \colorpreview{shibuitext@autumn}{text}
+    \colorpreview{shibuiaccent@autumn}{accent}
+    \colorpreview{shibuigray@autumn}{gray}
+    \colorpreview{shibuidarkgray@autumn}{darkgray}
+    \colorpreview{shibuicodebg@autumn}{codebg}
+  \end{shibuiframe}
+
+  \vspace{1em}
+
+  Warm autumn palette with browns and rust orange. Creates a cozy, approachable presentation atmosphere.
+
+  \vspace{0.5em}
+
+  \textbf{Usage:} \texttt{\textbackslash usetheme[autumn]\{Shibui\}}
 \end{frame}
 
 %--------------------------------------------------
-\section{Content Examples}
+\section{Basic Content}
 %--------------------------------------------------
 
-\subsection{Lists and Structure}
+\subsection{Text and Structure}
 
 \begin{frame}{Lists \& Structure}
   \textbf{Itemized lists} use simple squares:
@@ -162,7 +484,23 @@
   \end{enumerate}
 \end{frame}
 
-\subsection{Blocks and Boxes}
+\begin{frame}{Text Formatting and Quotations}
+  \begin{quote}
+    ``Less is more.''
+  \end{quote}
+
+  \vspace{0.5em}
+  \hfill --- Ludwig Mies van der Rohe
+
+  \vspace{2em}
+
+  \begin{quote}
+    ``Simplicity is the ultimate sophistication.''
+  \end{quote}
+
+  \vspace{0.5em}
+  \hfill --- Leonardo da Vinci
+\end{frame}
 
 \begin{frame}{Blocks \& Emphasis}
   \begin{block}{Standard Block}
@@ -201,8 +539,6 @@
     The box adapts to both light and dark themes automatically, maintaining readability and the clean Shibui style across all color schemes.
   \end{shibuiframe}
 \end{frame}
-
-\subsection{Tables}
 
 \begin{frame}{Simple Tables}
   Tables follow the minimal Shibui aesthetic:
@@ -279,26 +615,6 @@
   \end{columns}
 \end{frame}
 
-\subsection{Text Elements}
-
-\begin{frame}{Quotations}
-  \begin{quote}
-    ``Less is more.''
-  \end{quote}
-
-  \vspace{0.5em}
-  \hfill --- Ludwig Mies van der Rohe
-
-  \vspace{2em}
-
-  \begin{quote}
-    ``Simplicity is the ultimate sophistication.''
-  \end{quote}
-
-  \vspace{0.5em}
-  \hfill --- Leonardo da Vinci
-\end{frame}
-
 \subsection{Mathematics}
 
 \begin{frame}{Mathematics}
@@ -324,7 +640,161 @@
   \end{align}
 \end{frame}
 
-\subsection{Code and Algorithms}
+%--------------------------------------------------
+\section{Academic \& Technical Content}
+%--------------------------------------------------
+
+\subsection{Academic Features}
+
+\begin{frame}{Theorem Boxes}
+  The theme provides styled theorem-like environments using theme colors:
+
+  \vspace{0.5em}
+
+  \begin{shibuitheorem}[Pythagorean Theorem]
+    In a right triangle, the square of the hypotenuse equals the sum of squares of the other two sides:
+    \[c^2 = a^2 + b^2\]
+  \end{shibuitheorem}
+
+  \vspace{0.3em}
+
+  \begin{shibuilemma}
+    If $n$ is even, then $n^2$ is even.
+  \end{shibuilemma}
+
+  \vspace{0.3em}
+
+  All environments automatically use theme colors and adapt to the active color scheme.
+\end{frame}
+
+\begin{frame}{More Theorem Types}
+  Additional theorem-like environments:
+
+  \vspace{0.5em}
+
+  \begin{shibuidefinition}[Limit]
+    We say $\lim_{x \to a} f(x) = L$ if for every $\epsilon > 0$ there exists $\delta > 0$ such that $|f(x) - L| < \epsilon$ whenever $0 < |x - a| < \delta$.
+  \end{shibuidefinition}
+
+  \vspace{0.3em}
+
+  \begin{shibuiproposition}
+    The sum of two continuous functions is continuous.
+  \end{shibuiproposition}
+
+  \vspace{0.3em}
+
+  \begin{shibuicorollary}
+    All polynomial functions are continuous on $\mathbb{R}$.
+  \end{shibuicorollary}
+\end{frame}
+
+\begin{frame}{Proof Environment}
+  Proofs get a clean presentation with QED symbol:
+
+  \vspace{0.5em}
+
+  \begin{shibuitheorem}
+    The sum of two even numbers is even.
+  \end{shibuitheorem}
+
+  \begin{shibuiproof}
+    Let $m = 2k$ and $n = 2j$ be two even numbers where $k, j \in \mathbb{Z}$.
+
+    Then $m + n = 2k + 2j = 2(k + j)$.
+
+    Since $k + j \in \mathbb{Z}$, we have $m + n = 2(k + j)$ which is even by definition.
+  \end{shibuiproof}
+
+  \vspace{0.3em}
+
+  The proof environment automatically adds proper spacing and the QED symbol.
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]{Citations and Footnotes}
+  The theme provides two citation styles:
+
+  \vspace{0.5em}
+
+  \textbf{Footnote citation (manual):} For academic presentations, the Shibui philosophy of minimalism was influenced by Japanese design principles.\footnote{Tanizaki, Jun'ichiro. \textit{In Praise of Shadows}. Leete's Island Books, 1977. \vspace{1em}}
+
+  \vspace{0.5em}
+
+  \begin{shibuiframe}{Usage}
+    \textbf{Manual footnotes:} \\
+    \texttt{\textbackslash footnote\{Author. \textbackslash textit\{Title\}. ...\}}
+
+    \vspace{0.3em}
+
+    \textbf{With bibliography (biblatex/natbib):} \\
+    \texttt{\textbackslash footcite\{key\}} -- Full reference in footnote
+
+    \vspace{0.3em}
+
+    The \texttt{\textbackslash footcite} command works with biblatex, natbib, and standard bibtex, automatically adapting to your citation package.
+
+    \vspace{0.3em}
+
+    \small\textit{Note: To use \texttt{\textbackslash footcite}, load biblatex or natbib in the preamble and add your .bib file. Example:} \\
+    \texttt{\textbackslash usepackage[backend=biber]\{biblatex\}} \\
+    \texttt{\textbackslash addbibresource\{references.bib\}}
+  \end{shibuiframe}
+
+  \vspace{0.3em}
+
+  \small Footnote citations keep slide content clean while providing full reference details.
+\end{frame}
+
+\begin{frame}[fragile]{Bibliography Setup}
+  Setting up a bibliography with biblatex:
+
+  \vspace{0.5em}
+
+  \begin{shibuiframe}{Preamble Setup}
+    \texttt{\textbackslash usepackage[backend=biber,style=authoryear]\{biblatex\}} \\
+    \texttt{\textbackslash addbibresource\{references.bib\}}
+  \end{shibuiframe}
+
+  \vspace{0.5em}
+
+  \begin{shibuiframe}{In Your Presentation}
+    \texttt{\textbackslash footcite\{key\}} -- Footnote with full citation \\
+    \texttt{\textbackslash cite\{key\}} -- Inline citation \\
+    \texttt{\textbackslash parencite\{key\}} -- Citation in parentheses
+  \end{shibuiframe}
+
+  \vspace{0.5em}
+
+  \begin{shibuiframe}{Print Bibliography}
+    \texttt{\textbackslash begin\{frame\}\{References\}} \\
+    \texttt{~~\textbackslash printbibliography} \\
+    \texttt{\textbackslash end\{frame\}}
+  \end{shibuiframe}
+
+  \vspace{0.5em}
+
+  \small Compile with: pdflatex → biber → pdflatex → pdflatex
+\end{frame}
+
+\begin{frame}{Academic Workflow Example}
+  A complete academic presentation flow:
+
+  \vspace{0.5em}
+
+  \begin{enumerate}
+    \item \textbf{State theorem}: Use \texttt{shibuitheorem} environment
+    \item \textbf{Provide proof}: Use \texttt{shibuiproof} environment
+    \item \textbf{Cite sources}: Use \texttt{\textbackslash footcite} for references
+    \item \textbf{Add definitions}: Use \texttt{shibuidefinition} for terminology
+    \item \textbf{Present corollaries}: Use \texttt{shibuicorollary} for consequences
+  \end{enumerate}
+
+  \vspace{1em}
+
+  All environments work seamlessly together and adapt to your chosen color scheme, maintaining professional academic standards with minimalist Shibui aesthetics.
+\end{frame}
+
+\subsection{Code \& Algorithms}
 
 \begin{frame}[fragile]{Code Listings}
   Clean, readable code with syntax highlighting:
@@ -346,11 +816,32 @@ for num in fibonacci(10):
   \end{lstlisting}
 \end{frame}
 
-%--------------------------------------------------
-\section{Data \& Figures}
-%--------------------------------------------------
+\begin{frame}{Algorithms and Pseudocode}
 
-\subsection{Data Visualization Principles}
+  \begin{algorithm}[H]
+    \small
+    \caption{Binary Search}
+    \begin{algorithmic}[1]
+      \Procedure{BinarySearch}{$A, n, T$}
+        \State $L \gets 0$
+        \State $R \gets n - 1$
+        \While{$L \leq R$}
+          \State $m \gets \lfloor (L + R)/2 \rfloor$
+          \If{$A[m] < T$}
+            \State $L \gets m + 1$
+          \ElsIf{$A[m] > T$}
+            \State $R \gets m - 1$
+          \Else
+            \State \Return $m$
+          \EndIf
+        \EndWhile
+        \State \Return \textit{unsuccessful}
+      \EndProcedure
+    \end{algorithmic}
+  \end{algorithm}
+\end{frame}
+
+\subsection{Data Visualization}
 
 \begin{frame}{Presenting Data}
   When including figures or data visualizations:
@@ -384,43 +875,14 @@ for num in fibonacci(10):
   The Shibui theme's generous whitespace helps create natural visual hierarchy without competing elements.
 \end{frame}
 
-\subsection{Algorithms and Pseudocode}
-
-\begin{frame}{Algorithms}
-
-  \begin{algorithm}[H]
-    \small
-    \caption{Binary Search}
-    \begin{algorithmic}[1]
-      \Procedure{BinarySearch}{$A, n, T$}
-        \State $L \gets 0$
-        \State $R \gets n - 1$
-        \While{$L \leq R$}
-          \State $m \gets \lfloor (L + R)/2 \rfloor$
-          \If{$A[m] < T$}
-            \State $L \gets m + 1$
-          \ElsIf{$A[m] > T$}
-            \State $R \gets m - 1$
-          \Else
-            \State \Return $m$
-          \EndIf
-        \EndWhile
-        \State \Return \textit{unsuccessful}
-      \EndProcedure
-    \end{algorithmic}
-  \end{algorithm}
-\end{frame}
-
-\subsection{Graphics and Plots}
-
 \begin{frame}{TikZ Diagrams}
   \centering
   \begin{tikzpicture}[scale=0.8]
     % Nodes
-    \node[circle,draw=shibuitext,fill=shibuigray!20,text=shibuitext,minimum size=1cm] (A) at (0,0) {A};
-    \node[circle,draw=shibuitext,fill=shibuigray!20,text=shibuitext,minimum size=1cm] (B) at (3,1) {B};
-    \node[circle,draw=shibuitext,fill=shibuigray!20,text=shibuitext,minimum size=1cm] (C) at (3,-1) {C};
-    \node[circle,draw=shibuiaccent,fill=shibuiaccent!15,text=shibuitext,minimum size=1cm] (D) at (6,0) {D};
+    \node[circle,draw=shibuitext,fill=shibuicodebg,text=shibuitext,minimum size=1cm] (A) at (0,0) {A};
+    \node[circle,draw=shibuitext,fill=shibuicodebg,text=shibuitext,minimum size=1cm] (B) at (3,1) {B};
+    \node[circle,draw=shibuitext,fill=shibuicodebg,text=shibuitext,minimum size=1cm] (C) at (3,-1) {C};
+    \node[circle,draw=shibuiaccent,fill=shibuicodebg,text=shibuitext,minimum size=1cm] (D) at (6,0) {D};
 
     % Edges
     \draw[->,thick,color=shibuitext] (A) -- (B) node[midway,above,text=shibuitext] {5};
@@ -432,7 +894,7 @@ for num in fibonacci(10):
 
   \vspace{0.5em}
 
-  \small Weighted directed graph using themed colors (shibuitext, shibuiaccent, shibuigray)
+  \small Weighted directed graph using themed colors (shibuitext, shibuiaccent, shibuicodebg)
 \end{frame}
 
 \begin{frame}{PGFPlots: Standard Style}
@@ -446,6 +908,7 @@ for num in fibonacci(10):
       grid=major,
       grid style={color=shibuigray!30},
       legend pos=north east,
+      legend style={fill=shibuicodebg, draw=shibuitext, text=shibuitext},
       axis line style={color=shibuitext},
       tick label style={color=shibuitext},
       label style={color=shibuitext}
@@ -477,13 +940,13 @@ for num in fibonacci(10):
       xlabel={$x$},
       ylabel={$f(x)$}
     ]
-      \addplot[smooth, domain=-2:2, samples=50] {x^2};
+      \addplot+[smooth, domain=-2:2, samples=50] {x^2};
       \addlegendentry{$x^2$}
 
-      \addplot[smooth, domain=-2:2, samples=50] {2^x};
+      \addplot+[smooth, domain=-2:2, samples=50] {2^x};
       \addlegendentry{$2^x$}
 
-      \addplot[smooth, domain=-2:2, samples=50] {0.5*x};
+      \addplot+[smooth, domain=-2:2, samples=50] {0.5*x};
       \addlegendentry{$0.5x$}
     \end{axis}
   \end{tikzpicture}
@@ -508,7 +971,7 @@ for num in fibonacci(10):
         {sin(deg(x))};
       \addlegendentry{Base signal}
 
-      \addplot[color=shibuiaccent, thick, smooth, domain=0:10, samples=100]
+      \addplot[color=shibuiaccent!70!shibuidarkgray, thick, dashed, smooth, domain=0:10, samples=100]
         {sin(deg(x)) + 0.2*sin(deg(5*x))};
       \addlegendentry{With noise}
     \end{axis}
@@ -549,8 +1012,194 @@ for num in fibonacci(10):
 \end{frame}
 
 %--------------------------------------------------
-\section{Conclusion}
+\section{Advanced Customization}
 %--------------------------------------------------
+
+\subsection{Callout Boxes}
+
+\begin{frame}{Note Boxes}
+  Use callout boxes to highlight important information:
+
+  \vspace{0.5em}
+
+  \begin{shibiunote}[Important]
+    Callout boxes use theme colors and automatically adapt to your selected color scheme (nord, gruvbox, solarized, etc.).
+  \end{shibiunote}
+
+  \vspace{0.5em}
+
+  \begin{shibiunote}[Remember]
+    All theorem and callout environments are built with tcolorbox and support page breaks with the \texttt{breakable} option.
+  \end{shibiunote}
+
+  \vspace{0.5em}
+
+  \textbf{Usage:} \texttt{\textbackslash begin\{shibiunote\}[Title] ... \textbackslash end\{shibiunote\}}
+\end{frame}
+
+\begin{frame}{Warning and Tip Boxes}
+  Different callout types for different purposes:
+
+  \vspace{0.5em}
+
+  \begin{shibuiwarning}[Caution]
+    Warning boxes use a more prominent style with slightly darker colors and thicker borders to draw attention.
+  \end{shibuiwarning}
+
+  \vspace{0.5em}
+
+  \begin{shibuitip}[Pro Tip]
+    Tip boxes use gray tones for subtle suggestions and helpful hints without being too distracting.
+  \end{shibuitip}
+
+  \vspace{0.5em}
+
+  All callout boxes maintain the minimalist Shibui aesthetic while providing clear visual hierarchy.
+\end{frame}
+
+\subsection{Working with Theme Colors}
+
+\begin{frame}[fragile]{Theme Color Reference}
+  The theme defines semantic color names that adapt to your chosen color scheme:
+
+  \vspace{0.5em}
+
+  \begin{shibuiframe}{Available Theme Colors}
+    \texttt{shibuibg} -- Main background color \\
+    \texttt{shibuitext} -- Primary text color \\
+    \texttt{shibuiaccent} -- Accent color for highlights \\
+    \texttt{shibuigray} -- Light gray for subtle elements \\
+    \texttt{shibuidarkgray} -- Dark gray for secondary text \\
+    \texttt{shibuicodebg} -- Background for code blocks and boxes
+  \end{shibuiframe}
+
+  \vspace{0.5em}
+
+  These colors automatically change when you switch color schemes (nord, solarized, gruvbox, etc.), ensuring consistent styling across your presentation.
+\end{frame}
+
+\begin{frame}[fragile]{Using Theme Colors in TikZ}
+  Integrate theme colors into custom TikZ graphics:
+
+  \vspace{0.5em}
+
+  \begin{shibuiframe}{Example: Custom Diagram}
+    \texttt{\textbackslash begin\{tikzpicture\}} \\
+    \texttt{~~\textbackslash node[fill=shibuicodebg, draw=shibuiaccent,} \\
+    \texttt{~~~~~~~~text=shibuitext] \{Content\};} \\
+    \texttt{~~\textbackslash draw[color=shibuiaccent, thick] ...} \\
+    \texttt{\textbackslash end\{tikzpicture\}}
+  \end{shibuiframe}
+
+  \vspace{0.5em}
+
+  Using theme colors ensures your custom graphics match the presentation's color scheme automatically.
+\end{frame}
+
+\begin{frame}[fragile]{Using Theme Colors in PGFPlots}
+  Apply theme colors to custom plots:
+
+  \vspace{0.5em}
+
+  \begin{shibuiframe}{Manual Color Assignment}
+    \texttt{\textbackslash addplot[color=shibuiaccent, thick] \{...\};} \\
+    \texttt{\textbackslash addplot[color=shibuidarkgray, dashed] \{...\};}
+  \end{shibuiframe}
+
+  \vspace{0.3em}
+
+  \begin{shibuiframe}{Using Shibui Style}
+    \texttt{\textbackslash begin\{axis\}[shibui style, shibui colors]} \\
+    \texttt{~~\textbackslash addplot+ \{...\}; \% Uses cycle list} \\
+    \texttt{\textbackslash end\{axis\}}
+  \end{shibuiframe}
+
+  \vspace{0.5em}
+
+  The \texttt{shibui colors} cycle list provides theme-aware plot colors with varied line styles.
+\end{frame}
+
+\subsection{Custom Elements}
+
+\begin{frame}[fragile]{Custom Footer Text and Logos}
+  Personalize your presentation footer:
+
+  \vspace{0.5em}
+
+  \begin{shibuiframe}{Custom Footer}
+    Add to preamble: \\
+    \texttt{\textbackslash footertext\{Conference 2024 -- City, Country\}}
+  \end{shibuiframe}
+
+  \vspace{0.5em}
+
+  \begin{shibuiframe}{Kanji Logo}
+    Enable kanji logo: \\
+    \texttt{\textbackslash usetheme[kanjilogo]\{Shibui\}}
+  \end{shibuiframe}
+
+  \vspace{0.5em}
+
+  Footer text appears above the progress bar, aligned to the right. The kanji logo appears in the left margin if enabled.
+\end{frame}
+
+\begin{frame}[fragile]{Package Integration Tips}
+  The Shibui theme works well with common Beamer packages:
+
+  \vspace{0.5em}
+
+  \begin{shibuiframe}{Recommended Packages}
+    \textbf{Bibliography:} biblatex, natbib \\
+    \textbf{Code:} listings (auto-styled), minted \\
+    \textbf{Math:} amsmath, amsthm (compatible) \\
+    \textbf{Graphics:} TikZ, PGFPlots (with shibui styles) \\
+    \textbf{Tables:} booktabs (clean horizontal rules)
+  \end{shibuiframe}
+
+  \vspace{0.5em}
+
+  \small The theme automatically configures listings and algorithms. For other packages, use theme colors for consistency.
+\end{frame}
+
+\subsection{Presenter Notes}
+
+\begin{frame}{Notes Page Template}
+  The theme includes a clean notes page template for dual-screen presentations:
+
+  \vspace{0.5em}
+
+  \begin{shibuiframe}{Using Presenter Notes}
+    \textbf{Enable notes:} Add to preamble: \\
+    \texttt{\textbackslash setbeameroption\{show notes on second screen\}}
+
+    \vspace{0.3em}
+
+    \textbf{Add notes to slides:} \\
+    \texttt{\textbackslash note\{Your speaker notes here...\}}
+
+    \vspace{0.3em}
+
+    \textbf{Features:}
+    \begin{itemize}
+      \item Slide thumbnail preview
+      \item Section and slide number in header
+      \item Clean, readable layout
+      \item Theme colors for consistency
+    \end{itemize}
+  \end{shibuiframe}
+\end{frame}
+
+\note{
+  This is an example of speaker notes. They appear on the notes page with a preview of the current slide.
+
+  You can use notes to:
+  - Remind yourself of key points to mention
+  - Include timing information
+  - Add references or additional details
+  - Prepare for potential questions
+}
+
+\subsection{Summary}
 
 \begin{frame}{Summary}
   The Shibui Beamer theme offers:
@@ -607,11 +1256,19 @@ for num in fibonacci(10):
   \vspace{0.3em}
 
   \begin{shibuiframe}{Font Themes}
-    \texttt{sans} -- Fira Sans (default) \\
-    \texttt{serif} -- ET Book/Palatino \\
-    \texttt{garamond} -- EB Garamond \\
-    \texttt{charter} -- Charter \\
-    \texttt{mono} -- Fira Mono
+    \texttt{sans} -- {\fontfamily{FiraSans-TLF}\selectfont Fira Sans} (default) \\
+    \texttt{serif} -- {\fontfamily{ETbb-TLF}\selectfont ET Book}/{\fontfamily{ppl}\selectfont Palatino} \\
+    \texttt{garamond} -- {\fontfamily{EBGaramond-TLF}\selectfont EB Garamond} \\
+    \texttt{charter} -- {\fontfamily{bch}\selectfont Charter} \\
+    \texttt{mono} -- {\fontfamily{FiraMono-TLF}\selectfont Fira Mono}
+  \end{shibuiframe}
+
+  \vspace{0.3em}
+
+  \begin{shibuiframe}{Math Font Options}
+    \texttt{mathdefault} -- Auto-match text font (default) \\
+    \texttt{mathsans} -- Force sans-serif math (sfmath) \\
+    \texttt{mathserif} -- Force serif math (newtxmath)
   \end{shibuiframe}
 
   \vspace{0.3em}
@@ -660,7 +1317,7 @@ for num in fibonacci(10):
   \small Use with: \texttt{\textbackslash color\{shibuiaccent\}} or \texttt{\textbackslash textcolor\{shibuiaccent\}\{text\}}
 \end{frame}
 
-\begin{frame}{Custom Environments}
+\begin{frame}[allowframebreaks]{Custom Environments}
   Special environments provided by the theme:
 
   \vspace{0.5em}
@@ -668,16 +1325,38 @@ for num in fibonacci(10):
   \begin{shibuiframe}{shibuiframe}
     Minimal box with background color for highlighting concepts.
 
-    \textbf{Usage:}
+    \textbf{Usage:} \texttt{\textbackslash begin\{shibuiframe\}\{Title\} ... \textbackslash end\{shibuiframe\}}
+  \end{shibuiframe}
 
-    \texttt{\textbackslash begin\{shibuiframe\}\{Title\}} \\
-    \texttt{~~Content...} \\
-    \texttt{\textbackslash end\{shibuiframe\}}
+  \vspace{0.3em}
+
+  \begin{shibuiframe}{Theorem Environments}
+    \texttt{shibuitheorem[title]} -- Theorem box \\
+    \texttt{shibuilemma[title]} -- Lemma box \\
+    \texttt{shibuicorollary[title]} -- Corollary box \\
+    \texttt{shibuidefinition[title]} -- Definition box \\
+    \texttt{shibuiproposition[title]} -- Proposition box \\
+    \texttt{shibuiproof} -- Proof with QED symbol
+  \end{shibuiframe}
+
+  \vspace{0.3em}
+
+  \begin{shibuiframe}{Callout Boxes}
+    \texttt{shibiunote[title]} -- Note/info box \\
+    \texttt{shibuiwarning[title]} -- Warning box \\
+    \texttt{shibuitip[title]} -- Tip/hint box
+  \end{shibuiframe}
+
+  \vspace{0.3em}
+
+  \begin{shibuiframe}{Citation Commands}
+    \texttt{\textbackslash cite\{key\}} -- Normal inline citation \\
+    \texttt{\textbackslash footcite\{key\}} -- Footnote citation with full reference
   \end{shibuiframe}
 
   \vspace{0.5em}
 
-  All standard Beamer environments work as expected: blocks, columns, overlays, etc.
+  All environments use theme colors and adapt to the active color scheme. Standard Beamer environments also work: blocks, columns, overlays, etc.
 \end{frame}
 
 \begin{frame}{Custom Footer Text}

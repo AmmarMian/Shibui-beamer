@@ -290,6 +290,11 @@
       % Page numbers to the right of the progress bar
       \node[anchor=west,inner sep=0pt,outer sep=0pt,text=shibuidarkgray] at (\@tempdima+0.02cm,0.04cm)
         {\usebeamerfont{page number in head/foot}\insertframenumber\,/\,\inserttotalframenumber};
+      % Footer text above and aligned to right end of progress bar
+      \ifx\shibuifootertext\@empty\else
+        \node[anchor=south east,inner sep=0pt,outer sep=0pt,text=shibuidarkgray] at (\@tempdima-0.25cm,0.18cm)
+          {\tiny\shibuifootertext};
+      \fi
     \end{tikzpicture}
   \fi%
 }
@@ -312,6 +317,11 @@
     % Page numbers to the right of the progress bar
     \node[anchor=west,inner sep=0pt,outer sep=0pt,text=shibuidarkgray] at (\@tempdima+0.02cm,0.04cm)
       {\usebeamerfont{page number in head/foot}\insertframenumber\,/\,\inserttotalframenumber};
+    % Footer text above and aligned to right end of progress bar
+    \ifx\shibuifootertext\@empty\else
+      \node[anchor=south east,inner sep=0pt,outer sep=0pt,text=shibuidarkgray] at (\@tempdima-0.25cm,0.18cm)
+        {\tiny\shibuifootertext};
+    \fi
   \end{tikzpicture}
 }
 
@@ -323,17 +333,10 @@
   \ifnum\c@framenumber=1
     % No footline on title page
   \else
-    % Single colorbox containing footer text, progress bar, and page numbers
+    % Single colorbox containing progress bar and page numbers
     \begin{beamercolorbox}[wd=\paperwidth,ht=5ex,dp=1.5ex,leftskip=0em,rightskip=0em]{footline}
-      % Footer text (if set) - shown above progress bar in very small font
-      \ifx\shibuifootertext\@empty
-        % No footer text, maintain spacing
-        \vskip3ex
-      \else
-        \vskip1.5ex
-        \hspace*{1cm}{\tiny\color{shibuidarkgray}\shibuifootertext}%
-        \vskip0.5ex
-      \fi
+      % Spacing
+      \vskip3ex
       % Show kanji logo if enabled (in the left margin, doesn't shift progress bar)
       \ifx\shibui@kanjilogo\undefined
         \hspace*{1cm}% Normal left margin offset
@@ -422,6 +425,52 @@
     \protected@xdef\shibuiframetitle{\insertframetitle}%
   \fi
   % The actual title display is handled by the headline, so we don't render anything here
+}
+
+%--------------------------------------------------
+% NOTES PAGE TEMPLATE
+%--------------------------------------------------
+% Clean presenter notes layout for dual-screen presentations
+% Usage: \setbeameroption{show notes on second screen}
+
+\defbeamertemplate*{note page}{Shibui theme}{%
+  \nointerlineskip
+  \vbox{%
+    \hsize=\paperwidth
+    \vskip0.5cm
+    % Header with slide info
+    \hbox{%
+      \hspace*{0.5cm}%
+      \begin{beamercolorbox}[wd=\dimexpr\paperwidth-1cm\relax,ht=1.5ex,dp=1ex]{headline}%
+        {\tiny\color{shibuidarkgray}%
+          Slide \insertframenumber{} / \inserttotalframenumber{} \hfill \insertsection%
+        }%
+      \end{beamercolorbox}%
+    }%
+    \vskip0.3cm
+    % Slide preview (thumbnail)
+    \hbox{%
+      \hspace*{0.5cm}%
+      \begin{beamercolorbox}[wd=0.48\paperwidth,center]{note page}%
+        \insertslideintonotes{0.45}%
+      \end{beamercolorbox}%
+    }%
+    \vskip0.5cm
+    % Separator line
+    \hbox{%
+      \hspace*{0.5cm}%
+      {\color{shibuigray}\rule{\dimexpr\paperwidth-1cm\relax}{0.4pt}}%
+    }%
+    \vskip0.3cm
+    % Notes content
+    \hbox{%
+      \hspace*{0.5cm}%
+      \begin{beamercolorbox}[wd=\dimexpr\paperwidth-1cm\relax,left]{note page}%
+        \footnotesize
+        \insertnote
+      \end{beamercolorbox}%
+    }%
+  }%
 }
 
 \mode<all>

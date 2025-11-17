@@ -128,6 +128,33 @@
 \newcommand{\accentemph}[1]{\textcolor{shibuiaccent}{\emph{#1}}}
 
 %--------------------------------------------------
+% Custom Citation Commands
+%--------------------------------------------------
+% \footcite{key} - Creates a footnote with full citation
+% Regular \cite{key} behavior remains unchanged
+
+\AtBeginDocument{%
+  % Check if biblatex is loaded
+  \@ifpackageloaded{biblatex}{%
+    % biblatex already provides \footcite, use it directly
+    % (no action needed, biblatex's \footcite will be used)
+  }{%
+    % biblatex not loaded, provide custom \footcite
+    \@ifpackageloaded{natbib}{%
+      % Using natbib - create footnote with full citation
+      \newcommand{\footcite}[1]{%
+        \footnote{\bibentry{#1}}%
+      }%
+    }{%
+      % Using standard bibtex - create footnote with citation
+      \newcommand{\footcite}[1]{%
+        \footnote{\cite{#1}: \nocite{#1}}%
+      }%
+    }%
+  }%
+}
+
+%--------------------------------------------------
 % PGFPlots Shibui Style (optional, requires pgfplots package)
 %--------------------------------------------------
 
@@ -159,6 +186,7 @@
         legend style = {
           draw = none,
           fill = none,
+          text = shibuitext,
           cells = {anchor = west},
           at={(1.02,1)},
           anchor=north west
@@ -172,10 +200,9 @@
       % Default cycle list using theme colors
       shibui colors/.style = {
         cycle list = {
-          {color=shibuitext, thick},
-          {color=shibuiaccent, thick},
-          {color=shibuidarkgray, thick, dashed},
-          {color=shibuigray, thick, dotted}
+          {shibuiaccent, thick},
+          {shibuidarkgray, thick, dashed},
+          {shibuitext, thick, dotted}
         }
       }
     }
@@ -196,20 +223,20 @@
 \newtcolorbox{shibuiframe}[1]{
   colback=shibuicodebg,
   coltext=shibuitext,
-  boxrule=0pt,
-  arc=0pt,
-  sharp corners,
-  title={#1},
-  fonttitle=\bfseries,
   coltitle=shibuiaccent,
-  colbacktitle=shibuicodebg,
-  top=3mm,
-  bottom=3mm,
-  left=3mm,
-  right=3mm,
-  toptitle=0mm,
-  bottomtitle=0mm,
-  after title={\vspace{-3mm}}
+  fonttitle=\bfseries,
+  title={#1},
+  frame hidden,
+  boxrule=0pt,
+  sharp corners,
+  left=5pt,
+  right=5pt,
+  top=3pt,
+  bottom=3pt,
+  toptitle=2pt,
+  bottomtitle=1pt,
+  breakable,
+  enhanced jigsaw
 }
 
 %--------------------------------------------------
