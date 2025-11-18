@@ -3,7 +3,7 @@
 % Use the Shibui theme - Japanese aesthetic of simple, subtle beauty
 % Options:
 %   - Color: light (default), dark, solarizedlight, solarizeddark, solarizedosaka,
-%            nord, gruvboxlight, gruvboxdark, autumn
+%            nord, gruvboxlight, gruvboxdark, autumn, inei, ineienhanced, ineilight
 %   - Font: sans (default), serif, garamond, charter, mono
 %   - Layout: nosectionheader (default, hide section from header), navontop (show navigation above title)
 %   - TOC: nosub (hide subsections in table of contents)
@@ -16,7 +16,9 @@
 %   \usetheme[dark, navontop]{Shibui}                   % Show navigation squares above title
 %   \usetheme[gruvboxdark, garamond]{Shibui}            % Multiple options
 %   \usetheme[nord, progressbar=segmented]{Shibui}      % Section-based progress bar
-\usetheme[nord, charter, nosub, progressbar=segmented, kanjilogo]{Shibui}
+%   \usetheme[inei, garamond]{Shibui}                   % In Praise of Shadows aesthetic with textured background
+\usetheme[ineienhanced, charter, nosub, progressbar=segmented, kanjilogo]{Shibui}
+\renewcommand{\ineilightcolumns}{5}
 
 % Custom footer text (optional)
 \footertext{Conference Name 2024 -- City, Country}
@@ -88,7 +90,7 @@
   \end{enumerate}
 \end{frame}
 
-\begin{frame}[fragile]{Quick Start}
+\begin{frame}[fragile, allowframebreaks]{Quick Start}
   \textbf{Basic usage:}
 
   \vspace{0.5em}
@@ -264,7 +266,11 @@
 \subsection{Color Schemes}
 
 \begin{frame}{Color Palette Overview}
-  The theme now supports \textbf{9 color schemes} for different aesthetics.
+  The theme now supports \textbf{12 color schemes} for different aesthetics.
+
+  \vspace{0.5em}
+
+  \textbf{Available schemes:} light, dark, solarizedlight, solarizeddark, solarizedosaka, nord, gruvboxlight, gruvboxdark, autumn, inei, ineienhanced, ineilight
 
   \vspace{0.5em}
 
@@ -452,6 +458,75 @@
   \vspace{0.5em}
 
   \textbf{Usage:} \texttt{\textbackslash usetheme[autumn]\{Shibui\}}
+\end{frame}
+
+\begin{frame}{Color Scheme: inei}
+  \begin{shibuiframe}{inei -- In Praise of Shadows}
+    \colorpreview{shibuibg@inei}{bg}
+    \colorpreview{shibuitext@inei}{text}
+    \colorpreview{shibuiaccent@inei}{accent}
+    \colorpreview{shibuigray@inei}{gray}
+    \colorpreview{shibuidarkgray@inei}{darkgray}
+    \colorpreview{shibuicodebg@inei}{codebg}
+  \end{shibuiframe}
+
+  \vspace{1em}
+
+  Inspired by Tanizaki's philosophy: beauty in dimness, depth through layered shadows. Deep sumi ink black like traditional Japanese books with cool muted tones for contemplative viewing.
+
+  \vspace{0.5em}
+
+  \textbf{Aesthetic:} Cool blue-gray text on near-black background, muted antique gold accents gleaming from darkness. Simple and fast with no background effects.
+
+  \vspace{0.5em}
+
+  \textbf{Usage:} \texttt{\textbackslash usetheme[inei]\{Shibui\}}
+\end{frame}
+
+\begin{frame}{Color Scheme: ineienhanced}
+  \begin{shibuiframe}{ineienhanced -- In'ei with Effects}
+    \colorpreview{shibuibg@ineienhanced}{bg}
+    \colorpreview{shibuitext@ineienhanced}{text}
+    \colorpreview{shibuiaccent@ineienhanced}{accent}
+    \colorpreview{shibuigray@ineienhanced}{gray}
+    \colorpreview{shibuidarkgray@ineienhanced}{darkgray}
+    \colorpreview{shibuicodebg@ineienhanced}{codebg}
+  \end{shibuiframe}
+
+  \vspace{1em}
+
+  Same deep sumi ink black as inei, with added visual effects: organic random light columns creating interplay of shadow and light, plus diagonal crosshatch texture for matte black paper finish.
+
+  \vspace{0.5em}
+
+  \textbf{Note:} Slower compilation due to TikZ effects. Use basic \texttt{inei} for faster builds.
+
+  \vspace{0.5em}
+
+  \textbf{Usage:} \texttt{\textbackslash usetheme[ineienhanced]\{Shibui\}}
+\end{frame}
+
+\begin{frame}{Color Scheme: ineilight}
+  \begin{shibuiframe}{ineilight -- In'ei Light Variant}
+    \colorpreview{shibuibg@ineilight}{bg}
+    \colorpreview{shibuitext@ineilight}{text}
+    \colorpreview{shibuiaccent@ineilight}{accent}
+    \colorpreview{shibuigray@ineilight}{gray}
+    \colorpreview{shibuidarkgray@ineilight}{darkgray}
+    \colorpreview{shibuicodebg@ineilight}{codebg}
+  \end{shibuiframe}
+
+  \vspace{1em}
+
+  Light variant with warm off-white background like aged Japanese paper. Maintains the muted aesthetic with same antique gold accent. Better for printing and readability.
+
+  \vspace{0.5em}
+
+  \textbf{Aesthetic:} Inverts the In'ei philosophy -- light as the canvas, shadows as the accent. Still contemplative and refined.
+
+  \vspace{0.5em}
+
+  \textbf{Usage:} \texttt{\textbackslash usetheme[ineilight]\{Shibui\}}
 \end{frame}
 
 %--------------------------------------------------
@@ -745,7 +820,7 @@
   \small Footnote citations keep slide content clean while providing full reference details.
 \end{frame}
 
-\begin{frame}[fragile]{Bibliography Setup}
+\begin{frame}[fragile, allowframebreaks]{Bibliography Setup}
   Setting up a bibliography with biblatex:
 
   \vspace{0.5em}

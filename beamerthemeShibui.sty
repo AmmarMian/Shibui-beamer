@@ -6,8 +6,8 @@
 % License: MIT
 %
 % Features:
-% - 9 color schemes: light (default), dark, solarizedlight, solarizeddark, solarizedosaka,
-%   nord, gruvboxlight, gruvboxdark, autumn
+% - 12 color schemes: light (default), dark, solarizedlight, solarizeddark, solarizedosaka,
+%   nord, gruvboxlight, gruvboxdark, autumn, inei, ineienhanced, ineilight
 % - Multiple font options: sans (Fira Sans), serif (ET Book/Palatino), garamond (EB Garamond),
 %   charter (Charter), mono (Fira Mono)
 % - Minimal headline with optional navigation squares
@@ -21,6 +21,9 @@
 %   \usetheme[dark]{Shibui}                   % Use dark theme
 %   \usetheme[solarizedlight]{Shibui}         % Use Solarized Light
 %   \usetheme[nord]{Shibui}                   % Use Nord color scheme
+%   \usetheme[inei]{Shibui}                   % Use In'ei (basic, fast)
+%   \usetheme[ineienhanced]{Shibui}           % Use In'ei Enhanced (with effects)
+%   \usetheme[ineilight]{Shibui}              % Use In'ei Light (light variant)
 %   \usetheme[sans]{Shibui}                   % Use Fira Sans font
 %   \usetheme[serif]{Shibui}                  % Use ET Book/Palatino font
 %   \usetheme[garamond]{Shibui}               % Use EB Garamond font
@@ -50,6 +53,9 @@
 \DeclareOptionBeamer{gruvboxlight}{\PassOptionsToPackage{gruvboxlight}{beamercolorthemeShibui}}
 \DeclareOptionBeamer{gruvboxdark}{\PassOptionsToPackage{gruvboxdark}{beamercolorthemeShibui}}
 \DeclareOptionBeamer{autumn}{\PassOptionsToPackage{autumn}{beamercolorthemeShibui}}
+\DeclareOptionBeamer{inei}{\PassOptionsToPackage{inei}{beamercolorthemeShibui}}
+\DeclareOptionBeamer{ineienhanced}{\PassOptionsToPackage{ineienhanced}{beamercolorthemeShibui}}
+\DeclareOptionBeamer{ineilight}{\PassOptionsToPackage{ineilight}{beamercolorthemeShibui}}
 \DeclareOptionBeamer{sans}{\PassOptionsToPackage{sans}{beamerfontthemeShibui}}
 \DeclareOptionBeamer{serif}{\PassOptionsToPackage{serif}{beamerfontthemeShibui}}
 \DeclareOptionBeamer{garamond}{\PassOptionsToPackage{garamond}{beamerfontthemeShibui}}
@@ -197,12 +203,17 @@
         grid = major,
         grid style = {color=shibuigray!30, thin}
       },
-      % Default cycle list using theme colors
+      % Default cycle list using theme colors (5 solid colors before dashed)
       shibui colors/.style = {
         cycle list = {
-          {shibuiaccent, thick},
-          {shibuidarkgray, thick, dashed},
-          {shibuitext, thick, dotted}
+          {shibuiplot1, thick},
+          {shibuiplot2, thick},
+          {shibuiplot3, thick},
+          {shibuiplot4, thick},
+          {shibuiplot5, thick},
+          {shibuiplot1, thick, dashed},
+          {shibuiplot2, thick, dashed},
+          {shibuiplot3, thick, dashed}
         }
       }
     }
