@@ -86,7 +86,8 @@
 
 % Check if In'ei theme variants are active
 \@ifundefined{shibui@theme}{}{%
-  % Number of light columns (default: 2)
+  % Number of light columns (deprecated - now using subtle vignetting instead)
+  % Kept as no-op for backwards compatibility with existing presentations
   \providecommand{\ineilightcolumns}{2}
 
   % Check for basic inei theme (no expensive effects)
@@ -108,46 +109,42 @@
         % Fill base background
         \fill[shibuibg] (current page.north west) rectangle (current page.south east);
 
-        % Draw random light columns with random positions and widths
-        % For organic, natural appearance
-        \pgfmathsetseed{17}  % Fixed seed for consistency across slides
-        \foreach \i in {1,...,\ineilightcolumns} {
-          % Random position (0 to paperwidth)
-          \pgfmathsetmacro{\xstart}{rnd*\paperwidth}
-          % Random width (10% to 25% of page width)
-          \pgfmathsetmacro{\colwidth}{(rnd*0.15+0.10)*\paperwidth}
-          \pgfmathsetmacro{\xend}{\xstart+\colwidth}
+        % Subtle vignetting - natural light falloff from center to edges
+        % Multi-step circular radial gradient (10 steps) for ultra-smooth transitions
+        \begin{scope}[opacity=0.8]
+          \foreach \step in {10,9,8,7,6,5,4,3,2,1,0} {
+            % Calculate circular radius and intensity for this step
+            % Radius: largest circle at step 10, smallest at step 0
+            \pgfmathsetmacro{\circleradius}{0.7 * \paperwidth * (1.0 - \step * 0.08)}
+            % Intensity: 0% at edges, 30% at center
+            \pgfmathsetmacro{\intensity}{\step * 3}
+            \pgfmathsetmacro{\nextintensity}{(\step + 1) * 3}
 
-          % Each light column: dark at edges, light in center, back to dark
-          % Random intensity (8% to 15% mix)
-          \pgfmathsetmacro{\intensity}{rnd*9+9}
-          \shade[left color=shibuibg,
-                 right color=shibuibg,
-                 middle color=shibuigray!\intensity!shibuibg]
-            ([xshift=\xstart pt]current page.north west) rectangle
-            ([xshift=\xend pt]current page.south west);
-        }
+            % Draw circular radial shading for this step
+            \shade[shading=radial,
+                   inner color=shibuigray!\nextintensity!shibuibg,
+                   outer color=shibuigray!\intensity!shibuibg]
+              (current page.center) circle (\circleradius pt);
+          }
+        \end{scope}
 
         % Matte black paper effect - subtle diagonal crosshatch texture
         % Creates woven texture like traditional Japanese paper
         \begin{scope}[opacity=0.03]
-          % Diagonal lines (bottom-left to top-right)
-          \foreach \i in {0,8,...,600} {
+          % Diagonal lines (bottom-left to top-right) at 45 degrees
+          % Using 6pt spacing for finer, more even texture
+          % Simplified to avoid dimension overflow
+          \foreach \i in {-400,-394,...,800} {
             \draw[shibuitext, line width=0.1pt]
-              ([xshift=-\i pt]current page.south east) --
-              ([xshift=\i pt, yshift=\i pt]current page.south east);
-            \draw[shibuitext, line width=0.1pt]
-              ([yshift=\i pt]current page.south west) --
-              ([xshift=\i pt, yshift=\i pt]current page.south west);
+              ([xshift=\i pt]current page.south west) --
+              ([xshift=\i pt+600pt, yshift=600pt]current page.south west);
           }
-          % Diagonal lines (top-left to bottom-right)
-          \foreach \i in {0,8,...,600} {
+
+          % Diagonal lines (top-left to bottom-right) at -45 degrees
+          \foreach \i in {-400,-394,...,800} {
             \draw[shibuitext, line width=0.1pt]
-              ([xshift=-\i pt]current page.north east) --
-              ([xshift=\i pt, yshift=-\i pt]current page.north east);
-            \draw[shibuitext, line width=0.1pt]
-              ([yshift=-\i pt]current page.north west) --
-              ([xshift=\i pt, yshift=-\i pt]current page.north west);
+              ([xshift=\i pt]current page.north west) --
+              ([xshift=\i pt+600pt, yshift=-600pt]current page.north west);
           }
         \end{scope}
       \end{tikzpicture}

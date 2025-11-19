@@ -9,6 +9,9 @@
 *.fls
 *.fdb_latexmk
 *.synctex.gz
+*.dpth
+*.md5
+*.auxlock
 
 # Generated PDF
 *.pdf

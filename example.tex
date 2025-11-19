@@ -18,7 +18,7 @@
 %   \usetheme[nord, progressbar=segmented]{Shibui}      % Section-based progress bar
 %   \usetheme[inei, garamond]{Shibui}                   % In Praise of Shadows aesthetic with textured background
 \usetheme[ineienhanced, charter, nosub, progressbar=segmented, kanjilogo]{Shibui}
-\renewcommand{\ineilightcolumns}{5}
+% \renewcommand{\ineilightcolumns}{5}  % Deprecated: now uses subtle vignetting instead
 
 % Custom footer text (optional)
 \footertext{Conference Name 2024 -- City, Country}
@@ -1049,6 +1049,42 @@ for num in fibonacci(10):
       \addplot[color=shibuiaccent!70!shibuidarkgray, thick, dashed, smooth, domain=0:10, samples=100]
         {sin(deg(x)) + 0.2*sin(deg(5*x))};
       \addlegendentry{With noise}
+    \end{axis}
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{All Plot Colors Visualization}
+  Showcasing all 5 theme plot colors with \texttt{shibui colors}:
+
+  \vspace{0.3em}
+
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[
+      shibui style,
+      shibui colors,
+      width=0.75\textwidth,
+      height=0.8\textheight,
+      xlabel={$x$},
+      ylabel={$f(x)$},
+      ymin=-1.5, ymax=2,
+      legend pos=north east
+    ]
+      % All 5 plot colors automatically applied
+      \addplot+[smooth, domain=0:10, samples=100] {sin(deg(x))};
+      \addlegendentry{shibuiplot1}
+
+      \addplot+[smooth, domain=0:10, samples=100] {0.8*cos(deg(x)) + 0.5};
+      \addlegendentry{shibuiplot2}
+
+      \addplot+[smooth, domain=0:10, samples=100] {0.6*sin(deg(2*x)) - 0.5};
+      \addlegendentry{shibuiplot3}
+
+      \addplot+[smooth, domain=0:10, samples=100] {0.5*cos(deg(1.5*x)) + 1};
+      \addlegendentry{shibuiplot4}
+
+      \addplot+[smooth, domain=0:10, samples=100] {0.4*sin(deg(3*x)) - 1};
+      \addlegendentry{shibuiplot5}
     \end{axis}
   \end{tikzpicture}
 \end{frame}
