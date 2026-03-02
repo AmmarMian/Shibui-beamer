@@ -1,0 +1,125 @@
+% lcrpca_arch.tex
+% LCRPCA architecture: one layer of the unrolled network.
+% Two parallel update paths:
+%   Path 1 (L path): SVT (singular value thresholding)
+%   Path 2 (R path): conv W_{1,k}, soft-threshold S_lambda, conv W_{2,k}
+% Shared residual computation.
+%
+% Colors: theme names
+% Bounding box: approx 12cm x 6cm
+
+\begin{tikzpicture}[
+    % Operation box
+    opbox/.style = {
+      draw=shibuiaccent,
+      fill=shibuicodebg,
+      rounded corners=3pt,
+      thick,
+      text=shibuitext,
+      font=\scriptsize,
+      align=center,
+      minimum width=2.0cm,
+      minimum height=0.9cm,
+      inner sep=4pt
+    },
+    % Data node (small circle)
+    datanode/.style = {
+      draw=shibuitext,
+      fill=shibuicodebg!70!black,
+      circle,
+      minimum size=0.45cm,
+      inner sep=0pt,
+      font=\scriptsize,
+      text=shibuitext
+    },
+    % Addition node
+    addnode/.style = {
+      draw=shibuitext,
+      fill=shibuicodebg,
+      circle,
+      minimum size=0.5cm,
+      inner sep=0pt,
+      font=\scriptsize\bfseries,
+      text=shibuitext
+    },
+    arr/.style = {->, draw=shibuitext, thick,
+                  shorten >=2pt, shorten <=2pt},
+    arrthin/.style = {->, draw=shibuitext, thin, dashed,
+                      shorten >=2pt, shorten <=2pt},
+    lbl/.style = {font=\small, text=shibuitext}
+  ]
+
+  % -------- Input Y --------
+  \node[datanode] (Y) at (0, 3.0) {$\Mimage$};
+
+  % -------- Residual computation --------
+  % Residual R = Y - L - sum_k W_{1,k} * R_k
+  \node[opbox, minimum width=3.0cm] (resid) at (3.0, 3.0)
+    {Residual\\[2pt]
+     $\Mimage - \Mwall - \sum_\iatom \Wone{\iatom} \Fconv \Mtarget_\iatom$};
+
+  \draw[arr] (Y.east) -- (resid.west);
+
+  % -------- Split into two paths --------
+  % Branch point
+  \coordinate (split) at (5.5, 3.0);
+  \draw[arr] (resid.east) -- (split);
+
+  % ==== L PATH (top) ====
+  % Step: L += w_0 * residual, then SVT
+  \node[opbox] (Lstep) at (5.5, 4.5)
+    {$\Mwall + \lparamw{t} \cdot \text{res}$};
+  \node[opbox, draw=shibuiplot3, text=shibuiplot3] (Lsvt) at (8.0, 4.5)
+    {$\pxSvT{\lparammu{t}}(\cdot)$\\[2pt]
+     \textcolor{shibuiplot3}{SVT}};
+  \node[datanode] (Lout) at (10.5, 4.5) {$\Mwall^{(t)}$};
+
+  \draw[arr] (split) |- (Lstep.west);
+  \draw[arr] (Lstep.east) -- (Lsvt.west);
+  \draw[arr] (Lsvt.east) -- (Lout.west);
+
+  % L path label
+  \node[lbl, text=shibuiplot3, font=\tiny\bfseries, above=2pt]
+    at (8.0, 5.15) {low-rank path};
+
+  % ==== R PATH (bottom) ====
+  % Step: R_k += W_{2,k} * residual, then soft-threshold
+  \node[opbox] (Rstep) at (5.5, 1.5)
+    {$\Mtarget_\iatom + \Wtwo{\iatom} \Fconv \text{res}$};
+  \node[opbox, draw=shibuiplot2, text=shibuiplot2] (Rsft) at (8.0, 1.5)
+    {$\pxSoftT{\lparamlam{t}}(\cdot)$\\[2pt]
+     \textcolor{shibuiplot2}{soft-thresh}};
+  \node[datanode] (Rout) at (10.5, 1.5) {$\Mtarget^{(t)}$};
+
+  \draw[arr] (split) |- (Rstep.west);
+  \draw[arr] (Rstep.east) -- (Rsft.west);
+  \draw[arr] (Rsft.east) -- (Rout.west);
+
+  % R path label
+  \node[lbl, text=shibuiplot2, font=\tiny\bfseries, below=2pt]
+    at (8.0, 0.85) {sparse path};
+
+  % ==== Feedback to residual (next layer) ====
+  \draw[arrthin, rounded corners=4pt]
+    (Lout.east) -- (11.5, 4.5) -- (11.5, 3.0) -- (3.0, 3.0 - 0.45)
+    node[lbl, font=\tiny, midway, right=2pt, rotate=90,
+         anchor=south] {feedback to layer $t+1$};
+  \draw[arrthin, rounded corners=4pt]
+    (Rout.east) -- (11.5, 1.5);
+
+  % -------- Layer bracket --------
+  \draw[decorate, decoration={brace, amplitude=5pt}, shibuitext]
+    (-0.3, 5.55) -- (-0.3, 0.5)
+    node[lbl, font=\scriptsize, midway, left=8pt, rotate=90,
+         anchor=south] {Layer $t$};
+
+  % -------- Learnable parameters annotation --------
+  \node[lbl, font=\tiny, align=left, text=shibuiaccent]
+    at (6.2, -0.3)
+    {Learnable:
+     $\lparamw{t}$,
+     $\lparammu{t}$,
+     $\lparamlam{t}$,
+     $\{\Wone{\iatom}^{(t)}, \Wtwo{\iatom}^{(t)}\}_{\iatom=1}^{\nbatoms}$};
+
+\end{tikzpicture}

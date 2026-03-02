@@ -1,0 +1,466 @@
+% sec5_unrolling.tex
+% Section 5: Deep Unrolling
+% Robust Sparse Convolution Coding for Radar Applications
+% DSIPS2026 -- Tokyo, March 2026
+%
+% 8 slides:
+%   1. What is Deep Unrolling?
+%   2. From ISTA to LISTA: A Motivating Example
+%   3. Unrolling for RPCA + Sparse Coding
+%   4. LCRPCA: Unrolled Architecture
+%   5. LCRPCA: Architecture Details  [skip?]
+%   6. LCRPCA: Results with Scarce Data
+%   7. Why Fewer Parameters Help
+%   8. Comparison: Classical vs.\ Learned
+
+\section{Deep Unrolling}
+
+% ------------------------------------------------------------------
+% SLIDE 1 -- What is Deep Unrolling?
+% ------------------------------------------------------------------
+\begin{frame}{What is Deep Unrolling?}
+  \begin{columns}[T]
+    % ------- LEFT: concept -------
+    \column{0.52\textwidth}
+      \vspace{0.3em}
+      \textbf{Iterative optimization algorithm:}
+
+      \vspace{0.4em}
+      \begin{shibuiframe}{ }
+        \[
+          \mathbf{x}^{l+1}
+            = \mathcal{A}\!\left(\mathbf{x}^{l};\,\boldsymbol{\theta}\right),
+          \quad l = 1,\ldots
+        \]
+        \begin{itemize}
+          \item $\boldsymbol{\theta}$: \emphtext{fixed} parameters
+                (e.g.\ step size, threshold)
+          \item Iteration count: \emphtext{variable} (run until convergence)
+        \end{itemize}
+      \end{shibuiframe}
+
+      \vspace{0.6em}
+      \textbf{Deep unrolling:}
+      \begin{enumerate}
+        \item \emphtext{Truncate} to $\nlayer$ iterations (fixed depth)
+        \item Make $\boldsymbol{\theta}$ \emphtext{per-layer} and
+              \emphtext{learnable} from data:
+              $\boldsymbol{\theta} \;\longrightarrow\;
+               \boldsymbol{\theta}^{(1)},\ldots,\boldsymbol{\theta}^{(\nlayer)}$
+      \end{enumerate}
+
+      \vspace{0.4em}
+      \begin{shibiunote}[Result]
+        A neural network with $\nlayer$ layers,
+        each implementing \emphtext{one algorithm step}.
+      \end{shibiunote}
+
+    % ------- RIGHT: properties -------
+    \column{0.48\textwidth}
+      \vspace{0.3em}
+      \textbf{Advantages:}
+      \begin{itemize}
+        \item \emphtext{Interpretable:} each layer has a
+              physical meaning
+        \item \emphtext{Data-efficient:} few parameters
+              (prior from algorithm structure)
+        \item \emphtext{Flexible:} learns problem-specific
+              parameters from data
+        \item \emphtext{Fast inference:} fixed $\nlayer$ layers,
+              no convergence loop
+      \end{itemize}
+
+      \vspace{0.5em}
+      \textbf{Limitations:}
+      \begin{itemize}
+        \item Fixed number of layers
+              (no convergence guarantee)
+        \item Non-convex training
+              (local minima possible)
+      \end{itemize}
+
+      \vspace{0.4em}
+      \citebadge{Gregor \& LeCun (2010) LISTA;
+                 Monga et al.\ (2021) survey}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------
+% SLIDE 2 -- From ISTA to LISTA: A Motivating Example
+% ------------------------------------------------------------------
+\begin{frame}{From ISTA to LISTA: A Motivating Example}
+  \begin{columns}[T]
+    % ------- LEFT: ISTA -------
+    \column{0.44\textwidth}
+      \vspace{0.2em}
+      \textbf{ISTA} solves:
+      \[
+        \min_{\mathbf{x}}
+        \tfrac{1}{2}\ltwonorm{\mathbf{y}-\mathbf{W}\mathbf{x}}^{2}
+        + \sparsityhp\lonenorm{\mathbf{x}}
+      \]
+
+      \vspace{0.1em}
+      \begin{shibuiframe}{ISTA update}
+        \[
+          \mathbf{x}^{l+1}
+            = \pxSoftT{\sparsityhp}\!\left\{
+                \left(\mathbf{I}
+                  - \tfrac{1}{\mu}\mathbf{W}^{\top}\mathbf{W}\right)
+                \mathbf{x}^{l}
+                + \tfrac{1}{\mu}\mathbf{W}^{\top}\mathbf{y}
+              \right\}
+        \]
+      \end{shibuiframe}
+
+      \vspace{0.3em}
+      Fixed $\mathbf{W}$, $\mu$, $\sparsityhp$ -- iterate
+      until convergence.
+
+    % ------- ARROW -------
+    \column{0.08\textwidth}
+      \vspace{4em}
+      \centering
+      \large$\Rightarrow$\\[0.4em]
+      \tiny Unroll\\+\\Learn
+
+    % ------- RIGHT: LISTA -------
+    \column{0.48\textwidth}
+      \vspace{0.2em}
+      \textbf{LISTA} (learnable ISTA):
+
+      \vspace{0.1em}
+      \begin{shibuiframe}{LISTA layer $\ilayer$}
+        \[
+          \mathbf{x}^{(\ilayer+1)}
+            = \pxSoftT{\lparamlam{\ilayer}}\!\left(
+                \mathbf{W}_{t}^{(\ilayer)}\mathbf{x}^{(\ilayer)}
+                + \mathbf{W}_{e}^{(\ilayer)}\mathbf{y}
+              \right)
+        \]
+        Learnable per layer:
+        $\mathbf{W}_{t}^{(\ilayer)},\;
+         \mathbf{W}_{e}^{(\ilayer)},\;
+         \lparamlam{\ilayer}$
+      \end{shibuiframe}
+
+      \vspace{0.3em}
+      \textbf{Training loss:}
+      \[
+        \lossfn
+          = \tfrac{1}{N}\sum_{n}
+            \ltwonorm{\hat{\mathbf{x}}^{n}
+              - \mathbf{x}^{*n}}^{2}
+      \]
+  \end{columns}
+
+  \vspace{0.3em}
+  \begin{center}
+  \input{tikz/unrolling_layers}
+  \end{center}
+\end{frame}
+
+% ------------------------------------------------------------------
+% SLIDE 3 -- Unrolling for RPCA + Sparse Coding
+% ------------------------------------------------------------------
+\begin{frame}{Unrolling for RPCA + Sparse Coding}
+  \textbf{Context:} apply unrolling to the TWRI problem (KRPCA).
+
+  \vspace{0.4em}
+  \begin{shibuiframe}{PGD for KRPCA -- algorithm to unroll}
+    \begin{align*}
+      \Mwall^{(n+1)}
+        &= \pxSvT{\lowrankhp}\!\left(
+             \Mwall^{(n)}
+             - \stepsize\bigl(
+                 \Mtwri
+                 - \Mwall^{(n)}
+                 - \textstyle\sum_{\iatom}
+                   \Mdict_{\iatom}\Fconv\Mtarget_{\iatom}^{(n)}
+               \bigr)
+           \right)
+      \\[6pt]
+      \Mtarget_{\iatom}^{(n+1)}
+        &= \pxSoftT{\sparsityhp}\!\left(
+             \Mtarget_{\iatom}^{(n)}
+             - \stepsize
+               \{\Mdict_{\iatom}\}^{\star}\!
+               \bigl(
+                 \Mtwri
+                 - \Mwall^{(n)}
+                 - \textstyle\sum_{\iatom}
+                   \Mdict_{\iatom}\Fconv\Mtarget_{\iatom}^{(n)}
+               \bigr)
+           \right)
+    \end{align*}
+  \end{shibuiframe}
+
+  \vspace{0.3em}
+  where $\Mdict_{\iatom}$ is the physics-based propagation filter.
+
+  \vspace{0.5em}
+  \begin{columns}[T]
+    \column{0.55\textwidth}
+      \textbf{Key substitution -- replace fixed filters by
+      learnable ones:}
+      \[
+        \stepsize\cdot\Mdict_{\iatom}
+          \;\longrightarrow\;
+          \Wone{\iatom}^{(\ilayer)},
+        \qquad
+        \stepsize\cdot\Mdict_{\iatom}^{\star}
+          \;\longrightarrow\;
+          \Wtwo{\iatom}^{(\ilayer)}
+      \]
+
+    \column{0.45\textwidth}
+      \begin{shibiunote}[Benefit]
+        Decouples us from exact knowledge
+        of the propagation model through
+        the wall -- the network learns it.
+      \end{shibiunote}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------
+% SLIDE 4 -- LCRPCA: Unrolled Architecture
+% ------------------------------------------------------------------
+\begin{frame}{LCRPCA: Unrolled Architecture}
+  \begin{center}
+  \input{tikz/lcrpca_arch}
+  \end{center}
+
+  \vspace{0.2em}
+  \begin{shibuiframe}{ }
+    \centering
+    One layer of LCRPCA: parallel \emphtext{low-rank path}
+    ($\Mwall$) and \emphtext{sparse path} ($\Mtarget$).
+    \quad
+    Learnable per layer:
+    $\lparamlam{\ilayer},\;\lparammu{\ilayer},\;\lparamw{\ilayer}$,
+    all filters.
+  \end{shibuiframe}
+
+  \vspace{0.5em}
+  \begin{columns}[T]
+    \column{0.33\textwidth}
+      \centering
+      \emphtext{$\nlayer = 6$ layers}
+
+    \column{0.34\textwidth}
+      \centering
+      \emphtext{$K = 64$ filters per layer}
+
+    \column{0.33\textwidth}
+      \centering
+      \emphtext{$7{\times}7 \to 5{\times}5 \to 3{\times}3$}\\
+      filter sizes across layers
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------
+% SLIDE 5 -- LCRPCA: Architecture Details  [skip?]
+% ------------------------------------------------------------------
+\begin{frame}{LCRPCA: Architecture Details \skipbadge{}}
+
+  \begin{shibuiframe}{Per-layer unrolled update}
+    \begin{align*}
+      \Mwall^{(\ilayer)}
+        &= \pxSvT{\lparammu{\ilayer}}\!\left(
+             \Mwall^{(\ilayer-1)}
+             + \lparamw{\ilayer}\bigl(
+                 \Mtwri
+                 - \Mwall^{(\ilayer-1)}
+                 - \textstyle\sum_{\iatom}
+                   \Wone{\iatom}^{(\ilayer)}\Fconv
+                   \Mtarget_{\iatom}^{(\ilayer-1)}
+               \bigr)
+           \right)
+      \\[6pt]
+      \Mtarget_{\iatom}^{(\ilayer)}
+        &= \pxSoftT{\lparamlam{\ilayer}}\!\left(
+             \Mtarget_{\iatom}^{(\ilayer-1)}
+             + \Wtwo{\iatom}^{(\ilayer)}\Fconv
+               \bigl(
+                 \Mtwri
+                 - \Mwall^{(\ilayer-1)}
+                 - \textstyle\sum_{\iatom}
+                   \Wone{\iatom}^{(\ilayer)}\Fconv
+                   \Mtarget_{\iatom}^{(\ilayer-1)}
+               \bigr)
+           \right)
+    \end{align*}
+  \end{shibuiframe}
+
+  \vspace{0.4em}
+  \begin{columns}[T]
+    % ------- LEFT: parameter count -------
+    \column{0.50\textwidth}
+      \textbf{Total learnable parameters $\nparams$:}
+
+      \vspace{0.4em}
+      \renewcommand{\arraystretch}{1.25}
+      \begin{tabular}{lc}
+        \toprule
+        \textbf{Model} & \textbf{$\nparams$} \\
+        \midrule
+        LCRPCA (ours) & $21{,}656$ \\
+        U-Net (baseline) & $8{,}650{,}474$ \\
+        \midrule
+        Ratio & $\mathbf{400\times}$ fewer \\
+        \bottomrule
+      \end{tabular}
+
+    % ------- RIGHT: training loss -------
+    \column{0.50\textwidth}
+      \textbf{Training loss (three terms):}
+
+      \vspace{0.3em}
+      \begin{shibuiframe}{ }
+        \[
+          \lossfn
+            = \stepsize_{1}\ltwonorm{\Mwall-\Mwall_{\mathrm{GT}}}^{2}
+            + \stepsize_{2}\mathcal{H}(\Mtarget,\Mtarget_{\mathrm{GT}})
+            + \stepsize_{3}\mathrm{Dice}(\Mtarget,\Mtarget_{\mathrm{GT}})
+        \]
+      \end{shibuiframe}
+
+      \vspace{0.2em}
+      \small
+      reconstruction ($\ell_2$)
+      + cross-entropy ($\mathcal{H}$)
+      + Dice (detection map)
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------
+% SLIDE 6 -- LCRPCA: Results with Scarce Data
+% ------------------------------------------------------------------
+\begin{frame}{LCRPCA: Results with Scarce Data}
+
+  \begin{columns}[T]
+    \column{0.50\textwidth}
+      \centering
+      \figplaceholder[0.92\linewidth]{PR-AUC vs.\ training data
+        fraction \\ LCRPCA vs.\ U-Net vs.\ CoroNA}
+
+    \column{0.50\textwidth}
+      \centering
+      \figplaceholder[0.92\linewidth]{TWRI image reconstruction \\
+        LCRPCA (10\% data) vs.\ U-Net (10\% data)}
+  \end{columns}
+
+  \vspace{0.5em}
+  \begin{shibuiframe}{Key result (10\% training data)}
+    \centering
+    LCRPCA \emphtext{PR-AUC $= 0.85$}
+    \quad vs.\quad
+    U-Net $= 0.80$
+    \quad vs.\quad
+    CoroNA $= 0.07$
+  \end{shibuiframe}
+
+  \vspace{0.3em}
+  \citebadge{EUSIPCO 2024}
+\end{frame}
+
+% ------------------------------------------------------------------
+% SLIDE 7 -- Why Fewer Parameters Help
+% ------------------------------------------------------------------
+\begin{frame}{Why Fewer Parameters Help}
+
+  \begin{columns}[T]
+    % ------- LEFT: explanation -------
+    \column{0.55\textwidth}
+      \vspace{0.3em}
+      \begin{itemize}
+        \item \emphtext{Standard deep nets (U-Net):}
+              learn \emph{everything} from data --
+              no prior on problem structure
+        \item \emphtext{LCRPCA:} algorithm structure
+              provides \emphtext{inductive bias}
+        \item Structure encoded:
+          \begin{itemize}
+            \item $\pxSvT{\lparammu{\ilayer}}$
+                  for $\Mwall$ (low-rank constraint)
+            \item $\pxSoftT{\lparamlam{\ilayer}}$
+                  for $\Mtarget$ (sparsity constraint)
+            \item Convolutional connections between layers
+          \end{itemize}
+        \item Fewer free parameters
+              $\Rightarrow$ less data needed
+              to avoid overfitting
+        \item Dictionary $\Mdict$ is \emphtext{learned}
+              from data -- no need for exact wall model
+      \end{itemize}
+
+    % ------- RIGHT: key inequality -------
+    \column{0.45\textwidth}
+      \vspace{0.3em}
+      \begin{shibuiframe}{Parameter count}
+        \[
+          \nparams(\mathrm{LCRPCA})
+            = 21{,}656
+            \ll
+          \nparams(\mathrm{U\text{-}Net})
+            = 8{,}650{,}474
+        \]
+      \end{shibuiframe}
+
+      \vspace{0.6em}
+      \begin{shibuitip}
+        LCRPCA generalizes better in the
+        \emphtext{scarce-data regime} precisely
+        because its inductive bias reduces
+        the effective hypothesis space.
+      \end{shibuitip}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------
+% SLIDE 8 -- Comparison: Classical vs.\ Learned
+% ------------------------------------------------------------------
+\begin{frame}{Comparison: Classical vs.\ Learned}
+
+  \vspace{0.2em}
+  \renewcommand{\arraystretch}{1.3}
+  \begin{center}
+    \begin{tabular}{lcccc}
+      \toprule
+      \textbf{Method}
+        & \textbf{Params}
+        & \textbf{10\% PR-AUC}
+        & \textbf{100\% PR-AUC}
+        & \textbf{Interpretable} \\
+      \midrule
+      PGD (classical KRPCA)
+        & 0
+        & 0.62
+        & 0.70
+        & Yes (physics) \\
+      U-Net
+        & 8.6M
+        & 0.80
+        & 0.87
+        & No (black box) \\
+      CoroNA
+        & --
+        & 0.07
+        & --
+        & Partial \\
+      \textbf{LCRPCA (ours)}
+        & 21k
+        & \textbf{0.85}
+        & \textbf{0.89}
+        & Yes (unrolled) \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+
+  \vspace{0.6em}
+  \begin{shibuitip}[Take-away]
+    Deep unrolling gives the \emphtext{best of both worlds}:
+    \emphtext{interpretability} from the algorithm structure,
+    \emphtext{flexibility} from learned parameters.
+  \end{shibuitip}
+\end{frame}

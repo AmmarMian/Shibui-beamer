@@ -1,0 +1,372 @@
+% sec3_huber_gpr.tex
+% Section 3: Robust GPR -- Huber Extension
+% DSIPS2026 -- Tokyo, March 2026
+%
+% 7 slides covering:
+%   1. Outliers and Noise in GPR
+%   2. The Huber Function
+%   3. Hub-GPR: Problem Formulation
+%   4. Augmented Lagrangian for Hub-GPR  [skip?]
+%   5. Hub-GPR: ADMM Updates             [skip?]
+%   6. Hub-GPR: Visual Results
+%   7. Hub-GPR: Quantitative Results
+
+\section{Robust GPR: Huber Extension}
+
+% ------------------------------------------------------------------
+% SLIDE 1 -- Outliers and Noise in GPR
+% ------------------------------------------------------------------
+\begin{frame}{Outliers and Noise in GPR}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+      \vspace{0.3em}
+      \centering
+      \figplaceholder[0.9\linewidth]{B-scan with visible outliers /
+        acquisition artefacts}
+
+    \column{0.52\textwidth}
+      \vspace{0.3em}
+      \textbf{L2-GPR assumption: Gaussian noise}
+      \begin{itemize}
+        \item Works well under ideal acquisition conditions
+        \item Real GPR data has \emphtext{non-Gaussian noise}:
+          \begin{itemize}
+            \item acquisition artefacts
+            \item antenna misalignment
+            \item strong specular reflections
+          \end{itemize}
+        \item L2 norm \emphtext{squares} large residuals:\\
+              one outlier dominates the entire cost
+        \item Solution: replace L2 by a \emphtext{robust}
+              cost function
+      \end{itemize}
+
+      \vspace{0.6em}
+      \begin{shibuiwarning}[Warning]
+        L2 norm squares large residuals
+        $\Rightarrow$ outliers are heavily penalised
+      \end{shibuiwarning}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------
+% SLIDE 2 -- The Huber Function
+% ------------------------------------------------------------------
+\begin{frame}{The Huber Function}
+  \begin{columns}[T]
+    \column{0.55\textwidth}
+      \vspace{0.2em}
+  \input{tikz/huber_plot}
+
+    \column{0.45\textwidth}
+      \vspace{0.2em}
+      \begin{shibuiframe}{Definition}
+        \[
+          \Fhuber_{\delta}(x) =
+          \begin{cases}
+            \lvert x \rvert^{2}
+              & \lvert x \rvert \leq \delta \\[4pt]
+            2\delta\lvert x \rvert - \delta^{2}
+              & \lvert x \rvert > \delta
+          \end{cases}
+        \]
+      \end{shibuiframe}
+
+      \vspace{0.5em}
+      \textbf{Key properties:}
+      \begin{itemize}
+        \item \emphtext{Quadratic near zero}
+              ($\lvert x\rvert \leq \delta$):
+              identical to L2
+        \item \emphtext{Linear for large residuals}
+              ($\lvert x\rvert > \delta$):
+              bounded influence of outliers
+        \item $\delta$ controls the transition:\\
+              estimated from empirical quantiles
+              of the pixel distribution
+      \end{itemize}
+
+      \vspace{0.4em}
+      \textbf{Huber norm:}
+      \[
+        \hubernorm{\mathbf{x}}^{2}
+          = \sum_{i} \Fhuber_{\delta}(x_{i})
+      \]
+
+      \citebadge{Huber (1981);
+        Complex-valued extension:
+        Ollila et al.\ (2015)}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------
+% SLIDE 3 -- Hub-GPR: Problem Formulation
+% ------------------------------------------------------------------
+\begin{frame}{Hub-GPR: Problem Formulation}
+  Replace $\ltwonorm{\cdot}^{2}$ by $\hubernorm{\cdot}^{2}$:
+
+  \begin{shibuiframe}{Hub-GPR optimisation problem}
+    \[
+      \argminOn{\{\Mcoef_{\iatom}\},\,\Mclutter}
+      \;
+      \hubernorm{\Mimage
+        - \sum_{\iatom} \Mcoef_{\iatom} \Mconv \Matom_{\iatom}
+        - \Mclutter}^{2}
+      + \sparsityhp \sum_{\iatom} \lonenorm{\Mcoef_{\iatom}}
+      + \lowrankhp \nuclearnorm{\Mclutter}
+    \]
+  \end{shibuiframe}
+
+  \vspace{0.6em}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+      \centering
+      \renewcommand{\arraystretch}{1.25}
+      \begin{tabular}{lcc}
+        \toprule
+        \textbf{Property}
+          & \textbf{L2-GPR}
+          & \textbf{Hub-GPR} \\
+        \midrule
+        Data fidelity
+          & L2 norm & Huber \\
+        Robust to outliers
+          & No & \emphtext{Yes} \\
+        Closed-form update
+          & Yes & Partial \\
+        Complexity
+          & Lower & Similar \\
+        \bottomrule
+      \end{tabular}
+
+    \column{0.48\textwidth}
+      \begin{shibiunote}[Challenge]
+        The Huber norm introduces
+        a new difficulty: no
+        closed-form update exists
+        for $\Mcoef_{\iatom}$ or
+        $\Mclutter$ -- dedicated
+        solvers are required.
+      \end{shibiunote}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------
+% SLIDE 4 -- Augmented Lagrangian for Hub-GPR  [skip?]
+% ------------------------------------------------------------------
+\begin{frame}{Augmented Lagrangian for Hub-GPR \skipbadge{}}
+  \textbf{Variable splitting:} introduce auxiliary variables
+  $\Mauxclutter$ for $\Mclutter$ and
+  $\{\Mauxcoef_{\iatom}\}$ for $\{\Mcoef_{\iatom}\}$.
+
+  \vspace{0.4em}
+  \textbf{Constrained form:}
+  \[
+    \minimize_{\{\Mcoef_{\iatom}\},\,\Mclutter,\,
+               \Mauxclutter,\,\{\Mauxcoef_{\iatom}\}}
+    \;
+    \hubernorm{\Mimage
+      - \sum_{\iatom}\Mcoef_{\iatom}\Mconv\Matom_{\iatom}
+      - \Mclutter}^{2}
+    + \lowrankhp\nuclearnorm{\Mauxclutter}
+    + \sparsityhp\sum_{\iatom}\lonenorm{\Mauxcoef_{\iatom}}
+  \]
+  \[
+    \text{subject to}\quad
+    \Mauxclutter = \Mclutter,\qquad
+    \Mauxcoef_{\iatom} = \Mcoef_{\iatom}
+    \quad\forall\,\iatom
+  \]
+
+  \vspace{0.4em}
+  \begin{shibuiframe}{Augmented Lagrangian $\lagrangian$}
+    \begin{align*}
+      \lagrangian
+      &= \hubernorm{\Mimage
+           - \sum_{\iatom}\Mcoef_{\iatom}\Mconv\Matom_{\iatom}
+           - \Mclutter}^{2}
+         + \sparsityhp\sum_{\iatom}\lonenorm{\Mauxcoef_{\iatom}}
+         + \lowrankhp\nuclearnorm{\Mauxclutter} \\[4pt]
+      &\quad
+         + \frac{\laghpaux}{2}
+           \ltwonorm{%
+             \sum_{\iatom}\Mcoef_{\iatom}
+             - \Mauxcoef_{\iatom}
+             + \Mdualauxcoef_{\iatom}}^{2}
+         + \frac{\laghpclutter}{2}
+           \ltwonorm{%
+             \Mauxclutter - \Mclutter + \Mdualclutter}^{2}
+         + \mathrm{const}
+    \end{align*}
+  \end{shibuiframe}
+\end{frame}
+
+% ------------------------------------------------------------------
+% SLIDE 5 -- Hub-GPR: ADMM Updates  [skip?]
+% ------------------------------------------------------------------
+\begin{frame}{Hub-GPR: ADMM Updates \skipbadge{}}
+  \begin{columns}[T]
+    % ------- LEFT: C update -------
+    \column{0.50\textwidth}
+      \vspace{0.2em}
+      \textbf{$\Mcoef_{\iatom}$ update -- gradient descent
+        (Fourier domain)}
+
+      \vspace{0.3em}
+      No closed form. Gradient in Fourier:
+      \[
+        \gradient_{\mathbf{c}^{f}}\lagrangian
+        =
+        (\mathbf{H}^{f})^{\Herm}
+        \hprod
+        \bigl(\mathbf{1}_{\nbatoms}
+          \kron
+          \Fdhuber_{\delta}[
+            \mathbf{H}^{f}\mathbf{c}^{f}
+            - \mathbf{x}^{f}]\bigr)
+        + \laghpaux
+          (\mathbf{c}^{f} - \mathbf{z}^{f})
+      \]
+
+      \vspace{0.3em}
+      Gradient step (diminishing step-size):
+      \[
+        \mathbf{c}^{f,(\iadmm+1)}
+        = \mathbf{c}^{f,(\iadmm)}
+          - \frac{\stepsize}{\iadmm}
+            \gradient_{\mathbf{c}^{f}}\lagrangian
+      \]
+
+      \vspace{0.5em}
+      \textbf{Auxiliary updates (same as L2-GPR):}
+      \begin{itemize}
+        \item $\Mauxcoef_{\iatom}$ update:
+              $\pxSoftT{\sparsityhp/\laghpaux}$
+        \item $\Mauxclutter$ update:
+              $\pxSvT{\lowrankhp/\laghpclutter}$
+      \end{itemize}
+
+    % ------- RIGHT: L update -------
+    \column{0.50\textwidth}
+      \vspace{0.2em}
+      \textbf{$\Mclutter$ update -- new closed form}
+
+      \vspace{0.3em}
+      \begin{shibuiproposition}
+        \textbf{Proposition.}\enspace
+        The update for $\Mclutter$ admits a closed form
+        via the Huber proximal operator:
+        \[
+          \Mclutter^{(\iadmm+1)}
+          = \pxHub{1/\laghpclutter}{\delta}%
+              \!\left(\mathbf{V} + \mathbf{A}\right)
+            - \mathbf{A}
+        \]
+        where
+        $\mathbf{A}
+          = \sum_{\iatom}\Matom_{\iatom}
+            \Mconv\Mcoef_{\iatom}^{(\iadmm+1)}
+            - \Mimage$
+        and
+        $\mathbf{V}
+          = \Mauxclutter + \Mdualclutter$.
+      \end{shibuiproposition}
+
+      \vspace{0.3em}
+      \begin{shibuiproof}
+        The Huber proximal operator is:
+        \[
+          \pxHub{\gamma}{\delta}(x)
+          =
+          \begin{cases}
+            \dfrac{x}{1+\gamma}
+              & \lvert x\rvert < \delta(1+\gamma) \\[6pt]
+            x - \delta\gamma\,\sign(x)
+              & \text{otherwise}
+          \end{cases}
+        \]
+      \end{shibuiproof}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------
+% SLIDE 6 -- Hub-GPR: Visual Results
+% ------------------------------------------------------------------
+\begin{frame}{Hub-GPR: Visual Results}
+  \begin{columns}[T]
+    \column{0.33\textwidth}
+      \centering
+      \figplaceholder[0.9\linewidth]{Original B-scan $\Mimage$}
+
+    \column{0.33\textwidth}
+      \centering
+      \figplaceholder[0.9\linewidth]{%
+        L2-GPR reconstruction
+        $\sum_{\iatom}\Mcoef_{\iatom}\Mconv\Matom_{\iatom}$}
+
+    \column{0.33\textwidth}
+      \centering
+      \figplaceholder[0.9\linewidth]{%
+        Hub-GPR reconstruction (proposed)}
+  \end{columns}
+
+  \vspace{0.5em}
+  Hub-GPR produces cleaner hyperbola separation with
+  fewer artefacts in the clutter matrix.
+
+  \vspace{0.6em}
+  \begin{columns}[T]
+    \column{0.50\textwidth}
+      \centering
+      \figplaceholder[0.82\linewidth]{%
+        Clutter matrix $\Mclutter$ -- L2-GPR}
+
+    \column{0.50\textwidth}
+      \centering
+      \figplaceholder[0.82\linewidth]{%
+        Clutter matrix $\Mclutter$ -- Hub-GPR}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------
+% SLIDE 7 -- Hub-GPR: Quantitative Results
+% ------------------------------------------------------------------
+\begin{frame}{Hub-GPR: Quantitative Results}
+  \textbf{Metrics vs.\ noise variance}
+  (dashed = L2-GPR, solid = Hub-GPR):
+
+  \vspace{0.4em}
+  \begin{columns}[T]
+    \column{0.33\textwidth}
+      \centering
+      \figplaceholder[0.9\linewidth]{%
+        MSE vs.\ noise variance}
+
+    \column{0.33\textwidth}
+      \centering
+      \figplaceholder[0.9\linewidth]{%
+        PSNR vs.\ noise variance}
+
+    \column{0.33\textwidth}
+      \centering
+      \figplaceholder[0.9\linewidth]{%
+        SSIM vs.\ noise variance}
+  \end{columns}
+
+  \vspace{0.5em}
+  \begin{columns}[T]
+    \column{0.55\textwidth}
+      \begin{shibiunote}[Key result]
+        Hub-GPR outperforms L2-GPR across
+        \emphtext{all three metrics},
+        with the largest gains at high noise
+        variance where outliers are most
+        prevalent.
+      \end{shibiunote}
+
+    \column{0.42\textwidth}
+      \centering
+      \figplaceholder[0.9\linewidth]{%
+        ROC / PR-AUC curve comparison}
+  \end{columns}
+\end{frame}

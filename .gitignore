@@ -1,26 +1,50 @@
-# LaTeX auxiliary files
+# LaTeX build artifacts
 *.aux
-*.log
-*.nav
-*.out
-*.snm
-*.toc
-*.vrb
-*.fls
+*.bbl
+*.bcf
+*.blg
+*.dvi
 *.fdb_latexmk
-*.synctex.gz
-*.dpth
-*.md5
-*.auxlock
-
-# Generated PDF
+*.fls
+*.fmt
+*.fot
+*.lof
+*.log
+*.lot
+*.out
 *.pdf
+*.run.xml
+*.synctex.gz
+*.toc
+*-blx.bib
+*_latexmk
 
-# Backup files
+# Beamer/presentation specific
+*.nav
+*.snm
+*.vrb
+
+# Editor backups
 *~
-*.bak
 *.swp
+*.swo
+*.bak
+*#
 
-# OS-specific files
+# macOS
 .DS_Store
+.AppleDouble
+
+# System
 Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Temporary/build directories
+build/
+dist/
+.tmp/

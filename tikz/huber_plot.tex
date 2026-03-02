@@ -1,0 +1,98 @@
+% huber_plot.tex
+% PGFPlots: Huber function H_delta(x) vs L2 cost x^2/2
+% showing the transition at |x| = delta.
+%
+% Two curves:
+%   - L2:    f(x) = x^2/2   (dashed, shibuiplot2 blue)
+%   - Huber: f(x) = x^2/2 if |x|<=delta, else delta*(|x| - delta/2)
+%            (solid, shibuiaccent red)
+% Vertical line at x = delta.
+%
+% Uses: shibui style (open axes), shibui colors
+% Include in a frame with: \input{tikz/huber_plot}
+
+\begin{tikzpicture}
+  \pgfmathsetmacro{\dval}{1.5}   % Huber threshold delta
+
+  \begin{axis}[
+    shibui style,
+    width  = 8cm,
+    height = 5.5cm,
+    xmin = -3.2, xmax = 3.2,
+    ymin = -0.2, ymax = 4.0,
+    xlabel = {$x$},
+    ylabel = {cost},
+    xlabel style = {text=shibuitext, font=\small},
+    ylabel style = {text=shibuitext, font=\small},
+    tick label style = {font=\scriptsize, text=shibuitext},
+    % Mark delta on x-axis
+    xtick = {-1.5, 0, 1.5},
+    xticklabels = {$-\delta$, $0$, $\delta$},
+    ytick = {0, 1, 2, 3, 4},
+    legend cell align = {left},
+    legend style = {
+      font=\small,
+      draw=none,
+      fill=none,
+      text=shibuitext,
+      at={(0.05,0.95)},
+      anchor=north west
+    }
+  ]
+
+    % --- L2 cost: f(x) = x^2/2 ---
+    \addplot[
+      thick, dashed,
+      color=shibuiplot2,
+      domain=-3.0:3.0, samples=80
+    ] { x*x/2 };
+    \addlegendentry{$\frac{1}{2}|x|^2$ (L2)}
+
+    % --- Huber cost ---
+    % For |x| <= delta: x^2/2
+    \addplot[
+      thick,
+      color=shibuiaccent,
+      domain=-\dval:\dval, samples=40
+    ] { x*x/2 };
+
+    % For x > delta: delta*(x - delta/2)
+    \addplot[
+      thick,
+      color=shibuiaccent,
+      domain=\dval:3.0, samples=20
+    ] { \dval*(x - \dval/2) };
+
+    % For x < -delta: delta*(-x - delta/2)
+    \addplot[
+      thick,
+      color=shibuiaccent,
+      domain=-3.0:-\dval, samples=20
+    ] { \dval*(-x - \dval/2) };
+
+    \addlegendentry{$\Fhuber_\delta(x)$ (Huber)}
+
+    % --- Vertical lines at +/- delta ---
+    \addplot[
+      thin, dotted,
+      color=shibuitext,
+      domain=-0.1:2.5
+    ] coordinates { (1.5, -0.1) (1.5, 2.5) };
+
+    \addplot[
+      thin, dotted,
+      color=shibuitext,
+      domain=-0.1:2.5
+    ] coordinates { (-1.5, -0.1) (-1.5, 2.5) };
+
+    % --- Annotation: "linear here" ---
+    \node[font=\scriptsize, text=shibuiaccent,
+          anchor=south west] at (axis cs:1.6, 1.6)
+      {linear ($|x|>\delta$)};
+
+    \node[font=\scriptsize, text=shibuitext,
+          anchor=south] at (axis cs:0, 0.3)
+      {quadratic};
+
+  \end{axis}
+\end{tikzpicture}

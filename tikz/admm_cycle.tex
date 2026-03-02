@@ -1,0 +1,84 @@
+% admm_cycle.tex
+% ADMM update cycle for Hub-GPR:
+%   (1) Update {C_k}  -- gradient descent in Fourier domain
+%   (2) Update L      -- Huber proximal
+%   (3) Update {S_k}, M  -- soft-threshold, SVT
+%   (4) Update dual variables (tilde S, tilde L)
+%
+% Layout: four rounded boxes arranged in a cycle (clockwise).
+% Colors: theme names
+% Bounding box: approx 10cm x 6cm
+
+\begin{tikzpicture}[
+    % Box style: filled with code-bg, accent-colored border
+    box/.style = {
+      draw=shibuiaccent,
+      fill=shibuicodebg,
+      rounded corners=4pt,
+      thick,
+      text=shibuitext,
+      font=\small,
+      align=center,
+      minimum width=3.2cm,
+      minimum height=1.3cm,
+      inner sep=6pt
+    },
+    % Arrow style
+    arr/.style = {
+      ->, draw=shibuitext,
+      thick,
+      shorten >=2pt, shorten <=2pt
+    },
+    % Step label style
+    steplabel/.style = {
+      font=\scriptsize\bfseries,
+      text=shibuiaccent
+    }
+  ]
+
+  % ------ four nodes arranged in a rectangle ------
+  % Top-left: C update
+  \node[box] (Cupd) at (0, 2.5)
+    {Update $\{\Mcoef_\iatom\}$\\[3pt]
+     \scriptsize gradient descent\\
+     \scriptsize (Fourier domain)};
+
+  % Top-right: L update
+  \node[box] (Lupd) at (5.5, 2.5)
+    {Update $\Mclutter$\\[3pt]
+     \scriptsize Huber proximal\\
+     $\pxHub{1/\laghpclutter}{\delta}$};
+
+  % Bottom-right: S_k, M update
+  \node[box] (SMupd) at (5.5, 0)
+    {Update $\{\Mauxcoef_\iatom\}$, $\Mauxclutter$\\[3pt]
+     \scriptsize $\pxSoftT{\sparsityhp/\laghpaux}$,
+     $\pxSvT{\lowrankhp/\laghpclutter}$};
+
+  % Bottom-left: dual update
+  \node[box] (Dupd) at (0, 0)
+    {Update duals\\
+     $\Mdualauxcoef_\iatom$, $\Mdualclutter$\\[3pt]
+     \scriptsize $+= $ residuals};
+
+  % ------ arrows (clockwise cycle) ------
+  \draw[arr] (Cupd.east)  -- (Lupd.west)
+    node[steplabel, midway, above=4pt] {(1)$\to$(2)};
+  \draw[arr] (Lupd.south) -- (SMupd.north)
+    node[steplabel, midway, right=4pt] {(2)$\to$(3)};
+  \draw[arr] (SMupd.west) -- (Dupd.east)
+    node[steplabel, midway, below=4pt] {(3)$\to$(4)};
+  \draw[arr] (Dupd.north) -- (Cupd.south)
+    node[steplabel, midway, left=4pt] {(4)$\to$(1)};
+
+  % ------ center label ------
+  \node[text=shibuitext, font=\scriptsize\itshape, align=center]
+    at (2.75, 1.25) {ADMM\\iteration $\iadmm$};
+
+  % ------ outer loop indicator ------
+  \draw[draw=shibuitext, dashed, thin, rounded corners=6pt]
+    (-1.8, -0.85) rectangle (7.4, 3.35);
+  \node[text=shibuitext, font=\scriptsize, anchor=south west]
+    at (-1.8, 3.35) {repeat until convergence};
+
+\end{tikzpicture}

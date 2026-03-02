@@ -1,0 +1,117 @@
+% preamble.tex
+% Packages, theme setup, and custom commands for DSIPS2026 presentation
+% NOTE: No UTF-8 source characters. Use LaTeX commands for all special chars.
+
+%--------------------------------------------------
+% Beamer theme
+%--------------------------------------------------
+\usetheme[nord, charter, nosub, progressbar=segmented]{Shibui}
+\footertext{DSIPS2026 -- Tokyo}
+
+%--------------------------------------------------
+% Math packages
+%--------------------------------------------------
+\usepackage{amsmath}
+% NOTE: amsfonts/amssymb omitted -- mathdesign[charter] (loaded by Shibui)
+%       already provides all AMS symbols including \mathbb, \mathcal.
+%       Adding amssymb on top exhausts LaTeX's 16 math-font-family limit.
+\usepackage{mathtools}   % extends amsmath (e.g. \coloneqq, \smashoperator)
+% NOTE: bm omitted -- unused; bm declares extra symbol-font slots per family.
+
+%--------------------------------------------------
+% Graphics and layout
+%--------------------------------------------------
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{booktabs}    % \toprule, \midrule, \bottomrule in tables
+
+%--------------------------------------------------
+% TikZ and PGFPlots
+%--------------------------------------------------
+% (tikz already loaded by beamerthemeShibui.sty)
+\usetikzlibrary{%
+  calc,               % coordinate calculations
+  arrows.meta,        % modern arrow tips
+  positioning,        % node positioning (above of, right of, ...)
+  shapes.geometric,   % ellipse, diamond, etc.
+  fit,                % \node[fit=...] bounding boxes
+  backgrounds,        % background layers in tikzpicture
+  decorations.pathreplacing, % brace decorations
+  matrix              % matrix of nodes
+}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+%--------------------------------------------------
+% Algorithms
+%--------------------------------------------------
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+% Rename "Algorithm" to avoid conflicts with beamer caption patching
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+%--------------------------------------------------
+% Icons
+%--------------------------------------------------
+\usepackage{fontawesome5}
+
+%--------------------------------------------------
+% Notations
+%--------------------------------------------------
+\input{notations}
+
+%--------------------------------------------------
+% Slide-level custom commands
+%--------------------------------------------------
+
+% \skipbadge -- optional/skippable indicator using fontawesome
+\newcommand{\skipbadge}{%
+  \textcolor{shibuiaccent}{\scriptsize\faArrowRight}%
+}
+
+% \emphtext{text} -- accent-colored bold text (shortcut)
+\newcommand{\emphtext}[1]{\textcolor{shibuiaccent}{\textbf{#1}}}
+
+% \figplaceholder[width]{label} -- gray placeholder box
+% #1 = width (default 0.9\linewidth), #2 = descriptive label string
+\newcommand{\figplaceholder}[2][0.9\linewidth]{%
+  \setlength{\fboxsep}{0pt}%
+  \colorbox{shibuicodebg}{%
+    \begin{minipage}[c][0.5\linewidth][c]{#1}%
+      \centering\color{shibuitext}\small\itshape #2%
+    \end{minipage}%
+  }%
+}
+
+% \secframe -- helper to insert a plain frame before \section for custom section pages
+% (not needed: Shibui generates ToC frames via \AtBeginSection automatically)
+
+% Citation note: \citebadge{Author YEAR} -- small tcolorbox for attribution
+\newcommand{\citebadge}[1]{%
+  \begin{shibuitip}[Credit]%
+    #1%
+  \end{shibuitip}%
+}
+
+%--------------------------------------------------
+% Column shortcuts
+%--------------------------------------------------
+% Two equal columns (shortcut)
+\newenvironment{twocols}[1][0.48]{%
+  \begin{columns}[T]%
+  \begin{column}{#1\textwidth}%
+}{%
+  \end{column}%
+  \end{columns}%
+}
+% Usage: \begin{twocols} left \nextcol right \end{twocols}
+% -- actually simpler to just use columns directly; keeping as note
+
+%--------------------------------------------------
+% PGFPlots: apply Shibui style by default
+%--------------------------------------------------
+\pgfplotsset{
+  every axis/.append style={shibui style}
+}

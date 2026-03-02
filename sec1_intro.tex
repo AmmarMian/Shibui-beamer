@@ -1,0 +1,123 @@
+% sec1_intro.tex
+% Section 1: Introduction
+% Robust Sparse Convolution Coding for Radar Applications
+% DSIPS2026 -- Tokyo, March 2026
+
+\section{Introduction}
+
+% ------------------------------------------------------------------
+% SLIDE 1 -- GPR: Application
+% ------------------------------------------------------------------
+\begin{frame}{Ground Penetrating Radar: Application}
+  \begin{columns}[T]
+    \column{0.60\textwidth}
+      \vspace{0.5em}
+      \input{tikz/gpr_scene}
+
+    \column{0.40\textwidth}
+      \vspace{0.5em}
+      \begin{itemize}
+        \item Electromagnetic wave propagates into soil
+        \item Reflected by buried objects\\
+              (pipes, voids, landmines)
+        \item Antenna scans surface at velocity $\speed$
+        \item Response: \emphtext{hyperbolic shape} in B-scan
+        \item[\textbullet] \textbf{Applications:}\\
+              infrastructure inspection,\\
+              demining, archaeology
+      \end{itemize}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------
+% SLIDE 2 -- GPR: The Data
+% ------------------------------------------------------------------
+\begin{frame}{Ground Penetrating Radar: The Data}
+  \begin{columns}[T]
+    \column{0.50\textwidth}
+      \vspace{0.3em}
+      \centering
+      \figplaceholder[0.9\linewidth]{Raw B-scan
+        $\Mimage \in \R^{\nbrows \times \nbcols}$}
+
+    \column{0.50\textwidth}
+      \vspace{0.3em}
+      \textbf{Three challenges:}
+      \begin{enumerate}
+        \item \emphtext{Strong ground/layer clutter}\\
+              horizontal bands $\gg$ target signal
+        \item \emphtext{Low SNR}\\
+              hyperbola signal is weak
+        \item \emphtext{Noise \& artefacts}\\
+              discontinuities, misalignment
+      \end{enumerate}
+
+      \vspace{0.8em}
+      \begin{shibiunote}
+        \textbf{Goal:} separate hyperbola responses
+        $\{\Mcoef_{\iatom}\}$ from clutter $\Mclutter$
+      \end{shibiunote}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------
+% SLIDE 3 -- TWRI: Application
+% ------------------------------------------------------------------
+\begin{frame}{Through-Wall Radar Imaging: Application}
+  \begin{columns}[T]
+    \column{0.60\textwidth}
+      \vspace{0.5em}
+  \input{tikz/twri_scene}
+
+    \column{0.40\textwidth}
+      \vspace{0.5em}
+      \begin{itemize}
+        \item Array of $\Mnbpos$ antennas transmits\\
+              $\Mnbfreq$ frequencies
+        \item EM waves \emphtext{penetrate the wall}
+        \item Reflected by targets in room
+        \item Goal: \emphtext{image (locate) targets}\\
+              behind wall
+        \item[\textbullet] \textbf{Applications:}\\
+              security, rescue, surveillance
+      \end{itemize}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------
+% SLIDE 4 -- TWRI: The Data
+% ------------------------------------------------------------------
+\begin{frame}{Through-Wall Radar Imaging: The Data}
+  \begin{columns}[T]
+    \column{0.50\textwidth}
+      \vspace{0.3em}
+      \centering
+      \figplaceholder[0.9\linewidth]{Measurement
+        $\Mtwri \in \C^{\Mnbfreq \times \Mnbpos}$}
+
+    \column{0.50\textwidth}
+      \vspace{0.3em}
+      \textbf{Three challenges:}
+      \begin{enumerate}
+        \item \emphtext{Strong wall returns}\\
+              dominate the measurements
+        \item \emphtext{Unknown wall properties}\\
+              complex dielectric propagation
+        \item \emphtext{Multi-path \& low SNR}\\
+              for target returns
+      \end{enumerate}
+
+      \vspace{0.8em}
+      \begin{shibiunote}
+        \textbf{Goal:} separate wall returns $\Mwall$
+        from target image $\Mtarget$
+      \end{shibiunote}
+  \end{columns}
+
+  \vspace{0.6em}
+  \begin{shibuiwarning}
+    \textbf{Unifying theme:} both problems reduce to separating a
+    \emphtext{low-rank interference} from \emphtext{sparse target
+    responses} -- the same structural challenge.
+  \end{shibuiwarning}
+\end{frame}

@@ -1,0 +1,162 @@
+% notations.tex
+% Unified macro definitions for DSIPS2026 presentation
+% Adapted from: Paper_journal_inversion_GPR/Notations.tex
+% Extended with: TWRI macros, deep unrolling macros
+%
+% Design principle: each physical quantity has a semantic macro name.
+% Changing a symbol only requires editing this file.
+
+%--------------------------------------------------
+% Packages required by these macros
+%--------------------------------------------------
+% (loaded in preamble.tex: amsmath, amssymb, mathtools, bm)
+
+%--------------------------------------------------
+% Number fields and sets
+%--------------------------------------------------
+\newcommand{\R}{\ensuremath{\mathbb{R}}}
+\newcommand{\C}{\ensuremath{\mathbb{C}}}
+
+%--------------------------------------------------
+% Dimensions (GPR)
+%--------------------------------------------------
+\newcommand{\nbatoms}{\ensuremath{K}}            % number of dictionary atoms
+\newcommand{\nbrows}{\ensuremath{N_t}}           % number of time samples
+\newcommand{\nbcols}{\ensuremath{N_x}}           % number of spatial positions
+\newcommand{\vdim}{\ensuremath{N}}               % total pixels N = Nt * Nx
+
+% Iterables
+\newcommand{\iatom}{\ensuremath{k}}              % atom index
+\newcommand{\iimage}{\ensuremath{n}}             % image/sample index
+\newcommand{\iadmm}{\ensuremath{i}}              % ADMM iteration index
+
+%--------------------------------------------------
+% Dimensions (TWRI)
+%--------------------------------------------------
+\newcommand{\Mnbfreq}{\ensuremath{M}}            % number of frequency bins
+\newcommand{\Mnbpos}{\ensuremath{N}}             % number of antenna positions
+\newcommand{\identmat}[1]{\ensuremath{\mathbf{I}_{#1}}}  % identity I_N
+
+%--------------------------------------------------
+% Scalar functions and names
+%--------------------------------------------------
+\newcommand{\Fhuber}{\ensuremath{\mathcal{H}}}   % Huber function H_delta
+\newcommand{\Fdhuber}{\ensuremath{\Psi}}         % derivative of Huber: Psi_delta
+\DeclareMathOperator{\sign}{sign}
+
+%--------------------------------------------------
+% Matrix and vector operators
+%--------------------------------------------------
+\newcommand{\Mconv}{\ensuremath{\circledast}}    % 2D convolution (matrix form)
+\newcommand{\Fconv}{\ensuremath{\ast}}           % 1D convolution (function form)
+\newcommand{\hprod}{\ensuremath{\odot}}          % Hadamard (element-wise) product
+\newcommand{\kron}{\ensuremath{\otimes}}         % Kronecker product
+\newcommand{\T}{\ensuremath{\mathrm{T}}}         % transpose
+\newcommand{\Herm}{\ensuremath{\dagger}}         % Hermitian (conjugate transpose)
+
+% Norms
+\newcommand{\abs}[1]{\left\vert #1 \right\vert}
+\newcommand{\pnorm}[2]{\ensuremath{\left\| #1 \right\|_{#2}}}
+\newcommand{\ltwonorm}[1]{\pnorm{#1}{2}}
+\newcommand{\lonenorm}[1]{\pnorm{#1}{1}}
+\newcommand{\nuclearnorm}[1]{\pnorm{#1}{*}}
+\newcommand{\hubernorm}[1]{\pnorm{#1}{\mathcal{H}}}
+\newcommand{\twoonenorm}[1]{\pnorm{#1}{2,1}}    % group-sparsity norm (TWRI)
+
+% Operators
+\DeclareMathOperator{\vectorize}{vec}
+\DeclareMathOperator{\unvectorize}{unvec}
+\DeclareMathOperator{\diag}{diag}
+\newcommand{\fft}{\ensuremath{\mathcal{F}}}
+\newcommand{\ifft}{\ensuremath{\mathcal{F}^{-1}}}
+
+% Proximal operators
+\newcommand{\pxSoftT}[1]{\mathcal{S}_{#1}}      % soft threshold (sparsity)
+\newcommand{\pxSvT}[1]{\mathcal{T}_{#1}}        % SVT (low-rank)
+\newcommand{\pxHub}[2]{\mathcal{P\!H}_{#1,#2}}  % Huber proximal
+
+%--------------------------------------------------
+% GPR signal model  (image domain, real-valued)
+%--------------------------------------------------
+
+% Scalar (function) quantities
+\newcommand{\Fimage}{\ensuremath{y}}             % B-scan pixel y(x,t)
+\newcommand{\Fatom}{\ensuremath{h}}              % hyperbola atom h_k(x,t)
+\newcommand{\Fcoef}{\ensuremath{c}}              % sparse coefficient c_k(x,t)
+\newcommand{\Fclutter}{\ensuremath{\ell}}        % clutter function ell(x,t)
+\newcommand{\Fnoise}{\ensuremath{n}}             % noise n(x,t)
+\newcommand{\Fsignal}{\ensuremath{s}}            % target signal s(x,t)
+
+% Matrix (image) quantities
+\newcommand{\Mimage}{\ensuremath{\mathbf{Y}}}    % B-scan matrix Y
+\newcommand{\Matom}{\ensuremath{\mathbf{H}}}     % dictionary atom H_k
+\newcommand{\Mcoef}{\ensuremath{\mathbf{C}}}     % sparse coefficient map C_k
+\newcommand{\Mclutter}{\ensuremath{\mathbf{L}}}  % low-rank clutter L
+\newcommand{\Mauxclutter}{\ensuremath{\mathbf{M}}}   % auxiliary clutter M (ADMM)
+\newcommand{\Mnoise}{\ensuremath{\mathbf{N}}}    % noise matrix N
+\newcommand{\Mauxcoef}{\ensuremath{\mathbf{S}}}  % auxiliary coefficient S_k (ADMM)
+\newcommand{\Mdualauxcoef}{\ensuremath{\widetilde{\mathbf{S}}}}  % dual S
+\newcommand{\Mdualclutter}{\ensuremath{\widetilde{\mathbf{L}}}}  % dual L
+
+% Frequency-domain (lowercase bold = vec+FFT)
+\newcommand{\Vimage}{\ensuremath{\mathbf{y}}}
+\newcommand{\Vatom}{\ensuremath{\mathbf{h}}}
+\newcommand{\Vcoef}{\ensuremath{\mathbf{c}}}
+\newcommand{\Vclutter}{\ensuremath{\mathbf{l}}}
+\newcommand{\VMnoise}{\ensuremath{\mathbf{n}}}
+\newcommand{\Vauxcoef}{\ensuremath{\mathbf{s}}}
+\newcommand{\Vdualauxcoef}{\ensuremath{\widetilde{\mathbf{s}}}}
+\newcommand{\Vdualclutter}{\ensuremath{\widetilde{\mathbf{l}}}}
+\newcommand{\Vauxplusdual}{\ensuremath{\mathbf{z}}}  % combined auxiliary+dual
+\newcommand{\Vrimclutter}{\ensuremath{\mathbf{x}}}   % residual in C update
+
+%--------------------------------------------------
+% GPR physics model
+%--------------------------------------------------
+\newcommand{\rkthickness}{\ensuremath{\Delta}}   % wavelet thickness parameter
+\newcommand{\rksteepness}{\ensuremath{a}}        % Ricker steepness
+\newcommand{\rkflatness}{\ensuremath{p}}         % Ricker flatness
+\newcommand{\pulsation}{\ensuremath{\omega}}     % angular frequency
+\newcommand{\permittivity}{\ensuremath{\varepsilon_r}}  % relative permittivity
+\newcommand{\lightspeed}{\ensuremath{c_0}}       % speed of light in vacuum
+\newcommand{\speed}{\ensuremath{v}}              % EM wave speed in medium
+\newcommand{\radius}{\ensuremath{R}}             % depth/radius
+
+%--------------------------------------------------
+% TWRI model  (frequency domain, complex-valued)
+%--------------------------------------------------
+\newcommand{\Mtwri}{\ensuremath{\mathbf{Y}}}     % measurement matrix (same symbol Y)
+\newcommand{\Mwall}{\ensuremath{\mathbf{L}}}     % low-rank wall returns (same L)
+\newcommand{\Mdict}{\ensuremath{\boldsymbol{\Psi}}}  % propagation dictionary Psi
+\newcommand{\Vtarget}{\ensuremath{\mathbf{r}}}   % sparse target reflectivity (one col)
+\newcommand{\Mtarget}{\ensuremath{\mathbf{R}}}   % sparse target matrix (all columns)
+
+%--------------------------------------------------
+% Optimization utilities
+%--------------------------------------------------
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator{\minimize}{minimize}
+\newcommand{\argminOn}[1]{\ensuremath{\underset{#1}{\argmin\;}}}
+
+\newcommand{\sparsityhp}{\ensuremath{\lambda}}   % sparsity hyperparameter lambda
+\newcommand{\lowrankhp}{\ensuremath{\kappa}}     % low-rank hyperparameter kappa
+\newcommand{\lagrangehp}{\ensuremath{\rho}}      % ADMM penalty rho
+\newcommand{\laghpclutter}{\lagrangehp_{\mathbf{L}}}  % rho_L
+\newcommand{\laghpaux}{\lagrangehp_{\mathbf{S}}}      % rho_S
+\newcommand{\lagrangian}{\ensuremath{\mathcal{L}}}    % augmented Lagrangian L
+\newcommand{\gradient}{\ensuremath{\nabla}}      % gradient nabla
+\newcommand{\stepsize}{\ensuremath{\alpha}}      % gradient step size
+
+%--------------------------------------------------
+% Deep unrolling macros
+%--------------------------------------------------
+\newcommand{\nlayer}{\ensuremath{T}}             % total number of unrolled layers
+\newcommand{\ilayer}{\ensuremath{t}}             % layer index t = 1..T
+\newcommand{\Wone}[1]{\ensuremath{\mathbf{W}_{1,#1}}}   % learnable filter W_{1,k}
+\newcommand{\Wtwo}[1]{\ensuremath{\mathbf{W}_{2,#1}}}   % learnable filter W_{2,k}
+\newcommand{\wstep}{\ensuremath{w_0}}            % learnable scalar step size
+\newcommand{\lparamlam}[1]{\ensuremath{\lambda^{(#1)}}} % per-layer lambda^(t)
+\newcommand{\lparammu}[1]{\ensuremath{\mu^{(#1)}}}      % per-layer mu^(t)
+\newcommand{\lparamw}[1]{\ensuremath{w_0^{(#1)}}}       % per-layer w_0^(t)
+\newcommand{\nparams}{\ensuremath{P}}            % total learnable parameter count
+\newcommand{\lossfn}{\ensuremath{\mathcal{J}}}   % training loss

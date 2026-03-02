@@ -1,0 +1,272 @@
+% sec2_gpr_model.tex
+% Section 2: GPR Signal Model
+% Robust Sparse Convolution Coding for Radar Applications
+% DSIPS2026 -- Tokyo, March 2026
+
+\section{GPR Signal Model}
+
+% ------------------------------------------------------------------
+% SLIDE 1 -- GPR Acquisition
+% ------------------------------------------------------------------
+\begin{frame}{GPR Acquisition}
+  % Full-width TikZ scene
+  \begin{center}
+    \input{tikz/gpr_scene}
+  \end{center}
+
+  \vspace{-0.4em}
+
+  % Caption overlay as a narrow info box
+  \begin{shibuiframe}{ }
+    \centering
+    Antenna scans at position $x$, emits pulse $r(t)$, receives reflections.
+    \quad The recorded \textbf{B-scan} matrix:
+    $\Mimage \in \R^{\nbrows \times \nbcols}$
+    \quad ($\nbrows$ time samples $\times$ $\nbcols$ antenna positions).
+  \end{shibuiframe}
+\end{frame}
+
+% ------------------------------------------------------------------
+% SLIDE 2 -- B-scan Decomposition
+% ------------------------------------------------------------------
+\begin{frame}{B-scan Decomposition}
+
+  % Top: decomposition model in a highlighted box
+  \begin{shibuiframe}{Signal model}
+    \[
+      \Mimage
+        = \underbrace{%
+            \sum_{\iatom=1}^{\nbatoms}
+              \Mcoef_{\iatom} \Mconv \Matom_{\iatom}%
+          }_{\text{target responses}}
+        + \underbrace{\Mclutter}_{\text{clutter (low-rank)}}
+        + \underbrace{\Mnoise}_{\text{noise}}
+    \]
+  \end{shibuiframe}
+
+  \vspace{0.5em}
+
+  % Below: two-column layout
+  \begin{columns}[T]
+    \column{0.50\textwidth}
+      \vspace{0.3em}
+      \begin{itemize}
+        \item $\Matom_{\iatom}$: physics-based \emphtext{hyperbola atom} $k$,
+              $k = 1,\ldots,\nbatoms$,\quad $\nbatoms = 25$
+        \item $\Mcoef_{\iatom}$: \emphtext{sparse coefficient map}
+              (target location \& strength)
+        \item $\Mclutter$: ground/layer clutter,
+              assumed \emphtext{low-rank}
+        \item $\Mnoise$: additive measurement noise
+      \end{itemize}
+
+    \column{0.50\textwidth}
+      \vspace{0.3em}
+      \centering
+      \figplaceholder[0.85\linewidth]{%
+        Decomposition:
+        $\Mimage = \sum \Mcoef_{\iatom}\Mconv\Matom_{\iatom}
+         + \Mclutter + \Mnoise$}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------
+% SLIDE 3 -- Why Sparse Coding?
+% ------------------------------------------------------------------
+\begin{frame}{Why Sparse Coding?}
+
+  \begin{columns}[T]
+    \column{0.52\textwidth}
+      \vspace{0.3em}
+      \begin{itemize}
+        \item Buried objects are \emphtext{sparse}:
+              few targets in a large scene
+        \item Each target produces a
+              \emphtext{characteristic hyperbola} shape in the B-scan
+        \item \textbf{Sparse coding} = find a \emph{small} number of
+              activated atoms that explain the data
+        \item Same principle as LASSO/sparse regression,
+              extended to \emphtext{2D convolution}
+      \end{itemize}
+
+      \vspace{0.5em}
+      \begin{shibuiframe}{ }
+        \small
+        Target response $=$ convolution of \emph{a few atoms}
+        $\Matom_{\iatom}$ with \emph{sparse} activation maps
+        $\Mcoef_{\iatom}$
+      \end{shibuiframe}
+
+    \column{0.48\textwidth}
+      \vspace{0.3em}
+      \centering
+      \figplaceholder[0.85\linewidth]{%
+        One atom $\Matom_{\iatom}$ activated at one location:
+        hyperbola highlighted in B-scan}
+  \end{columns}
+\end{frame}
+
+% % ------------------------------------------------------------------
+% % SLIDE 4 -- Physics-Based Dictionary
+% % ------------------------------------------------------------------
+\begin{frame}{Physics-Based Dictionary $\{\Matom_{\iatom}\}$}
+
+  \begin{columns}[T]
+    \column{0.55\textwidth}
+      \vspace{0.3em}
+
+      \textbf{Atom construction -- hyperbola model:}
+
+      \vspace{0.4em}
+      \begin{shibuiframe}{ }
+        \[
+          h_{k}(x,t)
+            = r\!\left(
+                t - \frac{2}{\speed}
+                \sqrt{(x - x_0)^2 + d^2}
+              \right)
+        \]
+        \vspace{0.1em}
+        \begin{itemize}
+          \item $r(t)$: Ricker wavelet
+          \item $\speed = \lightspeed / \sqrt{\permittivity}$:
+                EM wave speed in medium
+          \item $d$: target depth
+          \item $x_0$: horizontal position
+        \end{itemize}
+      \end{shibuiframe}
+
+      \vspace{0.5em}
+      \begin{itemize}
+        \item Each $\Matom_{\iatom}$ encodes one hyperbola
+              for a specific depth / permittivity pair
+        \item Dictionary of $\nbatoms = 25$ atoms varying
+              in \emphtext{curvature} (speed/depth combinations)
+      \end{itemize}
+
+      \vspace{0.4em}
+      \citebadge{Terrasse, PhD thesis (2016) ---
+                 dictionary construction for GPR}
+
+    \column{0.45\textwidth}
+      \vspace{0.3em}
+      \centering
+      \figplaceholder[0.85\linewidth]{%
+        $4\times$ example atoms
+        $\Matom_{1},\ldots,\Matom_{4}$
+        (hyperbola shapes, $2\times 2$ grid)}
+  \end{columns}
+\end{frame}
+
+% % ------------------------------------------------------------------
+% % SLIDE 5 -- L2-GPR: Problem Formulation
+% % ------------------------------------------------------------------
+\begin{frame}{L2-GPR: Problem Formulation}
+
+  \begin{shibuiframe}{Optimization problem}
+    \[
+      \argminOn{\{\Mcoef_{\iatom}\},\,\Mclutter}
+        \ltwonorm{%
+          \Mimage
+          - \sum_{\iatom} \Mcoef_{\iatom} \Mconv \Matom_{\iatom}
+          - \Mclutter}^{2}
+        + \sparsityhp \sum_{\iatom} \lonenorm{\Mcoef_{\iatom}}
+        + \lowrankhp \nuclearnorm{\Mclutter}
+    \]
+  \end{shibuiframe}
+
+  \vspace{0.6em}
+
+  \textbf{Each penalty plays a distinct role:}
+
+  \vspace{0.3em}
+  \begin{itemize}
+    \item $\lonenorm{\cdot}$ promotes \emphtext{sparsity}
+          of the coefficient maps $\Mcoef_{\iatom}$
+          (few active targets)
+    \item $\nuclearnorm{\cdot}$ promotes \emphtext{low rank}
+          of the clutter matrix $\Mclutter$
+          (horizontal layer structure)
+    \item $\ltwonorm{\cdot}^{2}$ is the
+          \emphtext{$\ell_2$ data-fidelity} term
+          (Gaussian noise model)
+  \end{itemize}
+
+  \vspace{0.5em}
+  \citebadge{Wohlberg (2016) --- CSC-ADMM framework;\quad
+             Terrasse (2016) --- GPR application}
+\end{frame}
+
+% % ------------------------------------------------------------------
+% % SLIDE 6 -- ADMM Framework  [skippable]
+% % ------------------------------------------------------------------
+\begin{frame}{ADMM Framework \skipbadge{}}
+
+  \textbf{Variable splitting} with auxiliary variables:
+  \[
+    \minimize_{\{\Mcoef_{\iatom}\},\,\Mclutter}
+    \ltwonorm{\Mimage - \sum_{\iatom}\Mcoef_{\iatom}\Mconv\Matom_{\iatom} - \Mclutter}^{2}
+    + \sparsityhp\sum_{\iatom}\lonenorm{\Mcoef_{\iatom}}
+    + \lowrankhp\nuclearnorm{\Mclutter}
+  \]
+
+  \vspace{0.3em}
+  \textbf{Augmented Lagrangian} (standard ADMM, Boyd et al.\ 2011):
+
+  \vspace{0.2em}
+  \begin{shibuiframe}{Objective}
+    \[
+      \lagrangian = \ltwonorm{\Mimage - \sum_{\iatom}\Mcoef_{\iatom}\Mconv\Matom_{\iatom}
+             - \Mclutter}^{2}
+         + \sparsityhp\sum_{\iatom}\lonenorm{\Mauxcoef_{\iatom}}
+         + \lowrankhp\nuclearnorm{\Mauxclutter}
+         + \text{(coupling penalties)}
+    \]
+  \end{shibuiframe}
+
+\end{frame}
+
+% ------------------------------------------------------------------
+% SLIDE 7 -- ADMM Update Cycle  [skippable]
+% ------------------------------------------------------------------
+\begin{frame}{ADMM Update Cycle \skipbadge{}}
+
+  \begin{columns}[T]
+    \column{0.60\textwidth}
+      \vspace{0.3em}
+      \centering
+      \input{tikz/admm_cycle}
+
+    \column{0.40\textwidth}
+      \vspace{0.3em}
+      \textbf{Per-step summary:}
+
+      \vspace{0.5em}
+      \begin{itemize}
+        \item \textbf{(1) Update $\{\Mcoef_{\iatom}\}$:}\\
+              gradient descent in
+              \emphtext{Fourier domain}\\
+              (convolution $\to$ element-wise
+              product via FFT)
+
+        \vspace{0.4em}
+        \item \textbf{(2) Update $\Mclutter$:}\\
+              \emphtext{closed form} ---
+              soft threshold in Fourier domain
+
+        \vspace{0.4em}
+        \item \textbf{(3) Update $\{\Mauxcoef_{\iatom}\}$,
+              $\Mauxclutter$:}\\
+              $\pxSoftT{\sparsityhp/\laghpaux}$
+              (soft thresholding)\\
+              and $\pxSvT{\lowrankhp/\laghpclutter}$
+              (singular value thresholding)
+
+        \vspace{0.4em}
+        \item \textbf{(4) Dual update:}\\
+              $\Mdualauxcoef_{\iatom}$,\;
+              $\Mdualclutter$
+              $\mathrel{+}=$ residuals
+      \end{itemize}
+  \end{columns}
+\end{frame}

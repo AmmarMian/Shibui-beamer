@@ -1,0 +1,182 @@
+% sec6_conclusion.tex
+% Section 6: Conclusion
+% Robust Sparse Convolution Coding for Radar Applications
+% DSIPS2026 -- Tokyo, March 2026
+%
+% 3 slides:
+%   1. Summary of Contributions
+%   2. Perspectives
+%   3. Thank You
+
+\section{Conclusion}
+
+% ------------------------------------------------------------------
+% SLIDE 1 -- Summary of Contributions
+% ------------------------------------------------------------------
+\begin{frame}{Summary of Contributions}
+
+  \begin{columns}[T]
+
+    % ------- Block 1: GPR methods -------
+    \column{0.33\textwidth}
+      \begin{shibuiframe}{L2-GPR \& Hub-GPR}
+        \footnotesize
+        \begin{itemize}
+          \item Conv.\ sparse coding + low-rank clutter separation
+          \item Physics dict.: $\nbatoms = 25$ hyperbola atoms
+          \item Huber extension: robust to non-Gaussian noise/artefacts
+          \item \textbf{New:} closed-form $\pxHub{\,\cdot\,}{\,\cdot\,}$
+                for $\Mclutter$ update
+          \item Applications: pipe inspection, demining
+        \end{itemize}
+      \end{shibuiframe}
+
+    % ------- Block 2: TWRI / HKRPCA -------
+    \column{0.33\textwidth}
+      \begin{shibuiframe}{TWRI \& HKRPCA}
+        \footnotesize
+        \begin{itemize}
+          \item Kronecker dict.\
+                $\Mdict\!\left(\identmat{\Mnbpos}\kron\Vtarget\right)$
+          \item KRPCA + Huber: two variants\\
+                (semi-split PGD,\\full-split MM)
+          \item Group sparsity $\twoonenorm{\cdot}$\\
+                for spatial target localization
+        \end{itemize}
+      \end{shibuiframe}
+
+    % ------- Block 3: LCRPCA deep unrolling -------
+    \column{0.33\textwidth}
+      \begin{shibuiframe}{LCRPCA (unrolling)}
+        \footnotesize
+        \begin{itemize}
+          \item Unrolled PGD for RPCA + sparse coding
+          \item Learnable filters replace physics dictionary
+                (robust to model errors)
+          \item $\nparams = 21{,}656$ vs.\
+                $8.6\,\mathrm{M}$ for U-Net
+          \item PR-AUC $= 0.85$ with only\\
+                $10\%$ training data
+        \end{itemize}
+      \end{shibuiframe}
+
+  \end{columns}
+
+  \vspace{0.6em}
+  \begin{shibuiwarning}
+    \textbf{Unifying principle:}
+    all three methods exploit the same structural prior ---
+    \emphtext{low-rank clutter} + \emphtext{sparse target signal}
+    --- using ADMM and proximal operators.
+  \end{shibuiwarning}
+
+\end{frame}
+
+% ------------------------------------------------------------------
+% SLIDE 2 -- Perspectives
+% ------------------------------------------------------------------
+\begin{frame}{Perspectives}
+
+  \begin{columns}[T]
+
+    % ------- Left: open problems and future work -------
+    \column{0.55\textwidth}
+      \textbf{Open problems \& future work:}
+      \vspace{0.2em}
+      \begin{itemize}
+        \setlength{\itemsep}{0.15em}
+        \item \emphtext{Adaptive threshold $\delta$}
+              (currently set by quantiles): can it be learned
+              end-to-end?
+        \item \emphtext{Joint GPR + TWRI} framework:
+              unified model for both modalities
+        \item \emphtext{Online / streaming ADMM}
+              for real-time processing
+        \item \emphtext{Extension to 3D GPR}
+              (volumetric reconstruction)
+        \item \emphtext{Deep unrolling for GPR}:
+              apply LCRPCA ideas to Hub-GPR
+        \item \emphtext{Non-stationary clutter}:
+              $\Mclutter$ not globally low-rank
+              but \emph{locally} --- patch-based or
+              sliding-window formulation
+      \end{itemize}
+
+    % ------- Right: take-away -------
+    \column{0.43\textwidth}
+      \vspace{0.5em}
+      \begin{shibuiframe}{Key idea}
+        \small
+        Separate \emphtext{physics}\\
+        (sparse structure, low-rank clutter)\\
+        from \emphtext{learning}\\
+        (adapt to data with minimal parameters).
+      \end{shibuiframe}
+
+      \vspace{0.8em}
+      \small
+      \textbf{ADMM}
+      $+$ \textbf{proximal operators}
+      $+$ \textbf{deep unrolling}\\[0.2em]
+      $=$ principled, interpretable,\\
+      \hphantom{$=$\;} data-efficient framework.
+
+  \end{columns}
+
+\end{frame}
+
+% ------------------------------------------------------------------
+% SLIDE 3 -- Thank You
+% ------------------------------------------------------------------
+\begin{frame}{Thank You}
+
+  \begin{center}
+    \large
+    Thank you for your attention.
+  \end{center}
+
+  \vspace{0.8em}
+
+  \begin{columns}[T]
+
+    % ------- Left: key references -------
+    \column{0.52\textwidth}
+      \textbf{Selected references:}
+      \vspace{0.3em}
+      {\footnotesize
+      \begin{itemize}
+        \item Terrasse (2016), PhD thesis ---
+              GPR physics dictionary
+        \item Wohlberg (2016), TNNLS ---
+              CSC-ADMM
+        \item Gregor \& LeCun (2010) ---
+              LISTA (deep unrolling)
+        \item Monga et al.\ (2021),
+              \textit{IEEE SP Mag.} ---
+              algorithm unrolling survey
+        \item Br\'{e}hier et al.\ (2024) ---
+              LCRPCA for TWRI
+      \end{itemize}
+      }
+
+    % ------- Right: contact -------
+    \column{0.44\textwidth}
+      \vspace{0.2em}
+      \textbf{Contact \& code:}
+      \vspace{0.3em}
+
+      \begin{shibuitip}[Get in touch]
+        \footnotesize
+        \texttt{ammar.mian@univ-smb.fr}\\[0.4em]
+        Slides and code:\\
+        (available on request)
+      \end{shibuitip}
+
+  \end{columns}
+
+  \vspace{1.2em}
+  \begin{center}
+    \large\emphtext{Questions?}
+  \end{center}
+
+\end{frame}

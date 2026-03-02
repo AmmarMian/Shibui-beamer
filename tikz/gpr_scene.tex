@@ -1,0 +1,106 @@
+% gpr_scene.tex
+% GPR acquisition geometry: antenna scanning surface, buried objects,
+% hyperbolic wavefronts, soil layers.
+% Colors: theme names (shibuiaccent, shibuitext, shibuiplot2, shibuiplot3)
+% Bounding box: approx 10cm x 6cm
+%
+% Include in a frame with: \input{tikz/gpr_scene}
+
+\begin{tikzpicture}[
+    % Base style for labels
+    lbl/.style  = {font=\small, text=shibuitext},
+    % Style for soil layer shading
+    soil/.style = {fill=shibuicodebg, draw=shibuitext, thin},
+    % Style for object
+    obj/.style  = {fill=shibuiplot3!60!shibuicodebg, draw=shibuiplot3, thick},
+    % Style for wave arc
+    wave/.style = {draw=shibuiplot2, thin, dashed}
+  ]
+
+  % ------ coordinate definitions ------
+  % Surface at y=0, depth increases downward (y negative)
+  \def\surfaceY{0}
+  \def\soilDepth{-3.5}    % bottom of soil shown
+  \def\sceneWidth{9}      % total width in cm
+  \def\antennaX{4.5}      % antenna x position
+
+  % Object 1 (pipe, left) at (2, -1.8)
+  \coordinate (obj1) at (2, -1.8);
+  % Object 2 (deeper, right) at (6.5, -2.4)
+  \coordinate (obj2) at (6.5, -2.4);
+
+  % ------ soil background ------
+  \fill[shibuicodebg!60!black]
+    (0, \soilDepth) rectangle (\sceneWidth, \surfaceY);
+
+  % Soil layer 1 (shallow, slightly lighter)
+  \fill[shibuicodebg!80!black, opacity=0.5]
+    (0, -1.0) rectangle (\sceneWidth, \surfaceY);
+
+  % ------ surface line ------
+  \draw[shibuitext, thick] (0, \surfaceY) -- (\sceneWidth, \surfaceY);
+  \node[lbl, above right] at (0, \surfaceY) {surface};
+
+  % ------ GPR antenna (moving) ------
+  % Antenna body (rectangle)
+  \fill[shibuiaccent!80!black]
+    (\antennaX - 0.5, 0.15) rectangle (\antennaX + 0.5, 0.65);
+  \draw[shibuiaccent, thick]
+    (\antennaX - 0.5, 0.15) rectangle (\antennaX + 0.5, 0.65);
+  % Antenna label
+  \node[lbl, above] at (\antennaX, 0.65) {GPR antenna};
+  % Motion arrow
+  \draw[->, shibuiaccent, thick]
+    (\antennaX + 0.6, 0.4) -- (\antennaX + 1.5, 0.4)
+    node[lbl, right] {$x$};
+
+  % ------ downward EM pulse arcs from antenna ------
+  % Each arc is a half-ellipse opening downward, centered at the antenna.
+  % Precompute radii with \pgfmathsetmacro to avoid PGF math "and" operator error.
+  \foreach \r in {0.5, 1.0, 1.5} {
+    \pgfmathsetmacro{\xrad}{\r / 2.5}
+    \pgfmathsetmacro{\yrad}{\r / 4}
+    \pgfmathsetmacro{\opac}{1 - 0.25 * \r}
+    \pgfmathsetmacro{\startX}{\antennaX - \xrad}
+    \draw[wave, opacity=\opac]
+      (\startX, \surfaceY)
+      arc[start angle=180, end angle=360,
+          x radius=\xrad, y radius=\yrad];
+  }
+
+  % ------ buried objects ------
+  % Object 1: circle (pipe cross-section)
+  \draw[obj] (obj1) circle (0.25);
+  \node[lbl, below=2pt] at (obj1) {buried pipe};
+
+  % Object 2: smaller circle
+  \draw[obj] (obj2) circle (0.18);
+  \node[lbl, below=2pt] at (obj2) {cable};
+
+  % ------ hyperbolic response on surface (B-scan schematic) ------
+  % Hyperbola for object 1: vertex at x=2, t=1.4 (reflection delay)
+  % Points: (x, t) where t(x) ~ sqrt((x-x0)^2/v^2 + (2d/v)^2)
+  % Shown as a curve above the surface (shifted up for clarity)
+  % Actually: hyperbola shown ON the B-scan panel to the right
+  % Here we show the reflected wavefronts as curved arcs back to surface
+
+  % Reflected wavefront from obj1 reaching surface
+  \draw[wave, shibuiplot3, opacity=0.7]
+    plot[smooth, samples=40, domain=0.3:3.7]
+    (\x, {-0.05 - 0.5*(\x-2)*(\x-2)/2.5});
+
+  % Reflected wavefront from obj2
+  \draw[wave, shibuiplot3!70!white, opacity=0.5]
+    plot[smooth, samples=40, domain=3.8:9.0]
+    (\x, {-0.05 - 0.3*(\x-6.5)*(\x-6.5)/3.2});
+
+  % ------ depth axis ------
+  \draw[->, shibuitext, thin]
+    (0, \surfaceY) -- (0, \soilDepth + 0.3)
+    node[lbl, left, rotate=90, anchor=south] at (-0.25, -1.5) {depth $z$};
+
+  % ------ B-scan panel label (right side) ------
+  \node[lbl, align=center] at (8.2, -1.0)
+    {$\Mimage \in \R^{\nbrows \times \nbcols}$\\[2pt]B-scan};
+
+\end{tikzpicture}

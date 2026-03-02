@@ -1,0 +1,104 @@
+% twri_scene.tex
+% Through-Wall Radar Imaging geometry:
+% antenna array outside, thick wall, room interior, targets.
+% Colors: theme names
+% Bounding box: approx 10cm x 5.5cm
+%
+% Include in a frame with: \input{tikz/twri_scene}
+
+\begin{tikzpicture}[
+    lbl/.style  = {font=\small, text=shibuitext},
+    arrstyle/.style = {->, draw=shibuiplot2, thick},
+    target/.style   = {fill=shibuiaccent!70!shibuicodebg,
+                        draw=shibuiaccent, thick}
+  ]
+
+  % ------ layout constants ------
+  \def\arrayX{0.0}    % left edge of antenna array
+  \def\wallL{2.0}     % left face of wall
+  \def\wallR{2.8}     % right face of wall
+  \def\roomR{9.0}     % right edge of room
+  \def\sceneH{4.5}    % total height of scene
+  \def\floorY{0.0}
+  \def\ceilY{4.5}
+
+  % ------ room background ------
+  \fill[shibuicodebg!50!black]
+    (\wallR, \floorY) rectangle (\roomR, \ceilY);
+
+  % Ceiling and floor
+  \draw[shibuitext, thin]
+    (\wallR, \floorY) -- (\roomR, \floorY);
+  \draw[shibuitext, thin]
+    (\wallR, \ceilY)  -- (\roomR, \ceilY);
+  \node[lbl, right] at (\roomR - 0.7, \ceilY + 0.2) {room};
+
+  % ------ wall ------
+  \fill[shibuitext!30!black]
+    (\wallL, \floorY) rectangle (\wallR, \ceilY);
+  \draw[shibuitext, thick]
+    (\wallL, \floorY) rectangle (\wallR, \ceilY);
+  % Wall label with brace
+  \draw[decorate, decoration={brace, amplitude=4pt}, shibuitext]
+    (\wallL, \ceilY + 0.15) -- (\wallR, \ceilY + 0.15)
+    node[lbl, midway, above=5pt] {wall};
+
+  % ------ antenna array (left of wall) ------
+  % Array as a vertical bracket with N antenna dots
+  \foreach \n in {0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0} {
+    % Antenna element
+    \fill[shibuiaccent] (\arrayX + 0.3, \n) circle (3pt);
+    % TX pulse arrow toward wall
+    \draw[arrstyle, thin, opacity=0.5]
+      (\arrayX + 0.35, \n) -- (\wallL - 0.05, \n);
+  }
+  % Array bracket
+  \draw[shibuiaccent, thick]
+    (\arrayX, 0.4) -- (\arrayX, 4.1);
+  \node[lbl, left=2pt, align=right] at (\arrayX, 2.25)
+    {antenna\\array};
+  % Number of antennas label
+  \node[lbl, below=2pt] at (\arrayX + 0.3, 0.25)
+    {$\Mnbpos$ positions};
+
+  % ------ transmitted / received signal notation ------
+  % Frequency axis label
+  \node[lbl, above=2pt] at (\arrayX + 0.3, 4.15)
+    {$\Mnbfreq$ frequencies};
+
+  % ------ targets in room ------
+  % Target 1 (person standing)
+  \coordinate (tgt1) at (5.5, 1.5);
+  \fill[target] (tgt1) circle (0.2);
+  \fill[target] ($(tgt1) + (0, 0.45)$) circle (0.12);  % head
+  \draw[target, thick]
+    ($(tgt1) + (0, 0.33)$) -- ($(tgt1) + (0, -0.2)$);  % body
+  \draw[target]
+    ($(tgt1) + (0, 0.1)$) -- ($(tgt1) + (-0.2, -0.2)$);
+  \draw[target]
+    ($(tgt1) + (0, 0.1)$) -- ($(tgt1) + ( 0.2, -0.2)$);
+  \node[lbl, below=6pt] at (tgt1) {target 1};
+
+  % Target 2
+  \coordinate (tgt2) at (7.5, 3.0);
+  \fill[target] (tgt2) circle (0.2);
+  \fill[target] ($(tgt2) + (0, 0.45)$) circle (0.12);
+  \draw[target, thick]
+    ($(tgt2) + (0, 0.33)$) -- ($(tgt2) + (0, -0.2)$);
+  \draw[target]
+    ($(tgt2) + (0, 0.1)$) -- ($(tgt2) + (-0.2, -0.2)$);
+  \draw[target]
+    ($(tgt2) + (0, 0.1)$) -- ($(tgt2) + ( 0.2, -0.2)$);
+  \node[lbl, below=6pt] at (tgt2) {target 2};
+
+  % ------ reflected signal arrows (wall -> array) ------
+  \foreach \n in {0.5, 2.25, 4.0} {
+    \draw[->, draw=shibuiplot3, thin, opacity=0.6, dashed]
+      (\wallL - 0.05, \n) -- (\arrayX + 0.35, \n);
+  }
+
+  % ------ measurement matrix label ------
+  \node[lbl, align=center] at (0.7, -0.6)
+    {$\Mtwri \in \C^{\Mnbfreq \times \Mnbpos}$};
+
+\end{tikzpicture}

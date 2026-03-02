@@ -1,0 +1,311 @@
+% sec4_twri.tex
+% Section 4: Through-Wall Radar Imaging
+% Robust Sparse Convolution Coding for Radar Applications
+% DSIPS2026 -- Tokyo, March 2026
+
+\section{Through-Wall Radar Imaging}
+
+% ------------------------------------------------------------------
+% SLIDE 1 -- TWRI: Problem Setting
+% ------------------------------------------------------------------
+\begin{frame}{TWRI: Problem Setting}
+
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+      \vspace{0.3em}
+  \input{tikz/twri_scene}
+
+    \column{0.52\textwidth}
+      \vspace{0.3em}
+
+      \begin{shibuiframe}{Measurement model}
+        \[
+          \Mtwri
+            = \underbrace{\Mwall}_{\text{wall (low-rank)}}
+            + \underbrace{%
+                \Mdict\bigl(\identmat{\Mnbpos} \kron \Vtarget\bigr)%
+              }_{\text{targets (sparse)}}
+            + \Mnoise
+        \]
+      \end{shibuiframe}
+
+      \vspace{0.5em}
+      \begin{itemize}
+        \item $\Mtwri \in \C^{\Mnbfreq \times \Mnbpos}$:
+              complex measurements ($\Mnbfreq$ freq., $\Mnbpos$ antennas)
+        \item $\Mwall$: \emphtext{wall returns} --- low-rank\\
+              (coherent across antennas)
+        \item $\Mdict \in \C^{\Mnbfreq \times P}$:
+              \emphtext{propagation dictionary} (physics-based)
+        \item $\Vtarget \in \C^{P}$:
+              \emphtext{target reflectivity} --- sparse
+      \end{itemize}
+
+      \vspace{0.4em}
+      \begin{shibuitip}[Parallel with GPR]
+        $\Mconv \longleftrightarrow \Mdict\,(\cdot\kron\cdot)$,
+        \quad
+        $\Mcoef_{\iatom} \longleftrightarrow \Vtarget$
+      \end{shibuitip}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------
+% SLIDE 2 -- Kronecker Dictionary Structure
+% ------------------------------------------------------------------
+\begin{frame}{Kronecker Dictionary Structure}
+
+  \begin{columns}[T]
+    \column{0.52\textwidth}
+      \vspace{0.3em}
+
+      \textbf{Propagation dictionary $\Mdict$:}
+
+      \vspace{0.4em}
+      \begin{shibuiframe}{ }
+        \[
+          [\Mdict]_{:,p}
+            = \bigl[e^{-j\pulsation_1 \tau_p},\,
+                    \ldots,\,
+                    e^{-j\pulsation_{\Mnbfreq} \tau_p}\bigr]^{\T}
+        \]
+        \vspace{0.1em}
+        \begin{itemize}
+          \item Column $p$: \emphtext{steering vector} for grid cell $p$
+          \item $\tau_p$: propagation delay\\
+                (transmitter $\to$ wall $\to$ cell $p$)
+          \item Known from wall geometry and\\
+                dielectric model
+        \end{itemize}
+      \end{shibuiframe}
+
+      \vspace{0.5em}
+      \textbf{Kronecker structure:}
+      \begin{itemize}
+        \item $\identmat{\Mnbpos} \kron \Vtarget$:
+              same reflectivity $\Vtarget$ applied\\
+              \emphtext{independently} at each antenna
+        \item $\twoonenorm{\Vtarget}$: \emphtext{group sparsity}\\
+              one group per grid cell $p$, across all frequencies
+        \item Groups that are zero $\Rightarrow$ no target at cell $p$
+      \end{itemize}
+
+      \vspace{0.4em}
+      \citebadge{Setlur et al.\ (2012); Ahmad et al.\ (2013)
+                 --- TWRI with sparse recovery}
+
+    \column{0.48\textwidth}
+      \vspace{0.3em}
+      \centering
+      \figplaceholder[0.9\linewidth]{%
+        Dictionary $\Mdict$:\\columns $=$ propagation delay\\
+        steering vectors to grid cells}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------
+% SLIDE 3 -- KRPCA: Problem Formulation
+% ------------------------------------------------------------------
+\begin{frame}{KRPCA: Problem Formulation}
+
+  \begin{shibuiframe}{Kronecker Robust PCA (KRPCA)}
+    \[
+      \argminOn{\Mwall,\,\Vtarget}
+        \nuclearnorm{\Mwall}
+        + \sparsityhp\,\twoonenorm{\Vtarget}
+      \quad
+      \text{s.t.}
+      \quad
+      \Mtwri = \Mwall + \Mdict\bigl(\identmat{\Mnbpos} \kron \Vtarget\bigr)
+    \]
+  \end{shibuiframe}
+
+  \vspace{0.5em}
+  \begin{columns}[T]
+    \column{0.55\textwidth}
+      \vspace{0.2em}
+      \begin{itemize}
+        \item $\nuclearnorm{\Mwall}$: promotes \emphtext{low rank}\\
+              (wall returns coherent across antennas)
+        \item $\twoonenorm{\Vtarget}$: promotes \emphtext{group sparsity}\\
+              (few occupied grid cells in the scene)
+        \item Constraint: \emphtext{exact fit} (noise-free formulation)
+        \item Solved via ADMM --- same structure as L2-GPR
+              but in \emphtext{frequency domain} with Kronecker product
+      \end{itemize}
+
+    \column{0.45\textwidth}
+      \vspace{0.2em}
+      \begin{shibuitip}[Same structure as L2-GPR]
+        \footnotesize
+        \textbf{GPR:}\\
+        $\min \nuclearnorm{\Mclutter}
+         + \sparsityhp\sum_{\iatom}\lonenorm{\Mcoef_{\iatom}}$\\
+        s.t.\ $\Mimage = \sum_{\iatom} \Mcoef_{\iatom}\Mconv\Matom_{\iatom}
+               + \Mclutter$\\[4pt]
+        \textbf{TWRI:}\\
+        $\min \nuclearnorm{\Mwall}
+         + \sparsityhp\,\twoonenorm{\Vtarget}$\\
+        s.t.\ $\Mtwri = \Mwall
+               + \Mdict(\identmat{\Mnbpos}\kron\Vtarget)$
+      \end{shibuitip}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------
+% SLIDE 4 -- HKRPCA: Huber Extension  [skippable]
+% ------------------------------------------------------------------
+\begin{frame}{HKRPCA: Huber Extension \skipbadge{}}
+
+  \textbf{Adding robustness to non-Gaussian wall returns:}
+
+  \vspace{0.4em}
+  \begin{columns}[T]
+    \column{0.50\textwidth}
+      \vspace{0.2em}
+      \textbf{Variant 1 --- Semi-splitting PGD:}
+
+      \begin{shibuiframe}{ }
+        \footnotesize
+        \[
+          \argminOn{\Mwall,\,\Vtarget}
+            \hubernorm{\Mtwri - \Mwall
+              - \Mdict(\identmat{\Mnbpos}\kron\Vtarget)}^{2}
+            + \nuclearnorm{\Mwall}
+            + \sparsityhp\,\twoonenorm{\Vtarget}
+        \]
+      \end{shibuiframe}
+
+      \vspace{0.3em}
+      \begin{itemize}
+        \item Huber data fidelity replaces $\ell_2$
+        \item Solved by \emphtext{proximal gradient descent} (PGD)
+        \item Single noise model for whole measurement
+      \end{itemize}
+
+    \column{0.50\textwidth}
+      \vspace{0.2em}
+      \textbf{Variant 2 --- Full-splitting MM (column-wise):}
+
+      \vspace{0.3em}
+      \begin{itemize}
+        \item Models noise \emphtext{column-by-column}\\
+              (different noise per antenna/sensor)
+        \item More robust to \emphtext{sensor-specific artefacts}
+        \item Solved by \emphtext{majorization-minimization} (MM)\\
+              with full variable splitting
+      \end{itemize}
+  \end{columns}
+
+  \vspace{0.5em}
+  \begin{shibuiproposition}[HKRPCA wall update]
+    The wall component update admits a \emph{Huber proximal} closed form,
+    analogous to Hub-GPR:
+    \[
+      \Mwall^{(\iadmm+1)}
+        = \pxHub{1/\laghpclutter}{\delta}\!\bigl(
+            \mathbf{V}_{L} + \mathbf{A}_{L}
+          \bigr)
+          - \mathbf{A}_{L},
+    \]
+    where
+    $\mathbf{A}_{L}
+       = \Mdict\bigl(\identmat{\Mnbpos}\kron\Vtarget^{(\iadmm+1)}\bigr)
+         - \Mtwri$
+    and
+    $\mathbf{V}_{L} = \Mauxclutter + \Mdualclutter$.
+  \end{shibuiproposition}
+
+\end{frame}
+
+% ------------------------------------------------------------------
+% SLIDE 5 -- TWRI Results: Visual
+% ------------------------------------------------------------------
+\begin{frame}{TWRI Results: Visual}
+
+  \begin{columns}[T]
+    \column{0.33\textwidth}
+      \centering
+      \textbf{Classical back-projection}
+
+      \vspace{0.3em}
+      \figplaceholder[0.95\linewidth]{%
+        Back-projected image\\(wall clutter dominant)}
+
+    \column{0.33\textwidth}
+      \centering
+      \textbf{KRPCA}
+
+      \vspace{0.3em}
+      \figplaceholder[0.95\linewidth]{%
+        KRPCA reconstruction\\$\hat{\Vtarget}$ (wall removed)}
+
+    \column{0.33\textwidth}
+      \centering
+      \textbf{HKRPCA}
+
+      \vspace{0.3em}
+      \figplaceholder[0.95\linewidth]{%
+        HKRPCA reconstruction\\(robust, non-Gaussian)}
+  \end{columns}
+
+  \vspace{0.5em}
+  \begin{itemize}
+    \item KRPCA: \emphtext{wall contribution suppressed}, targets visible
+    \item HKRPCA: additionally handles \emphtext{non-Gaussian artefacts}
+          (impulsive noise, multipath outliers)
+  \end{itemize}
+
+  \vspace{0.3em}
+  \citebadge{Signal Processing 2024;\quad EUSIPCO 2024}
+
+\end{frame}
+
+% ------------------------------------------------------------------
+% SLIDE 6 -- TWRI: Comparison and Summary
+% ------------------------------------------------------------------
+\begin{frame}{TWRI: Comparison and Summary}
+
+  \begin{center}
+    \small
+    \begin{tabular}{@{}lcccc@{}}
+      \toprule
+      \textbf{Method}
+        & \textbf{Wall suppression}
+        & \textbf{Target localization}
+        & \textbf{Robust to outliers} \\
+      \midrule
+      Back-projection
+        & No
+        & Poor (clutter)
+        & No \\
+      KRPCA
+        & Yes
+        & Good
+        & No \\
+      HKRPCA (semi-split)
+        & Yes
+        & Good
+        & Yes \\
+      HKRPCA (full-split)
+        & Yes
+        & Better
+        & Yes (col.-wise) \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+
+  \vspace{0.5em}
+  \textbf{Key takeaways:}
+
+  \vspace{0.3em}
+  \begin{itemize}
+    \item TWRI problem $=$ GPR problem in \emphtext{frequency domain}
+          with \emphtext{Kronecker dictionary} structure
+    \item Huber norm extension provides robustness to
+          \emphtext{non-Gaussian wall returns} and sensor artefacts
+    \item HKRPCA achieves \emphtext{better target localization}
+          under adverse conditions, especially the full-splitting variant
+  \end{itemize}
+
+\end{frame}

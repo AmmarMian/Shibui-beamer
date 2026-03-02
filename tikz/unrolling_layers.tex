@@ -1,0 +1,122 @@
+% unrolling_layers.tex
+% Concept diagram: ISTA algorithm unrolled into T fixed layers.
+% Top row: classical ISTA (loop with arbitrary iterations).
+% Bottom row: LISTA / unrolled (fixed T layers, learnable params).
+%
+% Colors: theme names
+% Bounding box: approx 11cm x 5.5cm
+
+\begin{tikzpicture}[
+    % Shared layer box style
+    layerbox/.style = {
+      draw=shibuiaccent,
+      fill=shibuicodebg,
+      rounded corners=3pt,
+      thick,
+      text=shibuitext,
+      font=\scriptsize,
+      align=center,
+      minimum width=1.8cm,
+      minimum height=1.1cm,
+      inner sep=4pt
+    },
+    % Fixed-param box (lighter border)
+    fixedbox/.style = {
+      draw=shibuitext,
+      fill=shibuicodebg,
+      dashed,
+      rounded corners=3pt,
+      text=shibuitext,
+      font=\scriptsize,
+      align=center,
+      minimum width=1.8cm,
+      minimum height=1.1cm,
+      inner sep=4pt
+    },
+    arr/.style = {->, draw=shibuitext, thick,
+                  shorten >=2pt, shorten <=2pt},
+    lbl/.style = {font=\small, text=shibuitext}
+  ]
+
+  % ========== TOP HALF: classical iterative algorithm ==========
+  \node[lbl, font=\small\bfseries, text=shibuitext]
+    at (0, 4.8) {Iterative algorithm (ISTA)};
+
+  % Input
+  \node[lbl, font=\scriptsize] (yin) at (-1.2, 3.7) {$\mathbf{y}$};
+
+  % Three "iteration" boxes (same W each time)
+  \foreach \i/\xi in {1/1.0, 2/3.2, 3/5.4} {
+    \node[fixedbox] (ista\i) at (\xi, 3.7)
+      {$\mathcal{S}_\lambda$\\[2pt]
+       $\mathbf{W}^\top, \mathbf{W}$\\[1pt]
+       fixed};
+  }
+
+  % Dots to indicate more iterations
+  \node[lbl, font=\large] at (7.2, 3.7) {$\cdots$};
+
+  % Output
+  \node[lbl, font=\scriptsize] (xout_ista) at (8.6, 3.7) {$\hat{\mathbf{x}}$};
+
+  % Arrows
+  \draw[arr] (yin.east) -- (ista1.west);
+  \draw[arr] (ista1.east) -- (ista2.west);
+  \draw[arr] (ista2.east) -- (ista3.west);
+  \draw[arr] (ista3.east) -- (7.0, 3.7);
+  \draw[arr] (7.5, 3.7) -- (xout_ista.west);
+
+  % Loop arrow (feedback)
+  \draw[->, draw=shibuitext, thin, dashed, rounded corners=4pt]
+    (5.4 + 0.9, 3.7 + 0.55) -- (5.4 + 0.9, 3.7 + 1.0)
+    -- (1.0 - 0.9, 3.7 + 1.0)
+    -- (1.0 - 0.9, 3.7 + 0.55);
+  \node[lbl, font=\tiny, text=shibuitext]
+    at (3.2, 3.7 + 1.15) {repeat $i = 1, \ldots$};
+
+  % ========== UNROLLING ARROW ==========
+  \draw[->, draw=shibuiaccent, very thick]
+    (4.5, 2.95) -- (4.5, 2.3)
+    node[lbl, right=4pt, midway, font=\small\bfseries,
+         text=shibuiaccent] {unroll + learn};
+
+  % ========== BOTTOM HALF: unrolled (LISTA / LCRPCA) ==========
+  \node[lbl, font=\small\bfseries, text=shibuitext]
+    at (0, 2.0) {Unrolled network (\nlayer{} layers)};
+
+  % Input
+  \node[lbl, font=\scriptsize] (yin2) at (-1.2, 1.1) {$\mathbf{y}$};
+
+  % Three learnable layer boxes
+  \foreach \i/\xi in {1/1.0, 2/3.2, 3/5.4} {
+    \node[layerbox] (lista\i) at (\xi, 1.1)
+      {$\mathcal{S}_{\lparamlam{\i}}$\\[2pt]
+       $\Wone{\cdot}^{(\i)}$, $\Wtwo{\cdot}^{(\i)}$\\[1pt]
+       \textbf{learned}};
+  }
+
+  % Dots
+  \node[lbl, font=\large] at (7.2, 1.1) {$\cdots$};
+
+  % Output
+  \node[lbl, font=\scriptsize] (xout_lista) at (8.6, 1.1) {$\hat{\mathbf{x}}$};
+
+  % Arrows
+  \draw[arr] (yin2.east) -- (lista1.west);
+  \draw[arr] (lista1.east) -- (lista2.west)
+    node[lbl, font=\tiny, midway, below=2pt] {$\mathbf{x}^{(1)}$};
+  \draw[arr] (lista2.east) -- (lista3.west)
+    node[lbl, font=\tiny, midway, below=2pt] {$\mathbf{x}^{(2)}$};
+  \draw[arr] (lista3.east) -- (7.0, 1.1);
+  \draw[arr] (7.5, 1.1) -- (xout_lista.west);
+
+  % Learnable parameters bracket under all layers
+  \draw[decorate, decoration={brace, amplitude=5pt, mirror},
+        shibuitext]
+    (0.1, 0.45) -- (6.3, 0.45)
+    node[lbl, font=\scriptsize, midway, below=6pt]
+    {$\nparams$ learnable parameters
+     $\{\lparamlam{t}, \lparammu{t}, \lparamw{t},
+        \Wone{k}^{(t)}, \Wtwo{k}^{(t)}\}$};
+
+\end{tikzpicture}

@@ -1,0 +1,51 @@
+\documentclass[aspectratio=169]{beamer}
+
+% ============================================================
+% Preamble: packages, theme, notations, custom commands
+% ============================================================
+\input{preamble}
+
+% ============================================================
+% Presentation metadata
+% ============================================================
+\title{Robust Sparse Convolution Coding\\for Radar Applications}
+\subtitle{GPR Inversion and Through-Wall Radar Imaging}
+\author{Ammar Mian}
+\institute{Universit\'{e} Savoie Mont-Blanc, LISTIC, Annecy, France}
+\date{DSIPS2026 -- Tokyo, March 2026}
+
+% ============================================================
+\begin{document}
+% ============================================================
+
+\maketitle
+
+% ---- Section 1: Introduction (4 slides) ----
+% GPR application (2 slides) + TWRI application (2 slides)
+\input{sec1_intro}
+
+% ---- Section 2: GPR Signal Model (7 slides) ----
+% Acquisition -> B-scan decomposition -> Why sparse coding?
+% -> Physics dictionary -> L2-GPR formulation -> ADMM
+\input{sec2_gpr_model}
+%
+% ---- Section 3: Robust GPR with Huber norm (7 slides) ----
+% Motivation -> Huber function -> Hub-GPR problem
+% -> Augmented Lagrangian -> ADMM updates (proposition)
+% -> Results (visual + quantitative)
+\input{sec3_huber_gpr}
+
+% ---- Section 4: Through-Wall Radar Imaging (6 slides) ----
+% Scene reminder -> Forward model -> KRPCA -> HKRPCA
+% -> Results -> Comparison
+\input{sec4_twri}
+
+% ---- Section 5: Deep Unrolling (8 slides) ----
+% General principle -> ISTA/LISTA -> Unrolling for RPCA+CSC
+% -> LCRPCA architecture -> Training -> Results
+\input{sec5_unrolling}
+
+% ---- Section 6: Conclusion (2 slides) ----
+\input{sec6_conclusion}
+
+\end{document}
