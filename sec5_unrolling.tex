@@ -42,11 +42,9 @@
       \vspace{0.6em}
       \textbf{Deep unrolling:}
       \begin{enumerate}
-        \item \emphtext{Truncate} to $\nlayer$ iterations (fixed depth)
-        \item Make $\boldsymbol{\theta}$ \emphtext{per-layer} and
-              \emphtext{learnable} from data:
-              $\boldsymbol{\theta} \;\longrightarrow\;
-               \boldsymbol{\theta}^{(1)},\ldots,\boldsymbol{\theta}^{(\nlayer)}$
+        \item \emphtext{Truncate} to $\nlayer$ iterations
+        \pause
+        \item Make parameters \emphtext{per-layer} and \emphtext{learnable}
       \end{enumerate}
 
       \vspace{0.4em}
@@ -60,23 +58,20 @@
       \vspace{0.3em}
       \textbf{Advantages:}
       \begin{itemize}
-        \item \emphtext{Interpretable:} each layer has a
-              physical meaning
-        \item \emphtext{Data-efficient:} few parameters
-              (prior from algorithm structure)
-        \item \emphtext{Flexible:} learns problem-specific
-              parameters from data
-        \item \emphtext{Fast inference:} fixed $\nlayer$ layers,
-              no convergence loop
+        \item \emphtext{Interpretable}: physical meaning per layer
+        \pause
+        \item \emphtext{Data-efficient}: few parameters
+        \pause
+        \item \emphtext{Flexible}: learns from data
+        \pause
+        \item \emphtext{Fast}: fixed layers, no loops
       \end{itemize}
 
-      \vspace{0.5em}
+      \vspace{0.3em}
       \textbf{Limitations:}
       \begin{itemize}
-        \item Fixed number of layers
-              (no convergence guarantee)
+        \item Fixed depth (no guarantee)
         \item Non-convex training
-              (local minima possible)
       \end{itemize}
 
       \vspace{0.4em}
@@ -154,8 +149,9 @@
       \]
   \end{columns}
 
-  \vspace{0.3em}
+  \vspace{0.1em}
   \begin{center}
+  \small
   \input{tikz/unrolling_layers}
   \end{center}
 \end{frame}
@@ -227,34 +223,30 @@
 % ------------------------------------------------------------------
 \begin{frame}{LCRPCA: Unrolled Architecture}
   \begin{center}
+  \small
   \input{tikz/lcrpca_arch}
   \end{center}
 
-  \vspace{0.2em}
+  \vspace{0.15em}
   \begin{shibuiframe}{ }
-    \centering
-    One layer of LCRPCA: parallel \emphtext{low-rank path}
-    ($\Mwall$) and \emphtext{sparse path} ($\Mtarget$).
-    \quad
-    Learnable per layer:
-    $\lparamlam{\ilayer},\;\lparammu{\ilayer},\;\lparamw{\ilayer}$,
-    all filters.
+    \small\centering
+    One layer: parallel \emphtext{low-rank} ($\Mwall$) and \emphtext{sparse} ($\Mtarget$) paths.
+    Learnable: $\lparamlam{\ilayer}, \lparammu{\ilayer}, \lparamw{\ilayer}$, filters.
   \end{shibuiframe}
 
-  \vspace{0.5em}
+  \vspace{0.3em}
   \begin{columns}[T]
     \column{0.33\textwidth}
-      \centering
-      \emphtext{$\nlayer = 6$ layers}
+      \small\centering
+      $\nlayer = 6$ layers
 
     \column{0.34\textwidth}
-      \centering
-      \emphtext{$K = 64$ filters per layer}
+      \small\centering
+      $K = 64$ filters
 
     \column{0.33\textwidth}
-      \centering
-      \emphtext{$7{\times}7 \to 5{\times}5 \to 3{\times}3$}\\
-      filter sizes across layers
+      \small\centering
+      $7{\times}7 \to 3{\times}3$
   \end{columns}
 \end{frame}
 
@@ -263,73 +255,38 @@
 % ------------------------------------------------------------------
 \begin{frame}{LCRPCA: Architecture Details \skipbadge{}}
 
-  \begin{shibuiframe}{Per-layer unrolled update}
-    \begin{align*}
-      \Mwall^{(\ilayer)}
-        &= \pxSvT{\lparammu{\ilayer}}\!\left(
-             \Mwall^{(\ilayer-1)}
-             + \lparamw{\ilayer}\bigl(
-                 \Mtwri
-                 - \Mwall^{(\ilayer-1)}
-                 - \textstyle\sum_{\iatom}
-                   \Wone{\iatom}^{(\ilayer)}\Fconv
-                   \Mtarget_{\iatom}^{(\ilayer-1)}
-               \bigr)
-           \right)
-      \\[6pt]
-      \Mtarget_{\iatom}^{(\ilayer)}
-        &= \pxSoftT{\lparamlam{\ilayer}}\!\left(
-             \Mtarget_{\iatom}^{(\ilayer-1)}
-             + \Wtwo{\iatom}^{(\ilayer)}\Fconv
-               \bigl(
-                 \Mtwri
-                 - \Mwall^{(\ilayer-1)}
-                 - \textstyle\sum_{\iatom}
-                   \Wone{\iatom}^{(\ilayer)}\Fconv
-                   \Mtarget_{\iatom}^{(\ilayer-1)}
-               \bigr)
-           \right)
-    \end{align*}
+  \begin{shibuiframe}{Per-layer updates}
+    \small
+    $\Mwall^{(\ilayer)} = \pxSvT{\lparammu{\ilayer}}\!\left(\Mwall^{(\ilayer-1)} + \lparamw{\ilayer}(\Mtwri - \text{residual})\right)$
+
+    $\Mtarget^{(\ilayer)} = \pxSoftT{\lparamlam{\ilayer}}\!\left(\Mtarget^{(\ilayer-1)} + \Wtwo{\ilayer}\Fconv(\text{residual})\right)$
   \end{shibuiframe}
 
-  \vspace{0.4em}
+  \vspace{0.3em}
   \begin{columns}[T]
-    % ------- LEFT: parameter count -------
     \column{0.50\textwidth}
-      \textbf{Total learnable parameters $\nparams$:}
+      \small
+      \textbf{Parameters:}
 
-      \vspace{0.4em}
-      \renewcommand{\arraystretch}{1.25}
+      \vspace{0.2em}
+      \renewcommand{\arraystretch}{1.1}
       \begin{tabular}{lc}
         \toprule
-        \textbf{Model} & \textbf{$\nparams$} \\
+        \textbf{Model} & $\nparams$ \\
         \midrule
-        LCRPCA (ours) & $21{,}656$ \\
-        U-Net (baseline) & $8{,}650{,}474$ \\
+        LCRPCA & $21{,}656$ \\
+        U-Net & $8{,}6\mathrm{M}$ \\
         \midrule
-        Ratio & $\mathbf{400\times}$ fewer \\
+        Ratio & \textbf{400$\times$} \\
         \bottomrule
       \end{tabular}
 
-    % ------- RIGHT: training loss -------
     \column{0.50\textwidth}
-      \textbf{Training loss (three terms):}
-
-      \vspace{0.3em}
-      \begin{shibuiframe}{ }
-        \[
-          \lossfn
-            = \stepsize_{1}\ltwonorm{\Mwall-\Mwall_{\mathrm{GT}}}^{2}
-            + \stepsize_{2}\mathcal{H}(\Mtarget,\Mtarget_{\mathrm{GT}})
-            + \stepsize_{3}\mathrm{Dice}(\Mtarget,\Mtarget_{\mathrm{GT}})
-        \]
-      \end{shibuiframe}
+      \small
+      \textbf{Training loss:}
 
       \vspace{0.2em}
-      \small
-      reconstruction ($\ell_2$)
-      + cross-entropy ($\mathcal{H}$)
-      + Dice (detection map)
+      $\ell_2$ (reconstruction) + $\mathcal{H}$ (cross-entropy) + Dice
   \end{columns}
 \end{frame}
 
@@ -374,24 +331,15 @@
     \column{0.55\textwidth}
       \vspace{0.3em}
       \begin{itemize}
-        \item \emphtext{Standard deep nets (U-Net):}
-              learn \emph{everything} from data --
-              no prior on problem structure
-        \item \emphtext{LCRPCA:} algorithm structure
-              provides \emphtext{inductive bias}
-        \item Structure encoded:
-          \begin{itemize}
-            \item $\pxSvT{\lparammu{\ilayer}}$
-                  for $\Mwall$ (low-rank constraint)
-            \item $\pxSoftT{\lparamlam{\ilayer}}$
-                  for $\Mtarget$ (sparsity constraint)
-            \item Convolutional connections between layers
-          \end{itemize}
-        \item Fewer free parameters
-              $\Rightarrow$ less data needed
-              to avoid overfitting
-        \item Dictionary $\Mdict$ is \emphtext{learned}
-              from data -- no need for exact wall model
+        \item \emphtext{Standard nets}: learn everything, no prior
+        \pause
+        \item \emphtext{LCRPCA}: algorithm structure provides bias
+        \pause
+        \item Structure: low-rank + sparsity proxes + conv layers
+        \pause
+        \item Fewer parameters $\Rightarrow$ less data needed
+        \pause
+        \item Dictionary learned from data
       \end{itemize}
 
     % ------- RIGHT: key inequality -------
@@ -422,45 +370,24 @@
 % ------------------------------------------------------------------
 \begin{frame}{Comparison: Classical vs.\ Learned}
 
-  \vspace{0.2em}
-  \renewcommand{\arraystretch}{1.3}
+  \vspace{0.1em}
+  \small
+  \renewcommand{\arraystretch}{1.25}
   \begin{center}
     \begin{tabular}{lcccc}
       \toprule
-      \textbf{Method}
-        & \textbf{Params}
-        & \textbf{10\% PR-AUC}
-        & \textbf{100\% PR-AUC}
-        & \textbf{Interpretable} \\
+      \textbf{Method} & \textbf{Params} & \textbf{10\%} & \textbf{100\%} & \textbf{Interp.} \\
       \midrule
-      PGD (classical KRPCA)
-        & 0
-        & 0.62
-        & 0.70
-        & Yes (physics) \\
-      U-Net
-        & 8.6M
-        & 0.80
-        & 0.87
-        & No (black box) \\
-      CoroNA
-        & --
-        & 0.07
-        & --
-        & Partial \\
-      \textbf{LCRPCA (ours)}
-        & 21k
-        & \textbf{0.85}
-        & \textbf{0.89}
-        & Yes (unrolled) \\
+      PGD (KRPCA) & 0 & 0.62 & 0.70 & Physics \\
+      U-Net & 8.6M & 0.80 & 0.87 & Black box \\
+      CoroNA & -- & 0.07 & -- & Partial \\
+      \textbf{LCRPCA} & \textbf{21k} & \textbf{0.85} & \textbf{0.89} & Unrolled \\
       \bottomrule
     \end{tabular}
   \end{center}
 
-  \vspace{0.6em}
+  \vspace{0.4em}
   \begin{shibuitip}[Take-away]
-    Deep unrolling gives the \emphtext{best of both worlds}:
-    \emphtext{interpretability} from the algorithm structure,
-    \emphtext{flexibility} from learned parameters.
+    Best of both: \emphtext{interpretability} (algorithm) + \emphtext{flexibility} (learning)
   \end{shibuitip}
 \end{frame}

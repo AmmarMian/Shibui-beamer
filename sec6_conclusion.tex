@@ -22,12 +22,14 @@
       \begin{shibuiframe}{L2-GPR \& Hub-GPR}
         \footnotesize
         \begin{itemize}
-          \item Conv.\ sparse coding + low-rank clutter separation
-          \item Physics dict.: $\nbatoms = 25$ hyperbola atoms
-          \item Huber extension: robust to non-Gaussian noise/artefacts
-          \item \textbf{New:} closed-form $\pxHub{\,\cdot\,}{\,\cdot\,}$
-                for $\Mclutter$ update
-          \item Applications: pipe inspection, demining
+          \item Conv.\ sparse + low-rank clutter
+          \pause
+          \item Physics dict: $\nbatoms = 25$ atoms
+          \pause
+          \item Huber: robust to non-Gaussian
+          \pause
+          \item Closed-form for update
+          \item Applications: inspection, demining
         \end{itemize}
       \end{shibuiframe}
 
@@ -36,12 +38,11 @@
       \begin{shibuiframe}{TWRI \& HKRPCA}
         \footnotesize
         \begin{itemize}
-          \item Kronecker dict.\
-                $\Mdict\!\left(\identmat{\Mnbpos}\kron\Vtarget\right)$
-          \item KRPCA + Huber: two variants\\
-                (semi-split PGD,\\full-split MM)
-          \item Group sparsity $\twoonenorm{\cdot}$\\
-                for spatial target localization
+          \item Kronecker dictionary structure
+          \pause
+          \item KRPCA + Huber variants
+          \pause
+          \item Group sparsity for localization
         \end{itemize}
       \end{shibuiframe}
 
@@ -50,13 +51,13 @@
       \begin{shibuiframe}{LCRPCA (unrolling)}
         \footnotesize
         \begin{itemize}
-          \item Unrolled PGD for RPCA + sparse coding
-          \item Learnable filters replace physics dictionary
-                (robust to model errors)
-          \item $\nparams = 21{,}656$ vs.\
-                $8.6\,\mathrm{M}$ for U-Net
-          \item PR-AUC $= 0.85$ with only\\
-                $10\%$ training data
+          \item Unrolled PGD architecture
+          \pause
+          \item Learnable filters (robust)
+          \pause
+          \item $21{,}656$ vs $8.6\mathrm{M}$ params
+          \pause
+          \item PR-AUC $= 0.85$ (10\% data)
         \end{itemize}
       \end{shibuiframe}
 
@@ -81,25 +82,21 @@
 
     % ------- Left: open problems and future work -------
     \column{0.55\textwidth}
-      \textbf{Open problems \& future work:}
-      \vspace{0.2em}
+      \textbf{Open problems \& future:}
+      \vspace{0.15em}
       \begin{itemize}
-        \setlength{\itemsep}{0.15em}
-        \item \emphtext{Adaptive threshold $\delta$}
-              (currently set by quantiles): can it be learned
-              end-to-end?
-        \item \emphtext{Joint GPR + TWRI} framework:
-              unified model for both modalities
-        \item \emphtext{Online / streaming ADMM}
-              for real-time processing
-        \item \emphtext{Extension to 3D GPR}
-              (volumetric reconstruction)
-        \item \emphtext{Deep unrolling for GPR}:
-              apply LCRPCA ideas to Hub-GPR
-        \item \emphtext{Non-stationary clutter}:
-              $\Mclutter$ not globally low-rank
-              but \emph{locally} --- patch-based or
-              sliding-window formulation
+        \setlength{\itemsep}{0.08em}
+        \item \emphtext{Adaptive threshold $\delta$}: end-to-end learning?
+        \pause
+        \item \emphtext{Joint GPR + TWRI}: unified model
+        \pause
+        \item \emphtext{Online ADMM}: real-time
+        \pause
+        \item \emphtext{3D GPR}: volumetric
+        \pause
+        \item \emphtext{Deep unrolling for GPR}
+        \pause
+        \item \emphtext{Non-stationary clutter}: patch-based
       \end{itemize}
 
     % ------- Right: take-away -------

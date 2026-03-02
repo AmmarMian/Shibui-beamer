@@ -18,13 +18,13 @@
       \vspace{0.5em}
       \begin{itemize}
         \item Electromagnetic wave propagates into soil
-        \item Reflected by buried objects\\
-              (pipes, voids, landmines)
+        \pause
+        \item Reflected by buried objects (pipes, voids, landmines)
+        \pause
         \item Antenna scans surface at velocity $\speed$
+        \pause
         \item Response: \emphtext{hyperbolic shape} in B-scan
-        \item[\textbullet] \textbf{Applications:}\\
-              infrastructure inspection,\\
-              demining, archaeology
+        \item[\textbullet] \textbf{Applications:} inspection, demining, archaeology
       \end{itemize}
   \end{columns}
 \end{frame}
@@ -34,27 +34,26 @@
 % ------------------------------------------------------------------
 \begin{frame}{Ground Penetrating Radar: The Data}
   \begin{columns}[T]
-    \column{0.50\textwidth}
+    \column{0.48\textwidth}
       \vspace{0.3em}
       \centering
-      \figplaceholder[0.9\linewidth]{Raw B-scan
+      \figplaceholder[0.8\linewidth]{Raw B-scan
         $\Mimage \in \R^{\nbrows \times \nbcols}$}
 
-    \column{0.50\textwidth}
+    \column{0.52\textwidth}
       \vspace{0.3em}
       \textbf{Three challenges:}
       \begin{enumerate}
+        \setlength{\itemsep}{0.1em}
         \item \emphtext{Strong ground/layer clutter}\\
-              horizontal bands $\gg$ target signal
-        \item \emphtext{Low SNR}\\
-              hyperbola signal is weak
-        \item \emphtext{Noise \& artefacts}\\
-              discontinuities, misalignment
+              (horizontal bands $\gg$ signal)
+        \item \emphtext{Low SNR} (weak hyperbola)
+        \item \emphtext{Noise \& artefacts}
       \end{enumerate}
 
-      \vspace{0.8em}
+      \vspace{0.6em}
       \begin{shibiunote}
-        \textbf{Goal:} separate hyperbola responses
+        \textbf{Goal:} separate target responses
         $\{\Mcoef_{\iatom}\}$ from clutter $\Mclutter$
       \end{shibiunote}
   \end{columns}
@@ -72,14 +71,14 @@
     \column{0.40\textwidth}
       \vspace{0.5em}
       \begin{itemize}
-        \item Array of $\Mnbpos$ antennas transmits\\
-              $\Mnbfreq$ frequencies
+        \item Array of $\Mnbpos$ antennas transmits $\Mnbfreq$ frequencies
+        \pause
         \item EM waves \emphtext{penetrate the wall}
+        \pause
         \item Reflected by targets in room
-        \item Goal: \emphtext{image (locate) targets}\\
-              behind wall
-        \item[\textbullet] \textbf{Applications:}\\
-              security, rescue, surveillance
+        \pause
+        \item Goal: \emphtext{image targets behind wall}
+        \item[\textbullet] \textbf{Applications:} security, rescue, surveillance
       \end{itemize}
   \end{columns}
 \end{frame}
@@ -89,35 +88,32 @@
 % ------------------------------------------------------------------
 \begin{frame}{Through-Wall Radar Imaging: The Data}
   \begin{columns}[T]
-    \column{0.50\textwidth}
+    \column{0.48\textwidth}
       \vspace{0.3em}
       \centering
-      \figplaceholder[0.9\linewidth]{Measurement
+      \figplaceholder[0.8\linewidth]{Measurement
         $\Mtwri \in \C^{\Mnbfreq \times \Mnbpos}$}
 
-    \column{0.50\textwidth}
+    \column{0.52\textwidth}
       \vspace{0.3em}
       \textbf{Three challenges:}
       \begin{enumerate}
-        \item \emphtext{Strong wall returns}\\
-              dominate the measurements
-        \item \emphtext{Unknown wall properties}\\
-              complex dielectric propagation
-        \item \emphtext{Multi-path \& low SNR}\\
-              for target returns
+        \setlength{\itemsep}{0.1em}
+        \item \emphtext{Strong wall returns} (dominate)
+        \item \emphtext{Unknown wall properties} (dielectric)
+        \item \emphtext{Multi-path \& low SNR}
       \end{enumerate}
 
-      \vspace{0.8em}
+      \vspace{0.6em}
       \begin{shibiunote}
-        \textbf{Goal:} separate wall returns $\Mwall$
-        from target image $\Mtarget$
+        \textbf{Goal:} separate wall $\Mwall$
+        from target $\Mtarget$
       \end{shibiunote}
   \end{columns}
 
-  \vspace{0.6em}
+  \vspace{0.4em}
   \begin{shibuiwarning}
-    \textbf{Unifying theme:} both problems reduce to separating a
-    \emphtext{low-rank interference} from \emphtext{sparse target
-    responses} -- the same structural challenge.
+    \textbf{Unifying theme:} both GPR and TWRI reduce to separating
+    \emphtext{low-rank interference} from \emphtext{sparse targets}.
   \end{shibuiwarning}
 \end{frame}

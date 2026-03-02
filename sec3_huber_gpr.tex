@@ -28,17 +28,16 @@
       \vspace{0.3em}
       \textbf{L2-GPR assumption: Gaussian noise}
       \begin{itemize}
-        \item Works well under ideal acquisition conditions
-        \item Real GPR data has \emphtext{non-Gaussian noise}:
+        \item Works well under ideal conditions
+        \pause
+        \item Real GPR has \emphtext{non-Gaussian noise}:
           \begin{itemize}
-            \item acquisition artefacts
-            \item antenna misalignment
-            \item strong specular reflections
+            \item artefacts, misalignment, reflections
           \end{itemize}
-        \item L2 norm \emphtext{squares} large residuals:\\
-              one outlier dominates the entire cost
-        \item Solution: replace L2 by a \emphtext{robust}
-              cost function
+        \pause
+        \item L2 norm \emphtext{squares} large residuals
+        \pause
+        \item Solution: \emphtext{robust} cost function
       \end{itemize}
 
       \vspace{0.6em}
@@ -75,15 +74,11 @@
       \vspace{0.5em}
       \textbf{Key properties:}
       \begin{itemize}
-        \item \emphtext{Quadratic near zero}
-              ($\lvert x\rvert \leq \delta$):
-              identical to L2
-        \item \emphtext{Linear for large residuals}
-              ($\lvert x\rvert > \delta$):
-              bounded influence of outliers
-        \item $\delta$ controls the transition:\\
-              estimated from empirical quantiles
-              of the pixel distribution
+        \item \emphtext{Quadratic near zero}: identical to L2
+        \pause
+        \item \emphtext{Linear for large residuals}: bounded outlier influence
+        \pause
+        \item $\delta$ controls transition (estimated from quantiles)
       \end{itemize}
 
       \vspace{0.4em}
@@ -155,49 +150,25 @@
 % SLIDE 4 -- Augmented Lagrangian for Hub-GPR  [skip?]
 % ------------------------------------------------------------------
 \begin{frame}{Augmented Lagrangian for Hub-GPR \skipbadge{}}
+  \small
   \textbf{Variable splitting:} introduce auxiliary variables
-  $\Mauxclutter$ for $\Mclutter$ and
-  $\{\Mauxcoef_{\iatom}\}$ for $\{\Mcoef_{\iatom}\}$.
+  $\Mauxclutter$, $\{\Mauxcoef_{\iatom}\}$.
 
-  \vspace{0.4em}
-  \textbf{Constrained form:}
-  \[
-    \minimize_{\{\Mcoef_{\iatom}\},\,\Mclutter,\,
-               \Mauxclutter,\,\{\Mauxcoef_{\iatom}\}}
-    \;
-    \hubernorm{\Mimage
-      - \sum_{\iatom}\Mcoef_{\iatom}\Mconv\Matom_{\iatom}
-      - \Mclutter}^{2}
-    + \lowrankhp\nuclearnorm{\Mauxclutter}
-    + \sparsityhp\sum_{\iatom}\lonenorm{\Mauxcoef_{\iatom}}
-  \]
-  \[
-    \text{subject to}\quad
-    \Mauxclutter = \Mclutter,\qquad
-    \Mauxcoef_{\iatom} = \Mcoef_{\iatom}
-    \quad\forall\,\iatom
-  \]
+  \vspace{0.2em}
+  \begin{shibuiframe}{ }
+    \small
+    Huber fidelity + $\ell_1$ + low-rank penalties
+    \quad s.t. auxiliary constraints
+  \end{shibuiframe}
 
-  \vspace{0.4em}
-  \begin{shibuiframe}{Augmented Lagrangian $\lagrangian$}
-    \begin{align*}
-      \lagrangian
-      &= \hubernorm{\Mimage
-           - \sum_{\iatom}\Mcoef_{\iatom}\Mconv\Matom_{\iatom}
-           - \Mclutter}^{2}
-         + \sparsityhp\sum_{\iatom}\lonenorm{\Mauxcoef_{\iatom}}
-         + \lowrankhp\nuclearnorm{\Mauxclutter} \\[4pt]
-      &\quad
-         + \frac{\laghpaux}{2}
-           \ltwonorm{%
-             \sum_{\iatom}\Mcoef_{\iatom}
-             - \Mauxcoef_{\iatom}
-             + \Mdualauxcoef_{\iatom}}^{2}
-         + \frac{\laghpclutter}{2}
-           \ltwonorm{%
-             \Mauxclutter - \Mclutter + \Mdualclutter}^{2}
-         + \mathrm{const}
-    \end{align*}
+  \vspace{0.3em}
+  \begin{shibuiframe}{Augmented Lagrangian}
+    \small
+    \[
+      \lagrangian = \hubernorm{\Mimage - \sum_{\iatom}\Mcoef_{\iatom}\Mconv\Matom_{\iatom} - \Mclutter}^{2}
+         + \sparsityhp\sum_{\iatom}\lonenorm{\Mauxcoef_{\iatom}} + \lowrankhp\nuclearnorm{\Mauxclutter}
+         + \frac{\laghpaux}{2}\ltwonorm{\Mcoef_{\iatom} - \Mauxcoef_{\iatom} + \Mdualauxcoef_{\iatom}}^{2} + \ldots
+    \]
   \end{shibuiframe}
 \end{frame}
 

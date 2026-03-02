@@ -31,14 +31,13 @@
 
       \vspace{0.5em}
       \begin{itemize}
-        \item $\Mtwri \in \C^{\Mnbfreq \times \Mnbpos}$:
-              complex measurements ($\Mnbfreq$ freq., $\Mnbpos$ antennas)
-        \item $\Mwall$: \emphtext{wall returns} --- low-rank\\
-              (coherent across antennas)
-        \item $\Mdict \in \C^{\Mnbfreq \times P}$:
-              \emphtext{propagation dictionary} (physics-based)
-        \item $\Vtarget \in \C^{P}$:
-              \emphtext{target reflectivity} --- sparse
+        \item $\Mtwri$: complex measurements
+        \pause
+        \item $\Mwall$: \emphtext{wall returns} (low-rank, coherent)
+        \pause
+        \item $\Mdict$: \emphtext{propagation dictionary} (physics)
+        \pause
+        \item $\Vtarget$: \emphtext{target reflectivity} (sparse)
       \end{itemize}
 
       \vspace{0.4em}
@@ -56,50 +55,45 @@
 \begin{frame}{Kronecker Dictionary Structure}
 
   \begin{columns}[T]
-    \column{0.52\textwidth}
+    \column{0.50\textwidth}
       \vspace{0.3em}
 
-      \textbf{Propagation dictionary $\Mdict$:}
+      \textbf{Propagation dictionary:}
 
-      \vspace{0.4em}
+      \vspace{0.2em}
       \begin{shibuiframe}{ }
+        \small
         \[
-          [\Mdict]_{:,p}
-            = \bigl[e^{-j\pulsation_1 \tau_p},\,
-                    \ldots,\,
-                    e^{-j\pulsation_{\Mnbfreq} \tau_p}\bigr]^{\T}
+          [\Mdict]_{:,p} = [e^{-j\pulsation_1 \tau_p}, \ldots, e^{-j\pulsation_{\Mnbfreq} \tau_p}]^{\T}
         \]
         \vspace{0.1em}
         \begin{itemize}
-          \item Column $p$: \emphtext{steering vector} for grid cell $p$
-          \item $\tau_p$: propagation delay\\
-                (transmitter $\to$ wall $\to$ cell $p$)
-          \item Known from wall geometry and\\
-                dielectric model
+          \setlength{\itemsep}{0.06em}
+          \item Column $p$: steering vector
+          \item $\tau_p$: propagation delay
+          \item From wall geometry + dielectric
         \end{itemize}
       \end{shibuiframe}
 
-      \vspace{0.5em}
+      \vspace{0.3em}
       \textbf{Kronecker structure:}
       \begin{itemize}
-        \item $\identmat{\Mnbpos} \kron \Vtarget$:
-              same reflectivity $\Vtarget$ applied\\
-              \emphtext{independently} at each antenna
-        \item $\twoonenorm{\Vtarget}$: \emphtext{group sparsity}\\
-              one group per grid cell $p$, across all frequencies
-        \item Groups that are zero $\Rightarrow$ no target at cell $p$
+        \setlength{\itemsep}{0.06em}
+        \item $\identmat{\Mnbpos} \kron \Vtarget$: same reflectivity per antenna
+        \pause
+        \item $\twoonenorm{\Vtarget}$: group sparsity per cell
+        \pause
+        \item Zero groups $\Rightarrow$ no target
       \end{itemize}
 
-      \vspace{0.4em}
-      \citebadge{Setlur et al.\ (2012); Ahmad et al.\ (2013)
-                 --- TWRI with sparse recovery}
+      \vspace{0.2em}
+      \citebadge{Setlur et al. (2012)}
 
-    \column{0.48\textwidth}
+    \column{0.50\textwidth}
       \vspace{0.3em}
       \centering
-      \figplaceholder[0.9\linewidth]{%
-        Dictionary $\Mdict$:\\columns $=$ propagation delay\\
-        steering vectors to grid cells}
+      \figplaceholder[0.8\linewidth]{%
+        Dictionary columns:\\steering vectors}
   \end{columns}
 \end{frame}
 
@@ -120,34 +114,25 @@
     \]
   \end{shibuiframe}
 
-  \vspace{0.5em}
+  \vspace{0.4em}
   \begin{columns}[T]
-    \column{0.55\textwidth}
+    \column{0.50\textwidth}
       \vspace{0.2em}
+      \small
       \begin{itemize}
-        \item $\nuclearnorm{\Mwall}$: promotes \emphtext{low rank}\\
-              (wall returns coherent across antennas)
-        \item $\twoonenorm{\Vtarget}$: promotes \emphtext{group sparsity}\\
-              (few occupied grid cells in the scene)
-        \item Constraint: \emphtext{exact fit} (noise-free formulation)
-        \item Solved via ADMM --- same structure as L2-GPR
-              but in \emphtext{frequency domain} with Kronecker product
+        \setlength{\itemsep}{0.08em}
+        \item $\nuclearnorm{\Mwall}$: low-rank (coherent)
+        \item $\twoonenorm{\Vtarget}$: group sparsity
+        \item Constraint: exact fit (noise-free)
+        \item ADMM solver: same as L2-GPR
       \end{itemize}
 
-    \column{0.45\textwidth}
+    \column{0.50\textwidth}
       \vspace{0.2em}
-      \begin{shibuitip}[Same structure as L2-GPR]
-        \footnotesize
-        \textbf{GPR:}\\
-        $\min \nuclearnorm{\Mclutter}
-         + \sparsityhp\sum_{\iatom}\lonenorm{\Mcoef_{\iatom}}$\\
-        s.t.\ $\Mimage = \sum_{\iatom} \Mcoef_{\iatom}\Mconv\Matom_{\iatom}
-               + \Mclutter$\\[4pt]
-        \textbf{TWRI:}\\
-        $\min \nuclearnorm{\Mwall}
-         + \sparsityhp\,\twoonenorm{\Vtarget}$\\
-        s.t.\ $\Mtwri = \Mwall
-               + \Mdict(\identmat{\Mnbpos}\kron\Vtarget)$
+      \begin{shibuitip}[Same structure]
+        \tiny
+        \textbf{GPR}: $\min \nuclearnorm{\Mclutter} + \sparsityhp\sum_{\iatom}\lonenorm{\Mcoef_{\iatom}}$\\
+        \textbf{TWRI}: $\min \nuclearnorm{\Mwall} + \sparsityhp\twoonenorm{\Vtarget}$
       \end{shibuitip}
   \end{columns}
 \end{frame}
